@@ -7,7 +7,7 @@ Feature: Browse for products
     Given there are categories and products
 
   Scenario: View featured products and categories
-#    When I go to the homepage
+    When I go to the homepage
 #    Then I should see all main categories and its products
 #
 #  Scenario: View a tree menu with all categories

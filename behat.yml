@@ -5,3 +5,8 @@ default:
     default:
       paths:
         - %paths.base%/tests/acceptance
+  extensions:
+    Laracasts\Behat:
+    Behat\MinkExtension:
+      default_session: laravel
+      laravel: ~

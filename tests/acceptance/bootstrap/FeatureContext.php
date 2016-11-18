@@ -24,16 +24,16 @@ class FeatureContext extends MinkContext {
      * @Given /^there are categories and products$/
      */
     public function thereAreCategoriesAndProducts() {
-//        $categoryA = new Category(['name' => 'Category A']);
-//        $categoryAA = new Category(['name' => 'Category AA']);
-//        $categoryAA->parent = $categoryA;
-//        $categoryB = new Category(['name' => 'Category B']);
-//
-//        $productA1 = new Product(['name' => 'Product A 1']);
-//        $productA1->category = $categoryA;
-//        $productA2 = new Product(['name' => 'Product A 2']);
-//        $productA2->category = $categoryA;
-//        $productB1 = new Product(['name' => 'Product B 1']);
-//        $productB1->category = $categoryB;
+        $categoryA = new Category(['name' => 'Category A']);
+        $categoryAA = new Category(['name' => 'Category AA']);
+        $categoryAA->parent = $categoryA;
+        $categoryB = new Category(['name' => 'Category B']);
+
+        $productA1 = new Product(['name' => 'Product A 1']);
+        $productA1->category = $categoryA;
+        $productA2 = new Product(['name' => 'Product A 2']);
+        $productA2->category = $categoryA;
+        $productB1 = new Product(['name' => 'Product B 1']);
+        $productB1->category = $categoryB;
     }
 }
