@@ -1,6 +1,9 @@
 <?php
 
+namespace Tests\Unit\Models\Product;
+
 use App\Models\Product\Category;
+use Tests\TestCase;
 
 /**
  * Class CategoryTest

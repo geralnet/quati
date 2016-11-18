@@ -1,7 +1,10 @@
 <?php
 
+namespace Tests\Unit\Models\Product;
+
 use App\Models\Product\Category;
 use App\Models\Product\Product;
+use Tests\TestCase;
 
 /**
  * Class ProductTest

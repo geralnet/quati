@@ -3,10 +3,8 @@
 namespace App\Models\Product;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/**
- * Class Product
- */
 class Product extends Model {
     /** @var string[] */
     protected $fillable = ['name'];
@@ -14,6 +12,10 @@ class Product extends Model {
     /** @var string */
     protected $name;
 
-    /** @var Category */
-    protected $category;
+    /**
+     * @return BelongsTo
+     */
+    public function category() {
+        return $this->belongsTo(Category::class);
+    }
 }

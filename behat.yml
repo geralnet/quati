@@ -1,10 +1,10 @@
 default:
   autoload:
-    - %paths.base%/tests/acceptance/bootstrap
+    - %paths.base%/tests/Acceptance/bootstrap
   suites:
     default:
       paths:
-        - %paths.base%/tests/acceptance
+        - %paths.base%/tests/Acceptance
   extensions:
     Laracasts\Behat:
     Behat\MinkExtension:
