@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product\Category;
+
 class HomeController extends Controller {
     public function index() {
-        return view('home');
+        $categories = Category::getRootCategories();
+        return view('home', compact('categories'));
     }
 }

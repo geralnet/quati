@@ -53,9 +53,9 @@ class CategoryTest extends TestCase {
 
     /** @test */
     public function a_category_can_have_subcategories() {
-        $categoryA = Category::create(['name'=>'Category A']);
-        $categoryAA = Category::create(['name'=>'Category AA']);
-        $categoryAB = Category::create(['name'=>'Category AB']);
+        $categoryA = Category::create(['name' => 'Category A']);
+        $categoryAA = Category::create(['name' => 'Category AA']);
+        $categoryAB = Category::create(['name' => 'Category AB']);
 
         $categoryAA->parent()->associate($categoryA);
         $categoryAA->save();
@@ -66,5 +66,33 @@ class CategoryTest extends TestCase {
         $fetchedCategory = Category::find($categoryA->id);
         $subcategories = $fetchedCategory->subcategories;
         self::assertCount(2, $subcategories);
+    }
+
+    /** @test */
+    public function we_can_get_all_root_categories() {
+        $categoryA = Category::create(['name' => 'Category A']);
+
+        $categoryAA = new Category(['name' => 'Category AA']);
+        $categoryAA->parent()->associate($categoryA);
+        $categoryAA->save();
+
+        $categoryAB = new Category(['name' => 'Category AB']);
+        $categoryAB->parent()->associate($categoryA);
+        $categoryAB->save();
+
+        $categoryB = Category::create(['name' => 'Category B']);
+        $categoryBA = new Category(['name' => 'Category BA']);
+        $categoryBA->parent()->associate($categoryB);
+        $categoryBA->save();
+
+        Category::create(['name' => 'Category C']);
+
+        $expected = ['Category A', 'Category B', 'Category C'];
+        $actual = [];
+        foreach (Category::getRootCategories() as $category) {
+            $actual[] = $category->name;
+        }
+
+        self::assertSame($expected, $actual);
     }
 }

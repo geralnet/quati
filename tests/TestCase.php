@@ -4,13 +4,13 @@ namespace Tests;
 
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Mockery;
 
 /**
  * Class TestCase
  */
 abstract class TestCase extends \Illuminate\Foundation\Testing\TestCase {
     use DatabaseTransactions;
-
     /**
      * The base URL to use while testing the application.
      *
@@ -36,5 +36,10 @@ abstract class TestCase extends \Illuminate\Foundation\Testing\TestCase {
         $app->make(Kernel::class)->bootstrap();
 
         return $app;
+    }
+
+    /** @after */
+    public function close_mockery() {
+        Mockery::close();
     }
 }

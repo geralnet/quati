@@ -46,7 +46,16 @@ class FeatureContext extends MinkContext {
         $productB1 = new Product(['name' => 'Product B 1']);
         $productB1->category()->associate($categoryB);
         $productB1->save();
+    }
 
-        $cats = Category::all();
+    /**
+     * @Then /^I should see the main categories and its products$/
+     */
+    public function iShouldSeeTheMainCategoriesAndItsProducts() {
+        $this->assertPageContainsText('Category A');
+        $this->assertPageContainsText('Category B');
+        $this->assertPageContainsText('Product A 1');
+        $this->assertPageContainsText('Product A 2');
+        $this->assertPageContainsText('Product B 1');
     }
 }

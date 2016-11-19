@@ -8,8 +8,8 @@ Feature: Browse for products
 
   Scenario: View featured products and categories
     When I go to the homepage
-#    Then I should see the main categories and its products
-#
+    Then I should see the main categories and its products
+
 #  Scenario: View a tree menu with all categories
 #    When I go to the homepage
 #    Then I should see a tree with all the avaiable categories

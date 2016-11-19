@@ -2,6 +2,7 @@
 
 namespace App\Models\Product;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,9 +10,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Category extends Model {
     /** @var string[] */
     protected $fillable = ['name'];
-
     /** @var string */
     protected $name;
+
+    /**
+     * @return Collection
+     */
+    public static function getRootCategories() {
+        return static::whereNull('parent_id')->get();
+    }
 
     /**
      * @return HasMany
