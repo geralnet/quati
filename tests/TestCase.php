@@ -3,11 +3,14 @@
 namespace Tests;
 
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 /**
  * Class TestCase
  */
 abstract class TestCase extends \Illuminate\Foundation\Testing\TestCase {
+    use DatabaseTransactions;
+
     /**
      * The base URL to use while testing the application.
      *
