@@ -11,6 +11,8 @@
 |
 */
 
+use App\Models\Product\Category;
+
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     static $password;
 
