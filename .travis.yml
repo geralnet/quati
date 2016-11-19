@@ -3,17 +3,22 @@ language: php
 php:
   - 7.0.8
 
+services:
+  - mysql
+
 # If a new commit is pushed, other builds can abort anyway.
 git:
   depth: 1
 
 before_script:
+- mysql -e 'CREATE DATABASE quati;'
 - php -S localhost &
 - composer install --no-interaction
 - cp .env.travis .env
 - php artisan key:generate -n
 - cp .env.travis .env.behat
 - php artisan key:generate -n --env behat
+- php artisan migrate
 
 script:
 - vendor/bin/phpunit
