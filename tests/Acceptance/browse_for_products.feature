@@ -20,7 +20,9 @@ Feature: Browse for products
 
   Scenario: View a tree menu with all categories
     When I go to the homepage
-#    Then I should see a tree with all the avaiable categories
+    Then I should see "Category A" in the category tree
+    Then I should see "Category AA" in the category tree
+    And  I should see "Category B" in the category tree
 #
 #  Scenario: Browse products through the featured products
 #    Given I am on the homepage

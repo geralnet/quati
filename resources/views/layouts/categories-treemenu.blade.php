@@ -1,14 +1,5 @@
-<nav class="sidemenu">
+<nav class="sidemenu category-tree">
     <ul>
-        <li>Store</li>
-        <ul>
-            <li>Category A</li>
-            <li>Category B</li>
-            <ul>
-                <li>Category BA</li>
-                <li>Category BB</li>
-            </ul>
-            <li>Category C</li>
-        </ul>
+        @each('layouts.categories-treemenu-node', $root_categories, 'category')
     </ul>
 </nav>

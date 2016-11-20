@@ -40,4 +40,11 @@ class FeatureContext extends MinkContext {
     public function iShouldSeeInTheMainView($text) {
         $this->assertElementContainsText('*[role="main"]', $text);
     }
+
+    /**
+     * @Then /^I should see "([^"]*)" in the category tree$/
+     */
+    public function iShouldSeeInTheCategoryTree($text) {
+        $this->assertElementContainsText('.category-tree', $text);
+    }
 }
