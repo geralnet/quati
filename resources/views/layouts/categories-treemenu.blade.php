@@ -1,7 +1,4 @@
-<div>
-    Shopping Cart
-</div>
-<nav>
+<nav class="sidemenu">
     <ul>
         <li>Store</li>
         <ul>

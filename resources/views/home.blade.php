@@ -1,5 +1,9 @@
 @extends('layouts.master')
 
+@section('sidemenu')
+    @include('layouts.categories-treemenu')
+@endsection
+
 @section('content')
     <section>
         <h1>Description</h1>
@@ -21,7 +25,7 @@
             neque.</p>
     </section>
     <section class="subcategories">
-        @foreach($categories as $category)
+        @foreach($root_categories as $category)
             <section class="product-category">
                 <h1>{{ $category->name }}</h1>
                 <b>Products:</b>

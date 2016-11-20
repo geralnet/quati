@@ -14,7 +14,7 @@ class HomeControllerTest extends TestCase {
     }
 
     /** @test */
-    public function the_homepage_is_handled_by_homecontroller() {
+    public function it_handles_the_home_page() {
         $homeController = Mockery::mock(HomeController::class)->makePartial();
         $homeController->shouldReceive('index')->once();
         App::instance(HomeController::class, $homeController);
@@ -23,7 +23,7 @@ class HomeControllerTest extends TestCase {
     }
 
     /** @test */
-    public function the_homepage_view_must_be_home() {
+    public function it_must_provide_the_home_view() {
         /** @var Response $response */
         $response = $this->action('GET', 'HomeController@index');
         /** @var View $view */
@@ -32,17 +32,17 @@ class HomeControllerTest extends TestCase {
     }
 
     /** @test */
-    public function the_homepage_view_must_have_the_categories_parameter() {
+    public function it_must_provide_the_categories_parameter_to_the_view() {
         /** @var Response $response */
         $response = $this->action('GET', 'HomeController@index');
         /** @var View $view */
         $view = $response->getOriginalContent();
         $data = $view->getData();
-        self::assertArrayHasKey('categories', $data);
+        self::assertArrayHasKey('root_categories', $data);
     }
-    
+
     /** @test */
-    public function the_homepage_view_must_receive_the_root_categories() {
+    public function it_must_provide_the_root_categories_to_the_view() {
         $categoryA = Category::create(['name' => 'Category A']);
 
         $categoryAA = new Category(['name' => 'Category AA']);
@@ -53,9 +53,9 @@ class HomeControllerTest extends TestCase {
 
         $viewData = $this->action('GET', 'HomeController@index')->getOriginalContent()->getData();
 
-        $expected = [ 'Category A', 'Category B'];
+        $expected = ['Category A', 'Category B'];
         $actual = [];
-        foreach ($viewData['categories'] as $category) {
+        foreach ($viewData['root_categories'] as $category) {
             $actual[] = $category->name;
         }
 

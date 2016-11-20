@@ -3,6 +3,7 @@
 namespace Tests\Integration\Models\Product;
 
 use App\Models\Product\Category;
+use App\Models\Product\CategoryTree;
 use App\Models\Product\Product;
 use Tests\TestCase;
 
@@ -11,7 +12,7 @@ use Tests\TestCase;
  */
 class CategoryTest extends TestCase {
     /** @test */
-    public function a_category_has_a_name() {
+    public function it_has_a_name() {
         $category = new Category();
         $category->name = 'Test Category';
         $category->save();
@@ -19,7 +20,7 @@ class CategoryTest extends TestCase {
     }
 
     /** @test */
-    public function a_category_may_have_a_parent_category() {
+    public function it_may_have_a_parent_category() {
         $parent = new Category(['name' => 'Parent Category']);
         $parent->save();
 
@@ -34,7 +35,7 @@ class CategoryTest extends TestCase {
     }
 
     /** @test */
-    public function a_category_can_have_many_products() {
+    public function it_can_have_many_products() {
         $category = new Category(['name' => 'Category']);
         $category->save();
 
@@ -52,7 +53,7 @@ class CategoryTest extends TestCase {
     }
 
     /** @test */
-    public function a_category_can_have_subcategories() {
+    public function it_can_have_subcategories() {
         $categoryA = Category::create(['name' => 'Category A']);
         $categoryAA = Category::create(['name' => 'Category AA']);
         $categoryAB = Category::create(['name' => 'Category AB']);
@@ -69,7 +70,24 @@ class CategoryTest extends TestCase {
     }
 
     /** @test */
-    public function we_can_get_all_root_categories() {
+    public function it_can_provide_all_root_categories() {
+        $this->generateData();
+
+        Category::create(['name' => 'Category C']);
+
+        $expected = ['Category A', 'Category B', 'Category C'];
+        $actual = [];
+        foreach (Category::getRootCategories() as $category) {
+            $actual[] = $category->name;
+        }
+
+        self::assertSame($expected, $actual);
+    }
+
+    /**
+     * Creates some data used when testing fetched results.
+     */
+    private function generateData() {
         $categoryA = Category::create(['name' => 'Category A']);
 
         $categoryAA = new Category(['name' => 'Category AA']);
@@ -84,15 +102,5 @@ class CategoryTest extends TestCase {
         $categoryBA = new Category(['name' => 'Category BA']);
         $categoryBA->parent()->associate($categoryB);
         $categoryBA->save();
-
-        Category::create(['name' => 'Category C']);
-
-        $expected = ['Category A', 'Category B', 'Category C'];
-        $actual = [];
-        foreach (Category::getRootCategories() as $category) {
-            $actual[] = $category->name;
-        }
-
-        self::assertSame($expected, $actual);
     }
 }

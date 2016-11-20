@@ -24,7 +24,7 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-3" role="complementary">
-            @include('layouts.sidemenu')
+            @yield('sidemenu')
         </div>
         <div class="col-sm-9" role="main">
             @yield('content')

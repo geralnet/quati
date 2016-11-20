@@ -2,6 +2,7 @@
 
 use App\Models\Product\Category;
 use App\Models\Product\Product;
+use Behat\Gherkin\Node\TableNode;
 use Behat\MinkExtension\Context\MinkContext;
 use Laracasts\Behat\Context\DatabaseTransactions;
 
@@ -12,50 +13,31 @@ class FeatureContext extends MinkContext {
     use DatabaseTransactions;
 
     /**
-     * Initializes context.
-     *
-     * Every scenario gets its own context instance.
-     * You can also pass arbitrary arguments to the
-     * context constructor through behat.yml.
+     * @Given /^there are the following categories and products:$/
      */
-    public function __construct() {
+    public function thereAreTheFollowingCategoriesAndProducts(TableNode $table) {
+        $categories = [];
+        foreach ($table->getHash() as $row) {
+            $category = new Category();
+            $category->name = $row['Category'];
+            if ($row['Parent']) {
+                $category->parent()->associate($categories[$row['Parent']]);
+            }
+            $category->save();
+            $categories[$row['Category']] = $category;
+
+            foreach (explode(',', $row['Products']) as $product) {
+                $product = new Product(['name' => $product]);
+                $product->category()->associate($category);
+                $product->save();
+            }
+        }
     }
 
     /**
-     * @Given /^there are categories and products$/
+     * @Then /^I should see "([^"]*)" in the main view$/
      */
-    public function thereAreCategoriesAndProducts() {
-        $categoryA = new Category(['name' => 'Category A']);
-        $categoryA->save();
-
-        $categoryAA = new Category(['name' => 'Category AA']);
-        $categoryAA->parent()->associate($categoryA);
-        $categoryAA->save();
-
-        $categoryB = new Category(['name' => 'Category B']);
-        $categoryB->save();
-
-        $productA1 = new Product(['name' => 'Product A 1']);
-        $productA1->category()->associate($categoryA);
-        $productA1->save();
-
-        $productA2 = new Product(['name' => 'Product A 2']);
-        $productA2->category()->associate($categoryA);
-        $productA2->save();
-
-        $productB1 = new Product(['name' => 'Product B 1']);
-        $productB1->category()->associate($categoryB);
-        $productB1->save();
-    }
-
-    /**
-     * @Then /^I should see the main categories and its products in the main view$/
-     */
-    public function iShouldSeeTheMainCategoriesAndItsProductsInTheMainView() {
-        $this->assertElementContainsText('.subcategories', 'Category A');
-        $this->assertElementContainsText('.subcategories', 'Category B');
-        $this->assertElementContainsText('.subcategories', 'Product A 1');
-        $this->assertElementContainsText('.subcategories', 'Product A 2');
-        $this->assertElementContainsText('.subcategories', 'Product B 1');
+    public function iShouldSeeInTheMainView($text) {
+        $this->assertElementContainsText('*[role="main"]', $text);
     }
 }

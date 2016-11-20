@@ -4,14 +4,22 @@ Feature: Browse for products
   I should be able to find the products I want
 
   Background: Consider we have a few categories and products
-    Given there are categories and products
+    Given there are the following categories and products:
+      | Parent     | Category    | Products               |
+      |            | Category A  | Product A1, Product A2 |
+      | Category A | Category AA | Product AA1            |
+      |            | Category B  | Product B1             |
 
   Scenario: View featured products and categories
     When I go to the homepage
-    Then I should see the main categories and its products in the main view
+    Then I should see "Category A" in the main view
+    And  I should see "Category B" in the main view
+    And  I should see "Product A1" in the main view
+    And  I should see "Product A2" in the main view
+    And  I should see "Product B1" in the main view
 
-#  Scenario: View a tree menu with all categories
-#    When I go to the homepage
+  Scenario: View a tree menu with all categories
+    When I go to the homepage
 #    Then I should see a tree with all the avaiable categories
 #
 #  Scenario: Browse products through the featured products
