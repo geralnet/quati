@@ -1,22 +1,39 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Quati</title>
-</head>
+@extends('layouts.master')
 
-<body>
-@foreach($categories as $category)
+@section('content')
     <section>
-        <h1>{{ $category->name }}</h1>
-        <b>Products:</b>
-        <ul>
-            @foreach($category->products as $product)
-                <li>{{ $product->name }}</li>
-            @endforeach
-        </ul>
+        <h1>Description</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac dapibus felis. Vestibulum mattis
+            ante ac
+            felis posuere sodales. Nulla facilisi. In egestas, risus sed viverra fringilla, dolor massa pharetra
+            risus,
+            ut posuere mi urna eget sapien. Sed tempor enim sed imperdiet imperdiet. Fusce ipsum turpis, egestas
+            eu
+            ligula nec, fermentum sagittis ex. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
+            posuere
+            cubilia Curae; Ut a urna est. Praesent interdum dui sed tempor gravida. Nullam at metus elementum,
+            sollicitudin ante pretium, dignissim augue. Integer convallis condimentum felis ac lobortis.
+            Praesent rutrum
+            pharetra elit et pretium. Duis a turpis turpis. Praesent id quam in ipsum consequat feugiat non a
+            nibh.
+            Praesent vestibulum scelerisque purus et commodo. Ut mauris enim, tincidunt ac mollis non, egestas
+            non
+            neque.</p>
     </section>
-@endforeach
-</body>
-
-</html>
+    <section class="subcategories">
+        @foreach($categories as $category)
+            <section class="product-category">
+                <h1>{{ $category->name }}</h1>
+                <b>Products:</b>
+                <ul>
+                    @foreach($category->products as $product)
+                        <li>{{ $product->name }}</li>
+                    @endforeach
+                </ul>
+            </section>
+        @endforeach
+    </section>
+    <section>
+        <h1>Products</h1>
+    </section>
+@endsection

@@ -1,0 +1,43 @@
+.site-header {
+    overflow: auto;
+}
+
+.site-logo {
+    float: left;
+}
+
+.site-logo a {
+    text-decoration: none;
+    opacity: 0.8;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.site-logo a:hover {
+    opacity: 1;
+}
+
+.site-logo a img {
+    width: 171px;
+    height: 38px;
+    content: url('/@images/geralnet-logo.png');
+    margin: 10px;
+}
+
+.user-login {
+    float: right;
+    padding: 10px;
+}
+
+.user-login ul {
+    margin: 0px;
+}
+
+.user-login ul li {
+    display: inline-block;
+    list-style-type: none;
+    line-height: normal;
+}
+
+.user-login ul li + li::before {
+    content: '| ';
+}

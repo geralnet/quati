@@ -49,13 +49,13 @@ class FeatureContext extends MinkContext {
     }
 
     /**
-     * @Then /^I should see the main categories and its products$/
+     * @Then /^I should see the main categories and its products in the main view$/
      */
-    public function iShouldSeeTheMainCategoriesAndItsProducts() {
-        $this->assertPageContainsText('Category A');
-        $this->assertPageContainsText('Category B');
-        $this->assertPageContainsText('Product A 1');
-        $this->assertPageContainsText('Product A 2');
-        $this->assertPageContainsText('Product B 1');
+    public function iShouldSeeTheMainCategoriesAndItsProductsInTheMainView() {
+        $this->assertElementContainsText('.subcategories', 'Category A');
+        $this->assertElementContainsText('.subcategories', 'Category B');
+        $this->assertElementContainsText('.subcategories', 'Product A 1');
+        $this->assertElementContainsText('.subcategories', 'Product A 2');
+        $this->assertElementContainsText('.subcategories', 'Product B 1');
     }
 }
