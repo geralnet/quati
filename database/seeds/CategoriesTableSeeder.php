@@ -18,6 +18,10 @@ class CategoriesTableSeeder extends Seeder
         $categoryAA->parent()->associate($categoryA);
         $categoryAA->save();
 
+        $categoryAAA = new Category(['name' => 'Category AAA']);
+        $categoryAAA->parent()->associate($categoryAA);
+        $categoryAAA->save();
+
         $categoryAB = new Category(['name' => 'Category AB']);
         $categoryAB->parent()->associate($categoryA);
         $categoryAB->save();

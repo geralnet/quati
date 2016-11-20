@@ -1,5 +1,18 @@
+body {
+    background-color: #eee;
+}
+
 .site-header {
     overflow: auto;
+    background-color: #fff;
+}
+
+.site-block {
+    border: solid 1px #aaa;
+    background-color: #fff;
+    border-radius: 10px;
+    margin-bottom: 4px;
+    padding: 5px;
 }
 
 .site-logo {
@@ -34,10 +47,25 @@
 
 .user-login ul li {
     display: inline-block;
-    list-style-type: none;
+    list-style: none;
     line-height: normal;
 }
 
 .user-login ul li + li::before {
     content: '| ';
 }
+
+.category-tree {
+    font-size: 90%;
+}
+
+.category-tree ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.category-tree ul ul {
+    padding-left: 10px;
+}
+
