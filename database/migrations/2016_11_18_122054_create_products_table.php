@@ -6,6 +6,15 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateProductsTable extends Migration {
     /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down() {
+        Schema::dropIfExists('products');
+    }
+
+    /**
      * Run the migrations.
      *
      * @return void
@@ -17,18 +26,9 @@ class CreateProductsTable extends Migration {
             $table->string('name')->index();
 
             $table->integer('category_id')->unsigned()
-                ->index()->foreign()->references('id')->on('categories');
+                  ->index()->foreign()->references('id')->on('categories');
 
             $table->timestamps();
         });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down() {
-        Schema::dropIfExists('products');
     }
 }

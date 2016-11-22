@@ -11,14 +11,11 @@ use Tests\TestCase;
  */
 class ProductTest extends TestCase {
     /** @test */
-    public function test_we_can_create_a_simple_product() {
-        self::assertNotNull(new Product());
-    }
-
-    /** @test */
-    public function test_we_can_create_a_product_with_a_name() {
-        $product = new Product(['name' => 'The Name']);
-        self::assertSame('The Name', $product->name);
+    public function test_a_product_belongs_to_a_category() {
+        $product = new Product();
+        $category = new Category();
+        $product->category = $category;
+        self::assertSame($category, $product->category);
     }
 
     /** @test */
@@ -29,10 +26,13 @@ class ProductTest extends TestCase {
     }
 
     /** @test */
-    public function test_a_product_belongs_to_a_category() {
-        $product = new Product();
-        $category = new Category();
-        $product->category = $category;
-        self::assertSame($category, $product->category);
+    public function test_we_can_create_a_product_with_a_name() {
+        $product = new Product(['name' => 'The Name']);
+        self::assertSame('The Name', $product->name);
+    }
+
+    /** @test */
+    public function test_we_can_create_a_simple_product() {
+        self::assertNotNull(new Product());
     }
 }

@@ -14,6 +14,35 @@ class FeatureContext extends MinkContext {
     use DatabaseTransactions;
 
     /**
+     * @When /^I follow "([^"]*)" in the main view$/
+     */
+    public function iFollowInTheMainView($link) {
+        $link = $this->fixStepArgument($link);
+        $found = $this->getSession()->getPage()->find('css', '.site-main')
+                      ->findLink($link);
+
+        if (null === $link) {
+            throw new ElementNotFoundException($this->getSession(), 'link', 'id|title|alt|text', $locator);
+        }
+
+        $found->click();
+    }
+
+    /**
+     * @Then /^I should see "([^"]*)" in the category tree$/
+     */
+    public function iShouldSeeInTheCategoryTree($text) {
+        $this->assertElementContainsText('.category-tree', $text);
+    }
+
+    /**
+     * @Then /^I should see "([^"]*)" in the main view$/
+     */
+    public function iShouldSeeInTheMainView($text) {
+        $this->assertElementContainsText('.site-main', $text);
+    }
+
+    /**
      * @Given /^there are the following categories and products:$/
      */
     public function thereAreTheFollowingCategoriesAndProducts(TableNode $table) {
@@ -33,34 +62,5 @@ class FeatureContext extends MinkContext {
                 $product->save();
             }
         }
-    }
-
-    /**
-     * @Then /^I should see "([^"]*)" in the main view$/
-     */
-    public function iShouldSeeInTheMainView($text) {
-        $this->assertElementContainsText('.site-main', $text);
-    }
-
-    /**
-     * @Then /^I should see "([^"]*)" in the category tree$/
-     */
-    public function iShouldSeeInTheCategoryTree($text) {
-        $this->assertElementContainsText('.category-tree', $text);
-    }
-
-    /**
-     * @When /^I follow "([^"]*)" in the main view$/
-     */
-    public function iFollowInTheMainView($link) {
-        $link = $this->fixStepArgument($link);
-        $found = $this->getSession()->getPage()->find('css', '.site-main')
-                      ->findLink($link);
-
-        if (null === $link) {
-            throw new ElementNotFoundException($this->getSession(), 'link', 'id|title|alt|text', $locator);
-        }
-
-        $found->click();
     }
 }

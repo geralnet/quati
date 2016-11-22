@@ -3,15 +3,13 @@
 use Illuminate\Database\Seeder;
 use App\Models\Product\Category;
 
-class CategoriesTableSeeder extends Seeder
-{
+class CategoriesTableSeeder extends Seeder {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
-    {
+    public function run() {
         $categoryA = Category::create(['name' => 'Category A']);
 
         $categoryAA = new Category(['name' => 'Category AA']);

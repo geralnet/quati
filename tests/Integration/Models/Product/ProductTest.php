@@ -12,6 +12,20 @@ use Tests\TestCase;
  */
 class ProductTest extends TestCase {
     /** @test */
+    public function a_product_belongs_to_a_category() {
+        $category = Category::create(['name' => 'Category']);
+
+        $product = new Product(['name' => 'Product']);
+        $product->category()->associate($category);
+        $product->save();
+
+        $fetchedProduct = Product::with('category')->find($product->id);
+        self::assertSame($product->id, $fetchedProduct->id);
+        self::assertSame($category->id, $fetchedProduct->category->id);
+        self::assertSame('Category', $fetchedProduct->category->name);
+    }
+
+    /** @test */
     public function a_product_has_a_name() {
         $category = new Category(['name' => 'Category']);
         $category->save();
@@ -29,19 +43,5 @@ class ProductTest extends TestCase {
 
         self::expectException(QueryException::class);
         $product->save();
-    }
-
-    /** @test */
-    public function a_product_belongs_to_a_category() {
-        $category = Category::create(['name' => 'Category']);
-
-        $product = new Product(['name' => 'Product']);
-        $product->category()->associate($category);
-        $product->save();
-
-        $fetchedProduct = Product::with('category')->find($product->id);
-        self::assertSame($product->id, $fetchedProduct->id);
-        self::assertSame($category->id, $fetchedProduct->category->id);
-        self::assertSame('Category', $fetchedProduct->category->name);
     }
 }

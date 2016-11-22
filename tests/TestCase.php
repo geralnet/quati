@@ -11,6 +11,14 @@ use Mockery;
  */
 abstract class TestCase extends \Illuminate\Foundation\Testing\TestCase {
     use DatabaseTransactions;
+
+    /**
+     * TestCase constructor.
+     */
+    public function __construct() {
+        $this->baseUrl = env('APP_URL');
+    }
+
     /**
      * The base URL to use while testing the application.
      *
@@ -18,11 +26,9 @@ abstract class TestCase extends \Illuminate\Foundation\Testing\TestCase {
      */
     protected $baseUrl;
 
-    /**
-     * TestCase constructor.
-     */
-    public function __construct() {
-        $this->baseUrl = env('APP_URL');
+    /** @after */
+    public function close_mockery() {
+        Mockery::close();
     }
 
     /**
@@ -36,10 +42,5 @@ abstract class TestCase extends \Illuminate\Foundation\Testing\TestCase {
         $app->make(Kernel::class)->bootstrap();
 
         return $app;
-    }
-
-    /** @after */
-    public function close_mockery() {
-        Mockery::close();
     }
 }

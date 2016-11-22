@@ -9,60 +9,6 @@ use Tests\TestCase;
 
 class ProductBrowserControllerTest extends TestCase {
     /** @test */
-    public function it_should_not_have_an_error_for_homepage() {
-        $this->visit('/')->assertResponseOk();
-    }
-
-    /** @test */
-    public function it_handles_the_home_page() {
-        $controller = Mockery::mock(ProductBrowserController::class)->makePartial();
-        $controller->shouldReceive('index')->once();
-        App::instance(ProductBrowserController::class, $controller);
-
-        $this->visit('/');
-    }
-
-    /** @test */
-    public function it_must_provide_the_home_view() {
-        /** @var Response $response */
-        $response = $this->visit('/')->response;
-        /** @var View $view */
-        $view = $response->getOriginalContent();
-        self::assertSame('home', $view->getName());
-    }
-
-    /** @test */
-    public function it_must_provide_the_categories_parameter_to_the_view() {
-        /** @var Response $response */
-        $response = $this->visit('/')->response;
-        /** @var View $view */
-        $view = $response->getOriginalContent();
-        $data = $view->getData();
-        self::assertArrayHasKey('root_categories', $data);
-    }
-
-    /** @test */
-    public function it_must_provide_the_root_categories_to_the_view() {
-        $categoryA = Category::create(['name' => 'Category A']);
-
-        $categoryAA = new Category(['name' => 'Category AA']);
-        $categoryAA->parent()->associate($categoryA);
-        $categoryAA->save();
-
-        Category::create(['name' => 'Category B']);
-
-        $viewData = $this->visit('/')->response->getOriginalContent()->getData();
-
-        $expected = ['Category A', 'Category B'];
-        $actual = [];
-        foreach ($viewData['root_categories'] as $category) {
-            $actual[] = $category->name;
-        }
-
-        self::assertSame($expected, $actual);
-    }
-
-    /** @test */
     public function it_handles_a_category_view() {
         Category::create(['name' => 'Category Name', 'keyword' => 'TheKeyword']);
 
@@ -97,8 +43,52 @@ class ProductBrowserControllerTest extends TestCase {
     }
 
     /** @test */
-    public function it_returns_404_for_an_invalid_path() {
-        $this->get('/@InvalidPath')->assertResponseStatus(404);
+    public function it_handles_the_home_page() {
+        $controller = Mockery::mock(ProductBrowserController::class)->makePartial();
+        $controller->shouldReceive('index')->once();
+        App::instance(ProductBrowserController::class, $controller);
+
+        $this->visit('/');
+    }
+
+    /** @test */
+    public function it_must_provide_the_categories_parameter_to_the_view() {
+        /** @var Response $response */
+        $response = $this->visit('/')->response;
+        /** @var View $view */
+        $view = $response->getOriginalContent();
+        $data = $view->getData();
+        self::assertArrayHasKey('root_categories', $data);
+    }
+
+    /** @test */
+    public function it_must_provide_the_home_view() {
+        /** @var Response $response */
+        $response = $this->visit('/')->response;
+        /** @var View $view */
+        $view = $response->getOriginalContent();
+        self::assertSame('home', $view->getName());
+    }
+
+    /** @test */
+    public function it_must_provide_the_root_categories_to_the_view() {
+        $categoryA = Category::create(['name' => 'Category A']);
+
+        $categoryAA = new Category(['name' => 'Category AA']);
+        $categoryAA->parent()->associate($categoryA);
+        $categoryAA->save();
+
+        Category::create(['name' => 'Category B']);
+
+        $viewData = $this->visit('/')->response->getOriginalContent()->getData();
+
+        $expected = ['Category A', 'Category B'];
+        $actual = [];
+        foreach ($viewData['root_categories'] as $category) {
+            $actual[] = $category->name;
+        }
+
+        self::assertSame($expected, $actual);
     }
 
     /** @test */
@@ -141,5 +131,15 @@ class ProductBrowserControllerTest extends TestCase {
         }
 
         self::assertSame($expected, $actual);
+    }
+
+    /** @test */
+    public function it_returns_404_for_an_invalid_path() {
+        $this->get('/@InvalidPath')->assertResponseStatus(404);
+    }
+
+    /** @test */
+    public function it_should_not_have_an_error_for_homepage() {
+        $this->visit('/')->assertResponseOk();
     }
 }

@@ -13,22 +13,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Category extends Model {
-    /** @var string[] */
-    protected $fillable = ['name', 'keyword'];
-
-    /** @var string */
-    protected $name;
+    public static function getChildWithKeyword($parent, $keyword) {
+        $parentid = is_null($parent) ? null : $parent->id;
+        return Category::where('parent_id', $parentid)->where('keyword', $keyword)->first();
+    }
 
     /**
      * @return Collection
      */
     public static function getRootCategories() {
         return static::whereNull('parent_id')->get();
-    }
-
-    public static function getChildWithKeyword($parent, $keyword) {
-        $parentid = is_null($parent) ? null : $parent->id;
-        return Category::where('parent_id', $parentid)->where('keyword', $keyword)->first();
     }
 
     /**
@@ -42,12 +36,11 @@ class Category extends Model {
         return $keyword;
     }
 
-    /**
-     * @return HasMany
-     */
-    public function products() {
-        return $this->hasMany(Product::class);
-    }
+    /** @var string[] */
+    protected $fillable = ['name', 'keyword'];
+
+    /** @var string */
+    protected $name;
 
     /**
      * @return BelongsTo
@@ -59,8 +52,8 @@ class Category extends Model {
     /**
      * @return HasMany
      */
-    public function subcategories() {
-        return $this->hasMany(Category::class, 'parent_id');
+    public function products() {
+        return $this->hasMany(Product::class);
     }
 
     /**
@@ -71,5 +64,12 @@ class Category extends Model {
         $keyword = self::createKeywordFromName($name);
         $this->attributes['name'] = $name;
         $this->attributes['keyword'] = $keyword;
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function subcategories() {
+        return $this->hasMany(Category::class, 'parent_id');
     }
 }
