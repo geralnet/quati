@@ -25,9 +25,13 @@
             neque.</p>
     </section>
     <section class="subcategories">
-        @foreach($root_categories as $category)
+        @foreach($show_categories as $category)
             <section class="product-category">
-                <h1>{{ $category->name }}</h1>
+                <h1>
+                    <a href="/{{ $category->keyword }}">
+                        {{ $category->name }}
+                    </a>
+                </h1>
                 <b>Products:</b>
                 <ul>
                     @foreach($category->products as $product)

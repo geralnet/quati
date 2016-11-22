@@ -3,6 +3,7 @@
 use App\Models\Product\Category;
 use App\Models\Product\Product;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\MinkExtension\Context\MinkContext;
 use Laracasts\Behat\Context\DatabaseTransactions;
 
@@ -38,7 +39,7 @@ class FeatureContext extends MinkContext {
      * @Then /^I should see "([^"]*)" in the main view$/
      */
     public function iShouldSeeInTheMainView($text) {
-        $this->assertElementContainsText('*[role="main"]', $text);
+        $this->assertElementContainsText('.site-main', $text);
     }
 
     /**
@@ -46,5 +47,20 @@ class FeatureContext extends MinkContext {
      */
     public function iShouldSeeInTheCategoryTree($text) {
         $this->assertElementContainsText('.category-tree', $text);
+    }
+
+    /**
+     * @When /^I follow "([^"]*)" in the main view$/
+     */
+    public function iFollowInTheMainView($link) {
+        $link = $this->fixStepArgument($link);
+        $found = $this->getSession()->getPage()->find('css', '.site-main')
+                      ->findLink($link);
+
+        if (null === $link) {
+            throw new ElementNotFoundException($this->getSession(), 'link', 'id|title|alt|text', $locator);
+        }
+
+        $found->click();
     }
 }

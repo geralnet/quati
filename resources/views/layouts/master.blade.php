@@ -26,7 +26,7 @@
         <div class="col-sm-3" role="complementary">
             @yield('sidemenu')
         </div>
-        <div class="col-sm-9" role="main">
+        <div class="site-main col-sm-9" role="main">
             @yield('content')
         </div>
     </div>

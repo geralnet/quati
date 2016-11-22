@@ -23,12 +23,13 @@ Feature: Browse for products
     Then I should see "Category A" in the category tree
     Then I should see "Category AA" in the category tree
     And  I should see "Category B" in the category tree
-#
-#  Scenario: Browse products through the featured products
-#    Given I am on the homepage
-#    When I click on a category name in the features products
-#    Then I should see its products and subcategories
-#
+
+  Scenario: View a category listed in the main view
+    Given I am on the homepage
+    When I follow "Category A" in the main view
+    Then I should see "Category AA" in the main view
+    And  I should see "Product AA1" in the main view
+
 #  Scenario: Browse products through the category tree
 #    And I am on the homepage
 #    When I click on a category name in the category tree
