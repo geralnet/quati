@@ -12,6 +12,10 @@ class ProductsTableSeeder extends Seeder {
      */
     public function run() {
         foreach (Category::all() as $category) {
+            // Ignore root.
+            if ($category->keyword == Category::KEYWORD_ROOT) {
+                continue;
+            }
             for ($i = 1; $i <= 5; $i++) {
                 list(, $letter) = explode(' ', $category->name);
                 $product = new Product();

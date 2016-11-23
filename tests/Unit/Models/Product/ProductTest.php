@@ -11,7 +11,7 @@ use Tests\TestCase;
 class ProductTest extends TestCase {
     /** @test */
     public function it_belongs_to_a_category() {
-        $category = Category::create(['name' => 'Category']);
+        $category = Category::createInRoot(['name' => 'Category']);
 
         $product = new Product(['name' => 'Product']);
         $product->category()->associate($category);
@@ -35,8 +35,7 @@ class ProductTest extends TestCase {
 
     /** @test */
     public function it_has_a_name() {
-        $category = new Category(['name' => 'Category']);
-        $category->save();
+        $category = Category::createInRoot(['name' => 'Category']);
 
         $product = new Product(['name' => 'Test Product']);
         $product->category()->associate($category);

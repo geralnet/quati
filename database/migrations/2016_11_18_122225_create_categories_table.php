@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Product\Category;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -27,10 +28,21 @@ class CreateCategoriesTable extends Migration {
 
             $table->string('keyword')->index();
 
-            $table->integer('parent_id')->unsigned()->nullable()->index()
-                  ->foreign('parent_id')->references('id')->on('categories');
+            // Nullable so we can add root category.
+            $table->integer('parent_id')->unsigned()->nullable()
+                  ->index()->foreign('parent_id')->references('id')->on('categories');
 
             $table->timestamps();
+        });
+
+        // Add root category.
+        $category = Category::create(['name' => Category::KEYWORD_ROOT, 'keyword' => Category::KEYWORD_ROOT]);
+        $category->parent()->associate($category);
+        $category->save();
+
+        // Root category added, remove nullable attribute from parent.
+        Schema::table('categories', function(Blueprint $table) {
+            $table->integer('parent_id')->unsigned()->nullable(false)->change();
         });
     }
 }

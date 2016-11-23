@@ -46,13 +46,14 @@ class FeatureContext extends MinkContext {
      * @Given /^there are the following categories and products:$/
      */
     public function thereAreTheFollowingCategoriesAndProducts(TableNode $table) {
-        $categories = [];
+        $categories = ['[root]' => Category::getRoot()];
         foreach ($table->getHash() as $row) {
             $category = new Category();
             $category->name = $row['Category'];
-            if ($row['Parent']) {
-                $category->parent()->associate($categories[$row['Parent']]);
+            if ($row['Parent'] == '') {
+                $row['Parent'] = '[root]';
             }
+            $category->parent()->associate($categories[$row['Parent']]);
             $category->save();
             $categories[$row['Category']] = $category;
 

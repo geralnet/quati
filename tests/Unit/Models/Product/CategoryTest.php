@@ -12,10 +12,24 @@ class CategoryTest extends TestCase {
     private $generatedCategories = null;
 
     /** @test */
-    public function it_can_have_many_products() {
-        $category = new Category(['name' => 'Category']);
-        $category->save();
+    public function it_can_create_a_category_inside_root() {
+        $category = Category::createInRoot(['name' => 'Category']);
+        self::assertSame('Category', $category->name);
+        self::assertSame('[root]', $category->parent->name);
+    }
 
+    /** @test */
+    public function it_can_create_a_subcategory() {
+        $categoryA = Category::createInRoot(['name' => 'Category A']);
+        $categoryAA = Category::createSubcategory($categoryA, ['name' => 'Category AA']);
+        self::assertSame('Category AA', $categoryAA->name);
+        self::assertSame('Category A', $categoryAA->parent->name);
+        self::assertSame('[root]', $categoryAA->parent->parent->name);
+    }
+
+    /** @test */
+    public function it_can_have_many_products() {
+        $category = Category::createInRoot(['name' => 'Category']);
         $productA = new Product(['name' => 'Product A']);
         $productA->category()->associate($category);
         $productA->save();
@@ -31,15 +45,9 @@ class CategoryTest extends TestCase {
 
     /** @test */
     public function it_can_have_subcategories() {
-        $categoryA = Category::create(['name' => 'Category A']);
-        $categoryAA = Category::create(['name' => 'Category AA']);
-        $categoryAB = Category::create(['name' => 'Category AB']);
-
-        $categoryAA->parent()->associate($categoryA);
-        $categoryAA->save();
-
-        $categoryAB->parent()->associate($categoryA);
-        $categoryAB->save();
+        $categoryA = Category::createInRoot(['name' => 'Category A']);
+        Category::createSubcategory($categoryA, ['name' => 'Category AA']);
+        Category::createSubcategory($categoryA, ['name' => 'Category AB']);
 
         $fetchedCategory = Category::find($categoryA->id);
         $subcategories = $fetchedCategory->subcategories;
@@ -47,18 +55,10 @@ class CategoryTest extends TestCase {
     }
 
     /** @test */
-    public function it_can_provide_all_root_categories() {
-        $this->generateData();
-
-        Category::create(['name' => 'Category C']);
-
-        $expected = ['Category A', 'Category B', 'Category C'];
-        $actual = [];
-        foreach (Category::getRootCategories() as $category) {
-            $actual[] = $category->name;
-        }
-
-        self::assertSame($expected, $actual);
+    public function it_can_provide_the_root_category() {
+        $root = Category::getRoot();
+        self::assertSame('[root]', $root->name);
+        self::assertSame('[root]', $root->keyword);
     }
 
     /** @test */
@@ -108,7 +108,7 @@ class CategoryTest extends TestCase {
 
     /** @test */
     public function it_has_a_name() {
-        $category = Category::create(['name' => 'Test Category']);
+        $category = Category::createInRoot(['name' => 'Test Category']);
         self::assertSame('Test Category', $category->name);
     }
 
@@ -122,12 +122,9 @@ class CategoryTest extends TestCase {
 
     /** @test */
     public function it_may_have_a_parent_category() {
-        $parent = new Category(['name' => 'Parent Category']);
-        $parent->save();
+        $parent = Category::createInRoot(['name' => 'Parent Category']);
 
-        $child = new Category(['name' => 'Child Category']);
-        $child->parent()->associate($parent);
-        $child->save();
+        $child = Category::createSubcategory($parent, ['name' => 'Child Category']);
 
         $fetchedChild = Category::with('parent')->find($child->id);
         self::assertSame($child->id, $fetchedChild->id);
@@ -161,19 +158,13 @@ class CategoryTest extends TestCase {
      * Creates some data used when testing fetched results.
      */
     private function generateData() {
-        $this->generatedCategories['categoryA'] = Category::create(['name' => 'Category A']);
+        $categoryA = Category::createInRoot(['name' => 'Category A']);
+        $categoryAA = Category::createSubcategory($categoryA, ['name' => 'Category AA']);
+        $categoryAB = Category::createSubcategory($categoryA, ['name' => 'Category AB']);
 
-        $this->generatedCategories['categoryAA'] = new Category(['name' => 'Category AA']);
-        $this->generatedCategories['categoryAA']->parent()->associate($this->generatedCategories['categoryA']);
-        $this->generatedCategories['categoryAA']->save();
+        $categoryB = Category::createInRoot(['name' => 'Category B']);
+        $categoryBA = Category::createSubcategory($categoryB, ['name' => 'Category BA']);
 
-        $this->generatedCategories['categoryAB'] = new Category(['name' => 'Category AB']);
-        $this->generatedCategories['categoryAB']->parent()->associate($this->generatedCategories['categoryA']);
-        $this->generatedCategories['categoryAB']->save();
-
-        $this->generatedCategories['categoryB'] = Category::create(['name' => 'Category B']);
-        $this->generatedCategories['categoryBA'] = new Category(['name' => 'Category BA']);
-        $this->generatedCategories['categoryBA']->parent()->associate($this->generatedCategories['categoryB']);
-        $this->generatedCategories['categoryBA']->save();
+        $this->generatedCategories = compact('categoryA', 'categoryAA', 'categoryAB', 'categoryB', 'categoryBA');
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use App\Models\Product\Category;
+use Illuminate\Database\Seeder;
 
 class CategoriesTableSeeder extends Seeder {
     /**
@@ -10,25 +10,14 @@ class CategoriesTableSeeder extends Seeder {
      * @return void
      */
     public function run() {
-        $categoryA = Category::create(['name' => 'Category A']);
+        $categoryA = Category::createInRoot(['name' => 'Category A']);
+        $categoryAA = Category::createSubcategory($categoryA, ['name' => 'Category AA']);
+        Category::createSubcategory($categoryAA, ['name' => 'Category AAA']);
+        Category::createSubcategory($categoryA, ['name' => 'Category AB']);
 
-        $categoryAA = new Category(['name' => 'Category AA']);
-        $categoryAA->parent()->associate($categoryA);
-        $categoryAA->save();
+        $categoryB = Category::createInRoot(['name' => 'Category B']);
+        Category::createSubcategory($categoryB, ['name' => 'Category BA']);
 
-        $categoryAAA = new Category(['name' => 'Category AAA']);
-        $categoryAAA->parent()->associate($categoryAA);
-        $categoryAAA->save();
-
-        $categoryAB = new Category(['name' => 'Category AB']);
-        $categoryAB->parent()->associate($categoryA);
-        $categoryAB->save();
-
-        $categoryB = Category::create(['name' => 'Category B']);
-        $categoryBA = new Category(['name' => 'Category BA']);
-        $categoryBA->parent()->associate($categoryB);
-        $categoryBA->save();
-
-        Category::create(['name' => 'Category C']);
+        Category::createInRoot(['name' => 'Category C']);
     }
 }

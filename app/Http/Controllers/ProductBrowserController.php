@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class ProductBrowserController extends Controller {
     public function index($category) {
         $current_category = $this->getCategoryForPath($category);
-        $root_categories = Category::getRootCategories();
+        $root_categories = Category::getRoot()->subcategories()->getResults();
         $show_categories = is_null($current_category)
             ? $root_categories
             : $current_category->subcategories()->getResults();

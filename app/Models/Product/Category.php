@@ -2,7 +2,6 @@
 
 namespace App\Models\Product;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,16 +12,33 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Category extends Model {
+    /** Special keyword for the root category */
+    const KEYWORD_ROOT = '[root]';
+
+    /** @var Category Caches the root category. */
+    private static $rootCategory = null;
+
+    public static function createInRoot(array $attributes) {
+        return self::createSubcategory(self::getRoot(), $attributes);
+    }
+
+    public static function createSubcategory(Category $parent, array $attributes) {
+        $category = new Category($attributes);
+        $category->parent()->associate($parent);
+        $category->save();
+        return $category;
+    }
+
     public static function getChildWithKeyword($parent, $keyword) {
-        $parentid = is_null($parent) ? null : $parent->id;
+        $parentid = is_null($parent) ? Category::$rootCategory->id : $parent->id;
         return Category::where('parent_id', $parentid)->where('keyword', $keyword)->first();
     }
 
-    /**
-     * @return Collection
-     */
-    public static function getRootCategories() {
-        return static::whereNull('parent_id')->get();
+    public static function getRoot() : Category {
+        if (is_null(self::$rootCategory)) {
+            self::$rootCategory = static::where('keyword', Category::KEYWORD_ROOT)->firstOrFail();
+        }
+        return self::$rootCategory;
     }
 
     /**
@@ -70,6 +86,6 @@ class Category extends Model {
      * @return HasMany
      */
     public function subcategories() {
-        return $this->hasMany(Category::class, 'parent_id');
+        return $this->hasMany(Category::class, 'parent_id')->where('keyword', '!=', '[root]');
     }
 }
