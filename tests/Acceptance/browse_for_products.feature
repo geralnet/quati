@@ -13,22 +13,22 @@ Feature: Browse for products
   Scenario: View featured products and categories
     When I go to the homepage
     Then I should see "Category A" in the main view
-    And  I should see "Category B" in the main view
-    And  I should see "Product A1" in the main view
-    And  I should see "Product A2" in the main view
-    And  I should see "Product B1" in the main view
+    And I should see "Category B" in the main view
+    And I should see "Product A1" in the main view
+    And I should see "Product A2" in the main view
+    And I should see "Product B1" in the main view
 
   Scenario: View a tree menu with all categories
     When I go to the homepage
     Then I should see "Category A" in the category tree
-    Then I should see "Category AA" in the category tree
-    And  I should see "Category B" in the category tree
+    And I should see "Category AA" in the category tree
+    And I should see "Category B" in the category tree
 
   Scenario: View a category listed in the main view
     Given I am on the homepage
     When I follow "Category A" in the main view
     Then I should see "Category AA" in the main view
-    And  I should see "Product AA1" in the main view
+    And I should see "Product AA1" in the main view
 
 #  Scenario: Browse products through the category tree
 #    And I am on the homepage
