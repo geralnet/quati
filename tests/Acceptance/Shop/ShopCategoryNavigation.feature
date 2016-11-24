@@ -1,7 +1,7 @@
-Feature: Browse for products
+Feature: Browse for products using categories
   In order buy products
   As a customer
-  I should be able to find the products I want
+  I should be able to navigate through product categories
 
   Background: Consider we have a few categories and products
     Given there are the following categories and products:
@@ -30,11 +30,12 @@ Feature: Browse for products
     Then I should see "Category AA" in the main view
     And I should see "Product AA1" in the main view
 
-#  Scenario: Browse products through the category tree
-#    And I am on the homepage
-#    When I click on a category name in the category tree
-#    Then I should see its products and subcategories
-#
+  Scenario: Browse products through the category tree
+    And I am on the homepage
+    When I follow "Category A" in the category tree
+    Then I should see "Category AA" in the main view
+    And I should see "Product AA1" in the main view
+
 #  Scenario: View details of a product
 #    And I am on the category page
 #    When I click on a product

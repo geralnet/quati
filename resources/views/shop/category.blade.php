@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('sidemenu')
-    @include('layouts.categories-treemenu')
+    @include('shop.categories-treemenu')
 @endsection
 
 @section('content')
@@ -28,7 +28,7 @@
         @foreach($show_categories as $category)
             <section class="product-category">
                 <h1>
-                    <a href="/{{ $category->keyword }}">
+                    <a href="{{ $category->getKeywordPath() }}">
                         {{ $category->name }}
                     </a>
                 </h1>

@@ -14,6 +14,21 @@ class FeatureContext extends MinkContext {
     use DatabaseTransactions;
 
     /**
+     * @When /^I follow "([^"]*)" in the category tree$/
+     */
+    public function iFollowInTheCategoryTree($link) {
+        $link = $this->fixStepArgument($link);
+        $found = $this->getSession()->getPage()->find('css', '.category-tree')
+                      ->findLink($link);
+
+        if (is_null($found)) {
+            throw new ElementNotFoundException($this->getSession(), 'link', 'id|title|alt|text', $link);
+        }
+
+        $found->click();
+    }
+
+    /**
      * @When /^I follow "([^"]*)" in the main view$/
      */
     public function iFollowInTheMainView($link) {
@@ -21,8 +36,8 @@ class FeatureContext extends MinkContext {
         $found = $this->getSession()->getPage()->find('css', '.site-main')
                       ->findLink($link);
 
-        if (null === $link) {
-            throw new ElementNotFoundException($this->getSession(), 'link', 'id|title|alt|text', $locator);
+        if (is_null($found)) {
+            throw new ElementNotFoundException($this->getSession(), 'link', 'id|title|alt|text', $link);
         }
 
         $found->click();

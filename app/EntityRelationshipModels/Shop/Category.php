@@ -58,6 +58,26 @@ class Category extends EntityRelationshipModel {
     /** @var string */
     protected $name;
 
+    /** @var string */
+    private $keywordPath;
+
+    public function getKeywordPath() {
+        if (is_null($this->keywordPath)) {
+            if ($this->keyword == self::KEYWORD_ROOT) {
+                return '/';
+            }
+
+            $path = $this->parent()->getResults()->getKeywordPath();
+
+            if ($path == '/') {
+                $path = '';
+            }
+
+            $this->keywordPath = $path.'/'.$this->keyword;
+        }
+        return $this->keywordPath;
+    }
+
     /**
      * @return BelongsTo
      */

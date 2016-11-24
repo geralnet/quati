@@ -1,6 +1,6 @@
 default:
   autoload:
-    - %paths.base%/tests/Acceptance/bootstrap
+    - %paths.base%/tests/Acceptance
   suites:
     default:
       paths:

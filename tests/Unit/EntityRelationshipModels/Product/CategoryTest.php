@@ -133,6 +133,14 @@ class CategoryTest extends TestCase {
     }
 
     /** @test */
+    public function it_should_get_the_path_for_a_given_category() {
+        $alpha = Category::createInRoot(['name' => 'Alpha']);
+        $beta = Category::createSubcategory($alpha, ['name' => 'Beta']);
+        $charlie = Category::createSubcategory($beta, ['name' => 'Charlie']);
+        self::assertSame('/Alpha/Beta/Charlie', $charlie->getKeywordPath());
+    }
+
+    /** @test */
     public function it_should_map_to_the_correct_database_table() {
         $category = new Category();
         self::assertSame('shop_categories', $category->getTable());
