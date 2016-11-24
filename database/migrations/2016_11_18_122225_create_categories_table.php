@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Product\Category;
+use App\EntityRelationshipModels\Shop\Category;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,7 +12,7 @@ class CreateCategoriesTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('shop_categories');
     }
 
     /**
@@ -21,7 +21,7 @@ class CreateCategoriesTable extends Migration {
      * @return void
      */
     public function up() {
-        Schema::create('categories', function(Blueprint $table) {
+        Schema::create('shop_categories', function(Blueprint $table) {
             $table->increments('id');
 
             $table->string('name')->index();
@@ -41,7 +41,7 @@ class CreateCategoriesTable extends Migration {
         $category->save();
 
         // Root category added, remove nullable attribute from parent.
-        Schema::table('categories', function(Blueprint $table) {
+        Schema::table('shop_categories', function(Blueprint $table) {
             $table->integer('parent_id')->unsigned()->nullable(false)->change();
         });
     }

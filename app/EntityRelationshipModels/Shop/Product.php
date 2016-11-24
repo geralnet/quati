@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\Product;
+namespace App\EntityRelationshipModels\Shop;
 
-use Illuminate\Database\Eloquent\Model;
+use App\EntityRelationshipModels\EntityRelationshipModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Product extends Model {
+class Product extends EntityRelationshipModel {
     /** @var string[] */
     protected $fillable = ['name'];
 

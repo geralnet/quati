@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Product\Category;
-use App\Models\Product\Product;
+use App\EntityRelationshipModels\Shop\Category;
+use App\EntityRelationshipModels\Shop\Product;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\MinkExtension\Context\MinkContext;

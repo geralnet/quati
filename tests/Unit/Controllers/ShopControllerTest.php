@@ -1,20 +1,20 @@
 <?php
 
-use App\Http\Controllers\ProductBrowserController;
-use App\Models\Product\Category;
+use App\Http\Controllers\ShopController;
+use App\EntityRelationshipModels\Shop\Category;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\App;
 use Illuminate\View\View;
 use Tests\TestCase;
 
-class ProductBrowserControllerTest extends TestCase {
+class ShopControllerTest extends TestCase {
     /** @test */
     public function it_handles_a_category_view() {
         Category::createInRoot(['name' => 'Category Name', 'keyword' => 'TheKeyword']);
 
-        $controller = Mockery::mock(ProductBrowserController::class)->makePartial();
+        $controller = Mockery::mock(ShopController::class)->makePartial();
         $controller->shouldReceive('index')->once();
-        App::instance(ProductBrowserController::class, $controller);
+        App::instance(ShopController::class, $controller);
 
         $this->visit('/TheKeyword');
     }
@@ -42,9 +42,9 @@ class ProductBrowserControllerTest extends TestCase {
 
     /** @test */
     public function it_handles_the_home_page() {
-        $controller = Mockery::mock(ProductBrowserController::class)->makePartial();
+        $controller = Mockery::mock(ShopController::class)->makePartial();
         $controller->shouldReceive('index')->once();
-        App::instance(ProductBrowserController::class, $controller);
+        App::instance(ShopController::class, $controller);
 
         $this->visit('/');
     }
@@ -120,7 +120,7 @@ class ProductBrowserControllerTest extends TestCase {
 
     /** @test */
     public function it_returns_404_for_an_invalid_path() {
-        $this->get('/@InvalidPath')->assertResponseStatus(404);
+        $this->get('/InvalidPath')->assertResponseStatus(404);
     }
 
     /** @test */

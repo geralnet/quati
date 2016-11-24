@@ -11,5 +11,5 @@
 |
 */
 
-Route::get('/{category_path?}', 'ProductBrowserController@index')
+Route::get('/{category_path?}', 'ShopController@index')
      ->where('category_path', '[A-Za-z_\\-/]*');

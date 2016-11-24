@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models\Product;
+namespace App\EntityRelationshipModels\Shop;
 
-use Illuminate\Database\Eloquent\Model;
+use App\EntityRelationshipModels\EntityRelationshipModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class Category extends Model {
+class Category extends EntityRelationshipModel {
     /** Special keyword for the root category */
     const KEYWORD_ROOT = '[root]';
 
@@ -30,7 +30,7 @@ class Category extends Model {
     }
 
     public static function getChildWithKeyword($parent, $keyword) {
-        $parentid = is_null($parent) ? Category::$rootCategory->id : $parent->id;
+        $parentid = is_null($parent) ? Category::getRoot()->id : $parent->id;
         return Category::where('parent_id', $parentid)->where('keyword', $keyword)->first();
     }
 

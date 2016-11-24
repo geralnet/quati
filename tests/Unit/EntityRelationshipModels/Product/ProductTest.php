@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Product\Category;
-use App\Models\Product\Product;
+use App\EntityRelationshipModels\Shop\Category;
+use App\EntityRelationshipModels\Shop\Product;
 use Illuminate\Database\QueryException;
 use Tests\TestCase;
 
@@ -49,5 +49,11 @@ class ProductTest extends TestCase {
 
         self::expectException(QueryException::class);
         $product->save();
+    }
+
+    /** @test */
+    public function it_should_map_to_the_correct_database_table() {
+        $product = new Product();
+        self::assertSame('shop_products', $product->getTable());
     }
 }

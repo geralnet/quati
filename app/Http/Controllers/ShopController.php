@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product\Category;
+use App\EntityRelationshipModels\Shop\Category;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class ProductBrowserController extends Controller {
+class ShopController extends Controller {
     public function index($category) {
         $current_category = $this->getCategoryForPath($category);
         $root_categories = Category::getRoot()->subcategories()->getResults();

@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Product\Category;
-use App\Models\Product\Product;
+use App\EntityRelationshipModels\Shop\Category;
+use App\EntityRelationshipModels\Shop\Product;
 use Tests\TestCase;
 
 /**
@@ -130,6 +130,12 @@ class CategoryTest extends TestCase {
         self::assertSame($child->id, $fetchedChild->id);
         self::assertSame($parent->id, $child->parent->id);
         self::assertSame('Parent Category', $child->parent->name);
+    }
+
+    /** @test */
+    public function it_should_map_to_the_correct_database_table() {
+        $category = new Category();
+        self::assertSame('shop_categories', $category->getTable());
     }
 
     /** @test */
