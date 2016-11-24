@@ -13,7 +13,7 @@ class ShopControllerTest extends TestCase {
         Category::createInRoot(['name' => 'Category Name', 'keyword' => 'TheKeyword']);
 
         $controller = Mockery::mock(ShopController::class)->makePartial();
-        $controller->shouldReceive('index')->once();
+        $controller->shouldReceive('showCategory')->once();
         App::instance(ShopController::class, $controller);
 
         $this->visit('/TheKeyword');
@@ -43,7 +43,7 @@ class ShopControllerTest extends TestCase {
     /** @test */
     public function it_handles_the_home_page() {
         $controller = Mockery::mock(ShopController::class)->makePartial();
-        $controller->shouldReceive('index')->once();
+        $controller->shouldReceive('showCategory')->once();
         App::instance(ShopController::class, $controller);
 
         $this->visit('/');
@@ -60,12 +60,12 @@ class ShopControllerTest extends TestCase {
     }
 
     /** @test */
-    public function it_must_provide_the_home_view() {
+    public function it_must_provide_the_shop_category_view() {
         /** @var Response $response */
         $response = $this->visit('/')->response;
         /** @var View $view */
         $view = $response->getOriginalContent();
-        self::assertSame('home', $view->getName());
+        self::assertSame('shop.category', $view->getName());
     }
 
     /** @test */
