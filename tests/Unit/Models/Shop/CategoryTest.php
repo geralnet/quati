@@ -1,16 +1,13 @@
 <?php
 
-use App\EntityRelationshipModels\Shop\Category;
-use App\EntityRelationshipModels\Shop\Product;
+use App\Models\Shop\Category;
+use App\Models\Shop\Product;
 use Tests\TestCase;
 
 /**
  * Class CategoryTest
  */
 class CategoryTest extends TestCase {
-    /** @var Category[] */
-    private $generatedCategories = null;
-
     /** @test */
     public function it_can_create_a_category_inside_root() {
         $category = Category::createInRoot(['name' => 'Category']);
@@ -38,7 +35,8 @@ class CategoryTest extends TestCase {
         $productB->category()->associate($category);
         $productB->save();
 
-        $fetchedCategory = Category::find($category->id);
+        $id = $category->id;
+        $fetchedCategory = Category::find($id);
         $products = $fetchedCategory->products;
         self::assertCount(2, $products);
     }
@@ -50,7 +48,7 @@ class CategoryTest extends TestCase {
         Category::createSubcategory($categoryA, ['name' => 'Category AB']);
 
         $fetchedCategory = Category::find($categoryA->id);
-        $subcategories = $fetchedCategory->subcategories;
+        $subcategories = $fetchedCategory->subcategories();
         self::assertCount(2, $subcategories);
     }
 
@@ -147,38 +145,15 @@ class CategoryTest extends TestCase {
     }
 
     /** @test */
-    public function it_should_provide_the_category_given_a_parent_and_a_keyword() {
-        $this->generateData();
-
-        $actual = Category::getChildWithKeyword($this->generatedCategories['categoryA'], 'Category_AA');
-        self::assertSame('Category AA', $actual->name);
-    }
-
-    /** @test */
-    public function it_should_provide_the_category_given_no_parent_and_a_keyword() {
-        $this->generateData();
-
-        $actual = Category::getChildWithKeyword(null, 'Category_A');
-        self::assertSame('Category A', $actual->name);
+    public function it_should_not_override_the_keyword_when_setting_a_name() {
+        $category = new Category(['name' => 'Category A', 'keyword' => 'CategoryKey']);
+        $category->name = 'New Name';
+        self::assertSame('CategoryKey', $category->keyword);
     }
 
     /** @test */
     public function it_should_trim_names() {
         $category = new Category(['name' => "   ABC   \n"]);
         self::assertSame('ABC', $category->name);
-    }
-
-    /**
-     * Creates some data used when testing fetched results.
-     */
-    private function generateData() {
-        $categoryA = Category::createInRoot(['name' => 'Category A']);
-        $categoryAA = Category::createSubcategory($categoryA, ['name' => 'Category AA']);
-        $categoryAB = Category::createSubcategory($categoryA, ['name' => 'Category AB']);
-
-        $categoryB = Category::createInRoot(['name' => 'Category B']);
-        $categoryBA = Category::createSubcategory($categoryB, ['name' => 'Category BA']);
-
-        $this->generatedCategories = compact('categoryA', 'categoryAA', 'categoryAB', 'categoryB', 'categoryBA');
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace App\EntityRelationshipModels;
+namespace App\Models;
 
 use Tests\TestCase;
 

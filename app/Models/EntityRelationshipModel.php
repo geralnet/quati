@@ -1,11 +1,11 @@
 <?php
-namespace App\EntityRelationshipModels;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class EntityRelationshipModel extends Model {
-    const DATABASE_NAMESPACE_PREFIX = 'App\\EntityRelationshipModels\\';
+    const DATABASE_NAMESPACE_PREFIX = 'App\\Models\\';
 
     public function getTable() {
         if (isset($this->table)) {

@@ -1,23 +1,15 @@
 <?php
 
 use App\Http\Controllers\ShopController;
-use App\EntityRelationshipModels\Shop\Category;
+use App\Models\Shop\Category;
+use App\Models\Shop\Product;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\App;
 use Illuminate\View\View;
 use Tests\TestCase;
 
 class ShopControllerTest extends TestCase {
-    /** @test */
-    public function it_handles_a_category_view() {
-        Category::createInRoot(['name' => 'Category Name', 'keyword' => 'TheKeyword']);
-
-        $controller = Mockery::mock(ShopController::class)->makePartial();
-        $controller->shouldReceive('showCategory')->once();
-        App::instance(ShopController::class, $controller);
-
-        $this->visit('/TheKeyword');
-    }
+    /** @var Category[] */
+    private $generatedCategories = null;
 
     /** @test */
     public function it_handles_a_category_view_providing_the_current_category() {
@@ -41,15 +33,6 @@ class ShopControllerTest extends TestCase {
     }
 
     /** @test */
-    public function it_handles_the_home_page() {
-        $controller = Mockery::mock(ShopController::class)->makePartial();
-        $controller->shouldReceive('showCategory')->once();
-        App::instance(ShopController::class, $controller);
-
-        $this->visit('/');
-    }
-
-    /** @test */
     public function it_must_provide_the_categories_parameter_to_the_view() {
         /** @var Response $response */
         $response = $this->visit('/')->response;
@@ -57,15 +40,6 @@ class ShopControllerTest extends TestCase {
         $view = $response->getOriginalContent();
         $data = $view->getData();
         self::assertArrayHasKey('root_categories', $data);
-    }
-
-    /** @test */
-    public function it_must_provide_the_shop_category_view() {
-        /** @var Response $response */
-        $response = $this->visit('/')->response;
-        /** @var View $view */
-        $view = $response->getOriginalContent();
-        self::assertSame('shop.category', $view->getName());
     }
 
     /** @test */
@@ -83,6 +57,26 @@ class ShopControllerTest extends TestCase {
         }
 
         self::assertSame($expected, $actual);
+    }
+
+    /** @test */
+    public function it_must_provide_the_shop_category_view_for_a_category() {
+        $this->generateData();
+        /** @var Response $response */
+        $response = $this->visit('/Category_A')->response;
+        /** @var View $view */
+        $view = $response->getOriginalContent();
+        self::assertSame('shop.category', $view->getName());
+    }
+
+    /** @test */
+    public function it_must_provide_the_shop_product_view_for_a_product() {
+        $this->generateData();
+        /** @var Response $response */
+        $response = $this->visit('/Category_A/Product_A1')->response;
+        /** @var View $view */
+        $view = $response->getOriginalContent();
+        self::assertSame('shop.product', $view->getName());
     }
 
     /** @test */
@@ -126,5 +120,47 @@ class ShopControllerTest extends TestCase {
     /** @test */
     public function it_should_not_have_an_error_for_homepage() {
         $this->visit('/')->assertResponseOk();
+    }
+
+    /** @test */
+    public function it_should_provide_the_category_given_a_parent_and_a_keyword() {
+        $this->generateData();
+
+        $actual = ShopController::getShopItemForKeyword($this->generatedCategories['categoryA'], 'Category_AA');
+        self::assertSame('Category AA', $actual->name);
+    }
+
+    /** @test */
+    public function it_should_provide_the_category_given_root_and_a_keyword() {
+        $this->generateData();
+
+        $actual = ShopController::getShopItemForKeyword(Category::getRoot(), 'Category_A');
+        self::assertSame('Category A', $actual->name);
+    }
+
+    /** @test */
+    public function it_should_provide_the_product_given_a_category_and_a_keyword() {
+        $this->generateData();
+
+        $actual = ShopController::getShopItemForKeyword($this->generatedCategories['categoryA'], 'Product_A1');
+        self::assertSame('Product A1', $actual->name);
+    }
+
+    /**
+     * Creates some data used when testing fetched results.
+     */
+    private function generateData() {
+        $categoryA = Category::createInRoot(['name' => 'Category A']);
+        $categoryAA = Category::createSubcategory($categoryA, ['name' => 'Category AA']);
+        $categoryAB = Category::createSubcategory($categoryA, ['name' => 'Category AB']);
+
+        $categoryB = Category::createInRoot(['name' => 'Category B']);
+        $categoryBA = Category::createSubcategory($categoryB, ['name' => 'Category BA']);
+
+        $productA1 = Product::createInCategory($categoryA, ['name' => 'Product A1']);
+
+        $this->generatedCategories = compact(
+            'categoryA', 'categoryAA', 'categoryAB', 'categoryB', 'categoryBA', 'productA1'
+        );
     }
 }

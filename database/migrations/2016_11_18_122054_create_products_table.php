@@ -25,6 +25,8 @@ class CreateProductsTable extends Migration {
 
             $table->string('name')->index();
 
+            $table->string('keyword')->index();
+
             $table->integer('category_id')->unsigned()
                   ->index()->foreign()->references('id')->on('categories');
 

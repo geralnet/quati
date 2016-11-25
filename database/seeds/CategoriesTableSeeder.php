@@ -1,6 +1,6 @@
 <?php
 
-use App\EntityRelationshipModels\Shop\Category;
+use App\Models\Shop\Category;
 use Illuminate\Database\Seeder;
 
 class CategoriesTableSeeder extends Seeder {

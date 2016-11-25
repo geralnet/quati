@@ -8,5 +8,6 @@ default:
   extensions:
     Laracasts\Behat:
     Behat\MinkExtension:
+      show_cmd: google-chrome %s
       default_session: laravel
       laravel: ~

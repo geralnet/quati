@@ -1,7 +1,7 @@
 <?php
 
-use App\EntityRelationshipModels\Shop\Category;
-use App\EntityRelationshipModels\Shop\Product;
+use App\Models\Shop\Category;
+use App\Models\Shop\Product;
 use Illuminate\Database\QueryException;
 use Tests\TestCase;
 
@@ -34,6 +34,12 @@ class ProductTest extends TestCase {
     }
 
     /** @test */
+    public function it_has_a_keyword() {
+        $product = new Product(['name' => 'Product A', 'keyword' => 'Keyword']);
+        self::assertSame('Keyword', $product->keyword);
+    }
+
+    /** @test */
     public function it_has_a_name() {
         $category = Category::createInRoot(['name' => 'Category']);
 
@@ -52,8 +58,24 @@ class ProductTest extends TestCase {
     }
 
     /** @test */
+    public function it_should_get_the_path_for_a_given_product() {
+        $alpha = Category::createInRoot(['name' => 'Alpha']);
+        $beta = Category::createSubcategory($alpha, ['name' => 'Beta']);
+        $charlie = Category::createSubcategory($beta, ['name' => 'Charlie']);
+        $product = Product::createInCategory($charlie, ['name' => 'The Product']);
+        self::assertSame('/Alpha/Beta/Charlie/The_Product', $product->getKeywordPath());
+    }
+
+    /** @test */
     public function it_should_map_to_the_correct_database_table() {
         $product = new Product();
         self::assertSame('shop_products', $product->getTable());
+    }
+
+    /** @test */
+    public function it_should_not_override_the_keyword_when_setting_a_name() {
+        $product = new Product(['name' => 'Product A', 'keyword' => 'ProductKey']);
+        $product->name = 'New Name';
+        self::assertSame('ProductKey', $product->keyword);
     }
 }

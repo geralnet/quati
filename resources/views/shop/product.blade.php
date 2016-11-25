@@ -6,8 +6,10 @@
 
 @section('content')
     <section>
-        <h1>Description</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac dapibus felis. Vestibulum mattis
+        <h1>{{ $product->name }}</h1>
+        <p>
+            <b>Description:</b>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac dapibus felis. Vestibulum mattis
             ante ac
             felis posuere sodales. Nulla facilisi. In egestas, risus sed viverra fringilla, dolor massa pharetra
             risus,
@@ -22,30 +24,10 @@
             nibh.
             Praesent vestibulum scelerisque purus et commodo. Ut mauris enim, tincidunt ac mollis non, egestas
             non
-            neque.</p>
-    </section>
-    <section class="subcategories">
-        @foreach($show_categories as $category)
-            <section class="product-category">
-                <h1>
-                    <a href="{{ $category->getKeywordPath() }}">
-                        {{ $category->name }}
-                    </a>
-                </h1>
-                <b>Products:</b>
-                <ul>
-                    @foreach($category->products as $product)
-                        <li>
-                            <a href="{{ $product->getKeywordPath() }}">
-                                {{ $product->name }}
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-            </section>
-        @endforeach
-    </section>
-    <section>
-        <h1>Products</h1>
+            neque.
+        </p>
+        <p>
+            <b>Price: </b> <i>$ 1,000.000</i>
+        </p>
     </section>
 @endsection

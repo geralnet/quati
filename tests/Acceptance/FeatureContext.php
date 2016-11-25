@@ -1,7 +1,8 @@
 <?php
 
-use App\EntityRelationshipModels\Shop\Category;
-use App\EntityRelationshipModels\Shop\Product;
+use App\Models\Shop\Category;
+use app\Models\Shop\KeywordGenerator;
+use App\Models\Shop\Product;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\MinkExtension\Context\MinkContext;
@@ -12,6 +13,14 @@ use Laracasts\Behat\Context\DatabaseTransactions;
  */
 class FeatureContext extends MinkContext {
     use DatabaseTransactions;
+
+    /**
+     * @Given /^I am on "([^"]*)" category page$/
+     */
+    public function iAmOnCategoryPage($category) {
+        $url = '/'.KeywordGenerator::fromName($category);
+        $this->visit($url);
+    }
 
     /**
      * @When /^I follow "([^"]*)" in the category tree$/

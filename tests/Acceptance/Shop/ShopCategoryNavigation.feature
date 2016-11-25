@@ -11,7 +11,7 @@ Feature: Browse for products using categories
       |            | Category B  | Product B1             |
 
   Scenario: View featured products and categories
-    When I go to the homepage
+    Given I am on the homepage
     Then I should see "Category A" in the main view
     And I should see "Category B" in the main view
     And I should see "Product A1" in the main view
@@ -19,7 +19,7 @@ Feature: Browse for products using categories
     And I should see "Product B1" in the main view
 
   Scenario: View a tree menu with all categories
-    When I go to the homepage
+    Given I am on the homepage
     Then I should see "Category A" in the category tree
     And I should see "Category AA" in the category tree
     And I should see "Category B" in the category tree
@@ -31,12 +31,14 @@ Feature: Browse for products using categories
     And I should see "Product AA1" in the main view
 
   Scenario: Browse products through the category tree
-    And I am on the homepage
+    Given I am on the homepage
     When I follow "Category A" in the category tree
     Then I should see "Category AA" in the main view
     And I should see "Product AA1" in the main view
 
-#  Scenario: View details of a product
-#    And I am on the category page
-#    When I click on a product
-#    Then I should see its pictures, title, description and price
+  Scenario: View details of a product
+    Given I am on "Category A" category page
+    When I follow "Product AA1" in the main view
+    Then I should see "Product AA1"
+    And I should see "Description"
+    And I should see "$ 1,000.00"

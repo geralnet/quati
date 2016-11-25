@@ -1,7 +1,7 @@
 <?php
 
-use App\EntityRelationshipModels\Shop\Category;
-use App\EntityRelationshipModels\Shop\Product;
+use App\Models\Shop\Category;
+use App\Models\Shop\Product;
 use Illuminate\Database\Seeder;
 
 class ProductsTableSeeder extends Seeder {

@@ -1,15 +1,21 @@
 <?php
 
-namespace App\EntityRelationshipModels\Shop;
+namespace App\Models\Shop;
 
-use App\EntityRelationshipModels\EntityRelationshipModel;
+use App\Models\EntityRelationshipModel;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Category
  *
- * @mixin \Illuminate\Database\Eloquent\Builder
+ * @mixin Builder
+ * @property int      id
+ * @property string   name
+ * @property string   keyword
+ * @property Category parent
  */
 class Category extends EntityRelationshipModel {
     /** Special keyword for the root category */
@@ -29,11 +35,6 @@ class Category extends EntityRelationshipModel {
         return $category;
     }
 
-    public static function getChildWithKeyword($parent, $keyword) {
-        $parentid = is_null($parent) ? Category::getRoot()->id : $parent->id;
-        return Category::where('parent_id', $parentid)->where('keyword', $keyword)->first();
-    }
-
     public static function getRoot() : Category {
         if (is_null(self::$rootCategory)) {
             self::$rootCategory = static::where('keyword', Category::KEYWORD_ROOT)->firstOrFail();
@@ -41,25 +42,11 @@ class Category extends EntityRelationshipModel {
         return self::$rootCategory;
     }
 
-    /**
-     * @param $name
-     * @return string
-     */
-    private static function createKeywordFromName($name) :string {
-        $keyword = str_replace(' ', '_', $name);
-        $keyword = iconv('UTF-8', 'ASCII//TRANSLIT', $keyword);
-        $keyword = preg_replace('/[^A-Za-z0-9_]/u', '-', $keyword);
-        return $keyword;
-    }
-
     /** @var string[] */
     protected $fillable = ['name', 'keyword'];
 
     /** @var string */
-    protected $name;
-
-    /** @var string */
-    private $keywordPath;
+    private $keywordPath = null;
 
     public function getKeywordPath() {
         if (is_null($this->keywordPath)) {
@@ -97,15 +84,19 @@ class Category extends EntityRelationshipModel {
      */
     public function setNameAttribute($name) {
         $name = trim($name);
-        $keyword = self::createKeywordFromName($name);
         $this->attributes['name'] = $name;
-        $this->attributes['keyword'] = $keyword;
+
+        if (!isset($this->attributes['keyword'])) {
+            $keyword = KeywordGenerator::fromName($name);
+            $this->attributes['keyword'] = $keyword;
+        }
     }
 
     /**
-     * @return HasMany
+     * @return Collection
      */
     public function subcategories() {
-        return $this->hasMany(Category::class, 'parent_id')->where('keyword', '!=', '[root]');
+        /** @noinspection PhpUndefinedMethodInspection */
+        return $this->hasMany(Category::class, 'parent_id')->getQuery()->where('keyword', '!=', '[root]')->get();
     }
 }
