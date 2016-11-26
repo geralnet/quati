@@ -12,7 +12,7 @@ class CategoryTest extends TestCase {
     public function it_can_create_a_category_inside_root() {
         $category = Category::createInRoot(['name' => 'Category']);
         self::assertSame('Category', $category->name);
-        self::assertSame('[root]', $category->parent->name);
+        self::assertTrue($category->parent->isRoot());
     }
 
     /** @test */
@@ -21,7 +21,7 @@ class CategoryTest extends TestCase {
         $categoryAA = Category::createSubcategory($categoryA, ['name' => 'Category AA']);
         self::assertSame('Category AA', $categoryAA->name);
         self::assertSame('Category A', $categoryAA->parent->name);
-        self::assertSame('[root]', $categoryAA->parent->parent->name);
+        self::assertTrue($categoryAA->parent->parent->isRoot());
     }
 
     /** @test */
@@ -55,8 +55,7 @@ class CategoryTest extends TestCase {
     /** @test */
     public function it_can_provide_the_root_category() {
         $root = Category::getRoot();
-        self::assertSame('[root]', $root->name);
-        self::assertSame('[root]', $root->keyword);
+        self::assertTrue($root->isRoot());
     }
 
     /** @test */

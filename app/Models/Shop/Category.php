@@ -13,14 +13,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin Builder
  * @property int      id
+ * @property int      parent_id
  * @property string   name
  * @property string   keyword
  * @property Category parent
  */
 class Category extends EntityRelationshipModel {
-    /** Special keyword for the root category */
-    const KEYWORD_ROOT = '[root]';
-
     /** @var Category Caches the root category. */
     private static $rootCategory = null;
 
@@ -37,7 +35,7 @@ class Category extends EntityRelationshipModel {
 
     public static function getRoot() : Category {
         if (is_null(self::$rootCategory)) {
-            self::$rootCategory = static::where('keyword', Category::KEYWORD_ROOT)->firstOrFail();
+            self::$rootCategory = static::where('parent_id', null)->firstOrFail();
         }
         return self::$rootCategory;
     }
@@ -50,7 +48,7 @@ class Category extends EntityRelationshipModel {
 
     public function getKeywordPath() {
         if (is_null($this->keywordPath)) {
-            if ($this->keyword == self::KEYWORD_ROOT) {
+            if ($this->isRoot()) {
                 return '/';
             }
 
@@ -63,6 +61,13 @@ class Category extends EntityRelationshipModel {
             $this->keywordPath = $path.'/'.$this->keyword;
         }
         return $this->keywordPath;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRoot() {
+        return is_null($this->parent_id);
     }
 
     /**

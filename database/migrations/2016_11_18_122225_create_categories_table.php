@@ -28,7 +28,6 @@ class CreateCategoriesTable extends Migration {
 
             $table->string('keyword')->index();
 
-            // Nullable so we can add root category.
             $table->integer('parent_id')->unsigned()->nullable()
                   ->index()->foreign('parent_id')->references('id')->on('categories');
 
@@ -36,13 +35,6 @@ class CreateCategoriesTable extends Migration {
         });
 
         // Add root category.
-        $category = Category::create(['name' => Category::KEYWORD_ROOT, 'keyword' => Category::KEYWORD_ROOT]);
-        $category->parent()->associate($category);
-        $category->save();
-
-        // Root category added, remove nullable attribute from parent.
-        Schema::table('shop_categories', function(Blueprint $table) {
-            $table->integer('parent_id')->unsigned()->nullable(false)->change();
-        });
+        Category::create(['name' => '']);
     }
 }
