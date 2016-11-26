@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @mixin Builder
  * @property string   name
  * @property string   keyword
+ * @property int      price
  * @property Category category
  */
 class Product extends EntityRelationshipModel {
@@ -23,7 +24,7 @@ class Product extends EntityRelationshipModel {
     }
 
     /** @var string[] */
-    protected $fillable = ['name', 'keyword'];
+    protected $fillable = ['name', 'keyword', 'price'];
 
     /** @var string */
     private $keywordPath = null;

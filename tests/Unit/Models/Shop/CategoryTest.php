@@ -27,11 +27,11 @@ class CategoryTest extends TestCase {
     /** @test */
     public function it_can_have_many_products() {
         $category = Category::createInRoot(['name' => 'Category']);
-        $productA = new Product(['name' => 'Product A']);
+        $productA = new Product(['name' => 'Product A', 'price' => 10]);
         $productA->category()->associate($category);
         $productA->save();
 
-        $productB = new Product(['name' => 'Product A']);
+        $productB = new Product(['name' => 'Product B', 'price' => 10]);
         $productB->category()->associate($category);
         $productB->save();
 

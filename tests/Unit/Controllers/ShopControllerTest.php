@@ -157,7 +157,7 @@ class ShopControllerTest extends TestCase {
         $categoryB = Category::createInRoot(['name' => 'Category B']);
         $categoryBA = Category::createSubcategory($categoryB, ['name' => 'Category BA']);
 
-        $productA1 = Product::createInCategory($categoryA, ['name' => 'Product A1']);
+        $productA1 = Product::createInCategory($categoryA, ['name' => 'Product A1', 'price' => 10]);
 
         $this->generatedCategories = compact(
             'categoryA', 'categoryAA', 'categoryAB', 'categoryB', 'categoryBA', 'productA1'

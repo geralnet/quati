@@ -14,6 +14,12 @@ use Laracasts\Behat\Context\DatabaseTransactions;
 class FeatureContext extends MinkContext {
     use DatabaseTransactions;
 
+    /** @var Category[] */
+    private $categories = [];
+
+    /** @var Product[] */
+    private $products = [];
+
     /**
      * @Given /^I am on "([^"]*)" category page$/
      */
@@ -67,25 +73,28 @@ class FeatureContext extends MinkContext {
     }
 
     /**
-     * @Given /^there are the following categories and products:$/
+     * @Given /^there are the following categories:$/
      */
-    public function thereAreTheFollowingCategoriesAndProducts(TableNode $table) {
-        $categories = ['[root]' => Category::getRoot()];
+    public function thereAreTheFollowingCategories(TableNode $table) {
+        $this->categories[''] = Category::getRoot();
         foreach ($table->getHash() as $row) {
-            $category = new Category();
-            $category->name = $row['Category'];
-            if ($row['Parent'] == '') {
-                $row['Parent'] = '[root]';
-            }
-            $category->parent()->associate($categories[$row['Parent']]);
-            $category->save();
-            $categories[$row['Category']] = $category;
+            $name = $row['Category'];
+            $parent = $this->categories[$row['Parent']];
+            $this->categories[$name] = Category::createSubcategory($parent, ['name' => $name]);
+        }
+    }
 
-            foreach (explode(',', $row['Products']) as $product) {
-                $product = new Product(['name' => $product]);
-                $product->category()->associate($category);
-                $product->save();
-            }
+    /**
+     * @Given /^there are the following products:$/
+     */
+    public function thereAreTheFollowingProducts(TableNode $table) {
+        foreach ($table->getHash() as $row) {
+            $name = $row['Product'];
+            $category = $this->categories[$row['Category']];
+            $this->products[$name] = Product::createInCategory($category, [
+                'name'  => $name,
+                'price' => $row['Price'],
+            ]);
         }
     }
 }

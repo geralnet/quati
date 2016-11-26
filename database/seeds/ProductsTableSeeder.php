@@ -18,10 +18,10 @@ class ProductsTableSeeder extends Seeder {
             }
             for ($i = 1; $i <= 5; $i++) {
                 list(, $letter) = explode(' ', $category->name);
-                $product = new Product();
-                $product->name = "Product {$letter} {$i}";
-                $product->category()->associate($category);
-                $product->save();
+                Product::createInCategory($category, [
+                    'name'  => "Product {$letter} {$i}",
+                    'price' => $i * 99,
+                ]);
             }
         }
     }

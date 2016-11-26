@@ -13,7 +13,7 @@ class ProductTest extends TestCase {
     public function it_belongs_to_a_category() {
         $category = Category::createInRoot(['name' => 'Category']);
 
-        $product = new Product(['name' => 'Product']);
+        $product = new Product(['name' => 'Product', 'price' => 10]);
         $product->category()->associate($category);
         $product->save();
 
@@ -35,18 +35,27 @@ class ProductTest extends TestCase {
 
     /** @test */
     public function it_has_a_keyword() {
-        $product = new Product(['name' => 'Product A', 'keyword' => 'Keyword']);
+        $category = Category::createInRoot(['name' => 'Category']);
+        $product = Product::createInCategory($category, [
+            'name'    => 'Product A',
+            'keyword' => 'Keyword',
+            'price'   => 10,
+        ]);
         self::assertSame('Keyword', $product->keyword);
     }
 
     /** @test */
     public function it_has_a_name() {
         $category = Category::createInRoot(['name' => 'Category']);
-
-        $product = new Product(['name' => 'Test Product']);
-        $product->category()->associate($category);
-        $product->save();
+        $product = Product::createInCategory($category, ['name' => 'Test Product', 'price' => 10]);
         self::assertSame('Test Product', $product->name);
+    }
+
+    /** @test */
+    public function it_has_a_price() {
+        $category = Category::createInRoot(['name' => 'Category']);
+        $product = Product::createInCategory($category, ['name' => 'A Product', 'price' => 1234]);
+        self::assertEquals(1234, $product->price);
     }
 
     /** @test */
@@ -62,7 +71,7 @@ class ProductTest extends TestCase {
         $alpha = Category::createInRoot(['name' => 'Alpha']);
         $beta = Category::createSubcategory($alpha, ['name' => 'Beta']);
         $charlie = Category::createSubcategory($beta, ['name' => 'Charlie']);
-        $product = Product::createInCategory($charlie, ['name' => 'The Product']);
+        $product = Product::createInCategory($charlie, ['name' => 'The Product', 'price' => 10]);
         self::assertSame('/Alpha/Beta/Charlie/The_Product', $product->getKeywordPath());
     }
 

@@ -27,7 +27,7 @@
             neque.
         </p>
         <p>
-            <b>Price: </b> <i>$ 1,000.000</i>
+            <b>Price: </b> <i>$ {{ $product->price }}</i>
         </p>
     </section>
 @endsection
