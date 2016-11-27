@@ -1,6 +1,5 @@
 <?php
-namespace App\Models;
-
+use App\Models\EntityRelationshipModel;
 use Tests\TestCase;
 
 class EntityRelationshipModelTest extends TestCase {
