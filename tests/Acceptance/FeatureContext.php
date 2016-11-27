@@ -73,6 +73,13 @@ class FeatureContext extends MinkContext {
     }
 
     /**
+     * @Given /^there are is "([^"]*)" category$/
+     */
+    public function thereAreIsCategory($name) {
+        $this->categories[$name] = Category::createInRoot(['name' => $name]);
+    }
+
+    /**
      * @Given /^there are the following categories:$/
      */
     public function thereAreTheFollowingCategories(TableNode $table) {
