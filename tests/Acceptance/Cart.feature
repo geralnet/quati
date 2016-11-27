@@ -3,23 +3,23 @@ Feature: Shopping Cart
   As a customer
   I should be able to add and remove products from the shopping cart
 
-#  Background: Consider we have a few products
-#    Given there are the following categories:
-#      | Parent | Category   |
-#      |        | Category A |
-#    And there are the following products:
-#      | Category   | Product    | Price  |
-#      | Category A | Product A1 | 100.00 |
-#      | Category A | Product A2 | 500.00 |
-#
-#  Scenario: The shopping cart is visible on a category page
-#    Given I am on "Category A" category page
-#    Then I can see "Shopping Cart" in the shopping cart block
-#
-#  Scenario: The shopping cart is visible on a product page
-#    Given I am on "Product A1" product page
-#    Then I can see "Shopping Cart" in the shopping cart block
-#
+  Background: Consider we have a few products
+    Given there are the following categories:
+      | Parent | Category   |
+      |        | Category A |
+    And there are the following products:
+      | Category   | Product    | Price  |
+      | Category A | Product A1 | 100.00 |
+      | Category A | Product A2 | 500.00 |
+
+  Scenario: The shopping cart is visible on a category page
+    Given I am on "Category A" category page
+    Then I can see "Shopping Cart" in the shopping cart block
+
+  Scenario: The shopping cart is visible on a product page
+    Given I am on "Product A1" product page
+    Then I can see "Shopping Cart" in the shopping cart block
+
 #  Scenario: The shopping cart block links to the shopping cart page
 #    Given I am on the homepage
 #    When I click on the "Shopping Cart" block

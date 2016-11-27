@@ -1,6 +1,7 @@
 @extends('layouts.master')
 
 @section('sidemenu')
+    @include('cart.block')
     @include('shop.categories-treemenu')
 @endsection
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 use App\Models\Shop\Category;
 use app\Models\Shop\KeywordGenerator;
@@ -26,6 +27,20 @@ class FeatureContext extends MinkContext {
     public function iAmOnCategoryPage($category) {
         $url = '/'.KeywordGenerator::fromName($category);
         $this->visit($url);
+    }
+
+    /**
+     * @Given /^I am on "([^"]*)" product page$/
+     */
+    public function iAmOnProductPage($product) {
+        $this->visit($this->products[$product]->getKeywordPath());
+    }
+
+    /**
+     * @Then /^I can see "([^"]*)" in the shopping cart block$/
+     */
+    public function iCanSeeInTheShoppingCartBlock($text) {
+        $this->assertElementContainsText('.shopping-cart', $text);
     }
 
     /**
@@ -71,7 +86,6 @@ class FeatureContext extends MinkContext {
     public function iShouldSeeInTheMainView($text) {
         $this->assertElementContainsText('.site-main', $text);
     }
-
 
     /**
      * @Given /^there are the following categories:$/
