@@ -96,6 +96,12 @@ class CategoryTest extends TestCase {
     }
 
     /** @test */
+    public function it_has_a_description() {
+        $category = Category::createInRoot(['name' => 'Category', 'description' => 'Category description.']);
+        self::assertSame('Category description.', $category->description);
+    }
+
+    /** @test */
     public function it_has_a_keyword() {
         $category = new Category([
             'name' => 'Category A',

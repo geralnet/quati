@@ -40,8 +40,12 @@ class Category extends EntityRelationshipModel {
         return self::$rootCategory;
     }
 
+    protected $attributes = [
+        'description' => '',
+    ];
+
     /** @var string[] */
-    protected $fillable = ['name', 'keyword'];
+    protected $fillable = ['name', 'keyword', 'description'];
 
     /** @var string */
     private $keywordPath = null;

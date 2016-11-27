@@ -28,6 +28,8 @@ class CreateCategoriesTable extends Migration {
 
             $table->string('keyword')->index();
 
+            $table->text('description');
+
             $table->integer('parent_id')->unsigned()->nullable()
                   ->index()->foreign('parent_id')->references('id')->on('categories');
 
