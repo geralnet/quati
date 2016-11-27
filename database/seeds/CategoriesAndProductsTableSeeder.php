@@ -12,8 +12,9 @@ class CategoriesAndProductsTableSeeder extends Seeder {
      */
     public function run() {
         $root = Category::getRoot();
-        $root->name = 'Welcome to Quati Example Store!';
+        $root->name = 'Quati Example Store';
         $root->description = 'This is an example of how a store in Quati platform looks like.';
+        $root->save();
 
         $spaceships = Category::createInRoot([
             'name'        => 'Spaceships',

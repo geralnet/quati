@@ -97,4 +97,20 @@ class ProductTest extends TestCase {
         $product->name = 'New Name';
         self::assertSame('ProductKey', $product->keyword);
     }
+
+    /** @test */
+    public function it_should_return_false_if_it_has_no_products() {
+        $category = Category::createInRoot(['name' => 'Category']);
+        self::assertFalse($category->hasProducts());
+    }
+
+    /** @test */
+    public function it_should_return_true_if_it_has_products() {
+        $category = Category::createInRoot(['name' => 'Category']);
+        Product::createInCategory($category, [
+            'name'  => 'Product',
+            'price' => 1000,
+        ]);
+        self::assertTrue($category->hasProducts());
+    }
 }

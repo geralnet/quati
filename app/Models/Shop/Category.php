@@ -68,6 +68,14 @@ class Category extends EntityRelationshipModel {
         return $this->keywordPath;
     }
 
+    public function hasProducts() {
+        return ($this->products()->count() > 0);
+    }
+
+    public function hasSubcategories() {
+        return ($this->subcategories()->count() > 0);
+    }
+
     /**
      * @return bool
      */
@@ -107,6 +115,6 @@ class Category extends EntityRelationshipModel {
      */
     public function subcategories() {
         /** @noinspection PhpUndefinedMethodInspection */
-        return $this->hasMany(Category::class, 'parent_id')->getQuery()->where('keyword', '!=', '[root]')->get();
+        return $this->hasMany(Category::class, 'parent_id')->get();
     }
 }

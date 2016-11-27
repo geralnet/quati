@@ -1,7 +1,6 @@
-<?php $subcategories = $category->subcategories(); ?>
 <li><a href="{{ $category->getKeywordPath() }}">{{ $category->name }}</a></li>
-@if (count($subcategories) > 0)
+@if ($category->hasSubcategories())
     <ul>
-        @each('shop.categories-treemenu-node', $subcategories, 'category')
+        @each('shop.categories-treemenu-node', $category->subcategories(), 'category')
     </ul>
 @endif

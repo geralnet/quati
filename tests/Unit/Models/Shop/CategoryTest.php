@@ -157,6 +157,19 @@ class CategoryTest extends TestCase {
     }
 
     /** @test */
+    public function it_should_return_false_if_it_has_no_subcategories() {
+        $categoryA = Category::createInRoot(['name' => 'Category A']);
+        self::assertFalse($categoryA->hasSubcategories());
+    }
+
+    /** @test */
+    public function it_should_return_true_if_it_has_subcategories() {
+        $categoryA = Category::createInRoot(['name' => 'Category A']);
+        Category::createSubcategory($categoryA, ['name' => 'Category b']);
+        self::assertTrue($categoryA->hasSubcategories());
+    }
+
+    /** @test */
     public function it_should_trim_names() {
         $category = new Category(['name' => "   ABC   \n"]);
         self::assertSame('ABC', $category->name);
