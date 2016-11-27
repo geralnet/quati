@@ -13,3 +13,7 @@
 
 Route::get('/{shop_path?}', 'ShopController@getShop')
      ->where('shop_path', '[A-Za-z0-9_\\-/]*');
+
+Route::get('@cart', function() {
+   return 'Shopping Cart';
+});

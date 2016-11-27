@@ -90,8 +90,14 @@ class FeatureContext extends MinkContext {
      * @Then /^I should be in the "([^"]*)" page$/
      */
     public function iShouldBeInThePage($page) {
-        $url = '/@'.str_replace(' ', '-', strtolower($page));
+        if ($page == 'Shopping Cart') {
+            $url = '/@cart';
+        }
+        else {
+            $url = '/@'.str_replace(' ', '-', strtolower($page));
+        }
         $this->assertSession()->addressEquals($this->locatePath($url));
+        $this->assertSession()->statusCodeEquals(200);
     }
 
     /**
