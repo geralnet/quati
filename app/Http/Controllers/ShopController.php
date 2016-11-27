@@ -45,12 +45,7 @@ class ShopController extends Controller {
     }
 
     private function getShopCategory(Category $category) {
-        $current_category = $category;
-        $root_categories = Category::getRoot()->subcategories();
-        $show_categories = is_null($current_category)
-            ? $root_categories
-            : $current_category->subcategories();
-        return view('shop.category', compact('root_categories', 'current_category', 'show_categories'));
+        return view('shop.category', ['category' => $category]);
     }
 
     private function getShopItemForPath(string $path) {

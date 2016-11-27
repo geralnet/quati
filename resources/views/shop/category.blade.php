@@ -7,15 +7,15 @@
 
 @section('content')
     <section class="site-block">
-        <h1 class="site-block-header">{{ $current_category->name }}</h1>
-        <div>{!! $current_category->description  !!}</div>
+        <h1 class="site-block-header">{{ $category->name }}</h1>
+        <div>{!! $category->description  !!}</div>
     </section>
     <section class="site-block">
         <h3 class="site-block-header">Subcategories</h3>
         <div>
             <ul class="subcategories">
-                @foreach($show_categories as $category)
-                    <li><a href="{{ $category->getKeywordPath() }}">{{ $category->name }}</a></li>
+                @foreach($category->subcategories() as $subcategory)
+                    <li><a href="{{ $subcategory->getKeywordPath() }}">{{ $subcategory->name }}</a></li>
                 @endforeach
             </ul>
         </div>
@@ -24,7 +24,7 @@
         <h3 class="site-block-header">Products</h3>
         <div>
             <ul>
-                @foreach($current_category->products as $product)
+                @foreach($category->products as $product)
                     <li><a href="{{ $product->getKeywordPath() }}">{{ $product->name }}</a></li>
                 @endforeach
             </ul>

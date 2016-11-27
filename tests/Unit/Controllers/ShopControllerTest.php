@@ -18,7 +18,7 @@ class ShopControllerTest extends TestCase {
         $response = $this->visit('/TheKeyword')->response;
         $viewData = $response->getOriginalContent()->getData();
 
-        self::assertSame('Category Name', $viewData['current_category']->name);
+        self::assertSame('Category Name', $viewData['category']->name);
     }
 
     /** @test */
@@ -29,34 +29,7 @@ class ShopControllerTest extends TestCase {
         $response = $this->visit('/Alpha/Beta')->response;
         $viewData = $response->getOriginalContent()->getData();
 
-        self::assertSame('Category Beta', $viewData['current_category']->name);
-    }
-
-    /** @test */
-    public function it_must_provide_the_categories_parameter_to_the_view() {
-        /** @var Response $response */
-        $response = $this->visit('/')->response;
-        /** @var View $view */
-        $view = $response->getOriginalContent();
-        $data = $view->getData();
-        self::assertArrayHasKey('root_categories', $data);
-    }
-
-    /** @test */
-    public function it_must_provide_the_root_categories_to_the_view() {
-        $categoryA = Category::createInRoot(['name' => 'Category A']);
-        Category::createSubcategory($categoryA, ['name' => 'Category AA']);
-        Category::createInRoot(['name' => 'Category B']);
-
-        $viewData = $this->visit('/')->response->getOriginalContent()->getData();
-
-        $expected = ['Category A', 'Category B'];
-        $actual = [];
-        foreach ($viewData['root_categories'] as $category) {
-            $actual[] = $category->name;
-        }
-
-        self::assertSame($expected, $actual);
+        self::assertSame('Category Beta', $viewData['category']->name);
     }
 
     /** @test */
@@ -77,39 +50,6 @@ class ShopControllerTest extends TestCase {
         /** @var View $view */
         $view = $response->getOriginalContent();
         self::assertSame('shop.product', $view->getName());
-    }
-
-    /** @test */
-    public function it_provides_the_root_categories_as_the_shown_categories_if_homepage() {
-        Category::createInRoot(['name' => 'Category A']);
-        Category::createInRoot(['name' => 'Category B']);
-
-        $viewData = $this->visit('/')->response->getOriginalContent()->getData();
-
-        $expected = ['Category A', 'Category B'];
-        $actual = [];
-        foreach ($viewData['show_categories'] as $category) {
-            $actual[] = $category->name;
-        }
-
-        self::assertSame($expected, $actual);
-    }
-
-    /** @test */
-    public function it_provides_the_subcategories_as_shown_categories_if_viewing_a_category() {
-        $categoryA = Category::createInRoot(['name' => 'Category A']);
-        Category::createSubcategory($categoryA, ['name' => 'Category AA']);
-        Category::createInRoot(['name' => 'Category B']);
-
-        $viewData = $this->visit('/Category_A')->response->getOriginalContent()->getData();
-
-        $expected = ['Category AA'];
-        $actual = [];
-        foreach ($viewData['show_categories'] as $category) {
-            $actual[] = $category->name;
-        }
-
-        self::assertSame($expected, $actual);
     }
 
     /** @test */
