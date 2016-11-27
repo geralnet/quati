@@ -25,7 +25,12 @@ class FeatureContext extends MinkContext {
      * @Given /^I am on "([^"]*)" category page$/
      */
     public function iAmOnCategoryPage($category) {
-        $url = '/'.KeywordGenerator::fromName($category);
+        if (array_key_exists($category, $this->categories)) {
+            $url = $this->categories[$category]->getKeywordPath();
+        }
+        else {
+            $url = '/'.KeywordGenerator::fromName($category);
+        }
         $this->visit($url);
     }
 

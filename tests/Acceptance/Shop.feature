@@ -20,9 +20,6 @@ Feature: Browse for products using categories
     Given I am on the homepage
     Then I should see "Category A" in the main view
     And I should see "Category B" in the main view
-    And I should see "Product A1" in the main view
-    And I should see "Product A2" in the main view
-    And I should see "Product B1" in the main view
 
   Scenario: View a tree menu with all categories
     Given I am on the homepage
@@ -34,13 +31,11 @@ Feature: Browse for products using categories
     Given I am on the homepage
     When I follow "Category A" in the main view
     Then I should see "Category AA" in the main view
-    And I should see "Product AA1" in the main view
 
   Scenario: Browse products through the category tree
     Given I am on the homepage
     When I follow "Category A" in the category tree
     Then I should see "Category AA" in the main view
-    And I should see "Product AA1" in the main view
 
   Scenario: View the products of a category
     Given I am on "Category A" category page
@@ -48,8 +43,7 @@ Feature: Browse for products using categories
     And I should see "Product A2"
 
   Scenario: View details of a product
-    Given I am on "Category A" category page
+    Given I am on "Category AA" category page
     When I follow "Product AA1" in the main view
     Then I should see "Product AA1"
-    And I should see "Description"
     And I should see "$ 1000.00"
