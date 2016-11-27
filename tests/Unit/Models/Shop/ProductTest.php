@@ -34,6 +34,16 @@ class ProductTest extends TestCase {
     }
 
     /** @test */
+    public function it_has_a_description() {
+        $product = Product::createInCategory(Category::getRoot(), [
+            'name'        => 'Product',
+            'price'       => 100,
+            'description' => 'The description.',
+        ]);
+        self::assertSame('The description.', $product->description);
+    }
+
+    /** @test */
     public function it_has_a_keyword() {
         $category = Category::createInRoot(['name' => 'Category']);
         $product = Product::createInCategory($category, [

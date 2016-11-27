@@ -40,6 +40,7 @@ class Category extends EntityRelationshipModel {
         return self::$rootCategory;
     }
 
+    /** @var array */
     protected $attributes = [
         'description' => '',
     ];

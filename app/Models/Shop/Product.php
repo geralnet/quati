@@ -23,8 +23,13 @@ class Product extends EntityRelationshipModel {
         return $product;
     }
 
+    /** @var array */
+    protected $attributes = [
+        'description' => '',
+    ];
+
     /** @var string[] */
-    protected $fillable = ['name', 'keyword', 'price'];
+    protected $fillable = ['name', 'keyword', 'description', 'price'];
 
     /** @var string */
     private $keywordPath = null;

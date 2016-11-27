@@ -27,6 +27,8 @@ class CreateProductsTable extends Migration {
 
             $table->string('keyword')->index();
 
+            $table->text('description');
+
             $table->decimal('price');
 
             $table->integer('category_id')->unsigned()
