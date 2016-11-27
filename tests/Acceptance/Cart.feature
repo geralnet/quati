@@ -20,11 +20,11 @@ Feature: Shopping Cart
     Given I am on "Product A1" product page
     Then I can see "Shopping Cart" in the shopping cart block
 
-#  Scenario: The shopping cart block links to the shopping cart page
-#    Given I am on the homepage
-#    When I click on the "Shopping Cart" block
-#    Then I should be in the "Shopping Cart" page
-#
+  Scenario: The shopping cart block links to the shopping cart page
+    Given I am on the homepage
+    When I press the "Shopping Cart" block
+    Then I should be in the "Shopping Cart" page
+
 #  Scenario: Add a product to the cart from the category page
 #    Given I am on "Category A" category page
 #    When I change the quantity of "Product A1" to "2"

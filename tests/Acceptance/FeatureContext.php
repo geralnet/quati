@@ -74,6 +74,27 @@ class FeatureContext extends MinkContext {
     }
 
     /**
+     * @When /^I press the "([^"]*)" block$/
+     */
+    public function iPressTheBlock(string $block) {
+        $class = str_replace(' ', '-', strtolower($block));
+        $locator = ".{$class} > a.site-block";
+        $found = $this->getSession()->getPage()->find('css', $locator);
+        if (is_null($found)) {
+            throw new ElementNotFoundException($this->getSession(), 'link', 'css', $locator);
+        }
+        $found->click();
+    }
+
+    /**
+     * @Then /^I should be in the "([^"]*)" page$/
+     */
+    public function iShouldBeInThePage($page) {
+        $url = '/@'.str_replace(' ', '-', strtolower($page));
+        $this->assertSession()->addressEquals($this->locatePath($url));
+    }
+
+    /**
      * @Then /^I should see "([^"]*)" in the category tree$/
      */
     public function iShouldSeeInTheCategoryTree($text) {

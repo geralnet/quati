@@ -8,6 +8,7 @@ body {
 }
 
 .site-block {
+    display: block;
     border: solid 1px #aaa;
     background-color: #fff;
     border-radius: 10px;
@@ -69,3 +70,10 @@ body {
     padding-left: 10px;
 }
 
+.shopping-cart a {
+    text-decoration: none;
+}
+
+.shopping-cart a:hover {
+    background-color: #efe;
+}
