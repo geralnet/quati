@@ -47,5 +47,14 @@
     </section>
     <section>
         <h1>Products</h1>
+        <ul>
+            @foreach($current_category->products as $product)
+                <li>
+                    <a href="{{ $product->getKeywordPath() }}">
+                        {{ $product->name }}
+                    </a>
+                </li>
+            @endforeach
+        </ul>
     </section>
 @endsection

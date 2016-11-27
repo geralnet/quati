@@ -42,6 +42,11 @@ Feature: Browse for products using categories
     Then I should see "Category AA" in the main view
     And I should see "Product AA1" in the main view
 
+  Scenario: View the products of a category
+    Given I am on "Category A" category page
+    Then I should see "Product A1"
+    And I should see "Product A2"
+
   Scenario: View details of a product
     Given I am on "Category A" category page
     When I follow "Product AA1" in the main view

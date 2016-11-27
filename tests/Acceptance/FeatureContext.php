@@ -72,12 +72,6 @@ class FeatureContext extends MinkContext {
         $this->assertElementContainsText('.site-main', $text);
     }
 
-    /**
-     * @Given /^there are is "([^"]*)" category$/
-     */
-    public function thereAreIsCategory($name) {
-        $this->categories[$name] = Category::createInRoot(['name' => $name]);
-    }
 
     /**
      * @Given /^there are the following categories:$/
@@ -103,5 +97,12 @@ class FeatureContext extends MinkContext {
                 'price' => $row['Price'],
             ]);
         }
+    }
+
+    /**
+     * @Given /^there is a "([^"]*)" category$/
+     */
+    public function thereIsACategory($name) {
+        $this->categories[$name] = Category::createInRoot(['name' => $name]);
     }
 }
