@@ -25,24 +25,24 @@ Feature: Shopping Cart
     When I press the "Shopping Cart" block
     Then I should be in the "Shopping Cart" page
 
-#  Scenario: Add a product to the cart from the category page
-#    Given I am on "Category A" category page
-#    When I change the quantity of "Product A1" to "2"
-#    And I press "Add to Order"
-#    Then I should see "Shopping Cart"
-#    And I should see "Product A1"
-#    And I should see "Total $ 200.00"
-#
-#  Scenario: Add two products to the card at once from the category page
-#    Given I am on "Category A" category page
-#    When I change the quantity of "Product A1" to "1"
-#    And I change the quantity of "Product A2" to "2"
-#    And I press "Add to Order"
-#    Then I should see "Shopping Cart"
-#    And I should see "Product A1"
-#    And I should see "Product A2"
-#    And I should see "Total $ 1100.00"
-#
+  Scenario: Add a product to the cart from the category page
+    Given I am on "Category A" category page
+    When I change the quantity of "Product A1" to "2"
+    And I press "Add to Order"
+    Then I should see "Shopping Cart"
+    And I should see "Product A1"
+    And I should see "Total: $ 200.00"
+
+  Scenario: Add two products to the card at once from the category page
+    Given I am on "Category A" category page
+    When I change the quantity of "Product A1" to "1"
+    And I change the quantity of "Product A2" to "2"
+    And I press "Add to Order"
+    Then I should see "Shopping Cart"
+    And I should see "Product A1"
+    And I should see "Product A2"
+    And I should see "Total: $ 1100.00"
+
 #  Scenario: Add a product from the product page
 #    Given I am on the "Product A2" product page
 #    When I change the quantity to "4"

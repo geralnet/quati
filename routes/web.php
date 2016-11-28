@@ -11,9 +11,41 @@
 |
 */
 
+use App\Models\Shop\Product;
+
 Route::get('/{shop_path?}', 'ShopController@getShop')
      ->where('shop_path', '[A-Za-z0-9_\\-/]*');
 
 Route::get('@cart', function() {
-   return 'Shopping Cart';
+    return 'Shopping Cart';
+});
+Route::put('@cart', function(\Illuminate\Http\Request $request) {
+    $quantities = $request->input('quantities');
+
+    $html = '<p>Shopping Cart</p>';
+    $total = 0;
+    foreach ($quantities as $id => $quantity) {
+        $quantity = (int)$quantity;
+        if ($quantity < 0) {
+            abort(400, 'Invalid product quantity.');
+        }
+        if ($quantity == 0){
+            continue;
+        }
+        $product = Product::find($id);
+        $subtotal = $quantity * $product->price;
+        $total += $subtotal;
+
+        $html .= <<<HTML
+<b>Product: </b> {$product->name}<br />
+<b>Price: </b> {$product->price}<br />
+<b>Quantity: </b> {$quantity}<br />
+<b>Subtotal: </b>$ {$subtotal}<br />
+<br />
+HTML;
+    }
+
+    $html .= sprintf('<br /><b>Total: </b> $ %0.2f', $total);
+
+    return $html;
 });

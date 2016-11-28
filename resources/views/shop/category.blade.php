@@ -32,13 +32,34 @@
     @if ($category->hasProducts())
         <section class="site-block">
             <h3 class="site-block-header">Products</h3>
-            <div>
-                <ul>
+            <form action="/@@cart" method="post">
+                <input type="hidden" name="_method" value="PUT" />
+                {{ csrf_field() }}
+                <table class="category-products">
+                    <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Buy</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
                     @foreach($category->products as $product)
-                        <li><a href="{{ $product->getKeywordPath() }}">{{ $product->name }}</a></li>
+                        <tr>
+                            <td><a href="{{ $product->getKeywordPath() }}">{{ $product->name }}</a></td>
+                            <td>$ {{ $product->price }}</td>
+                            <td>
+                                <input name="quantities[{{$product->id}}]" type="number" step="1"
+                                       title="{{ $product->name }}" />
+                            </td>
+                        </tr>
                     @endforeach
-                </ul>
-            </div>
+                    </tbody>
+                </table>
+
+                <input type="submit" value="Add to Order" />
+            </form>
         </section>
     @endif
 

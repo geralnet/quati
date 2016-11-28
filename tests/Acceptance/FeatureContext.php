@@ -49,6 +49,14 @@ class FeatureContext extends MinkContext {
     }
 
     /**
+     * @When /^I change the quantity of "([^"]*)" to "([^"]*)"$/
+     */
+    public function iChangeTheQuantityOfTo($product, $quantity) {
+        $id = $this->products[$product]->id;
+        $this->fillField("quantities[{$id}]", $quantity);
+    }
+
+    /**
      * @When /^I follow "([^"]*)" in the category tree$/
      */
     public function iFollowInTheCategoryTree($link) {
