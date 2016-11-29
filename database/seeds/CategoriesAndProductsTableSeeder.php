@@ -35,8 +35,8 @@ class CategoriesAndProductsTableSeeder extends Seeder {
             'price'       => 19999,
         ]);
         Product::createInCategory($starfighters, [
-            'name'        => 'The Viper (Mark I)',
-            'description' => 'The Viper (Mark I) was introduced into Colonial service shortly before the outbreak of
+            'name'        => 'Viper',
+            'description' => 'Viper was introduced into Colonial service shortly before the outbreak of
                               the first Cylon War. However, it was the Mark II Viper series, designed specifically for
                               use with the new Colonial Battlestars, that is best remembered. The Mark II was used
                               during the Cylon War, proving a capable fighting vehicle. It is regarded as one of the
@@ -132,7 +132,7 @@ class CategoriesAndProductsTableSeeder extends Seeder {
             'price'       => 160000,
         ]);
         Product::createInCategory($transportation, [
-            'name'        => 'Millenium Falcon',
+            'name'        => 'Millennium Falcon',
             'description' => 'The Millennium Falcon, originally known as YT-1300 492727ZED, was a Corellian YT-1300f
                               light freighter used by the smugglers Han Solo and Chewbacca during the Galactic Civil
                               War. It was previously owned by Lando Calrissian, who lost it to Solo in a game of

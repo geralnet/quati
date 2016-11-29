@@ -2,6 +2,12 @@ body {
     background-color: #eee;
 }
 
+.navbar-quati {
+    background: #ddd;
+    border: none;
+    border-radius: 0;
+}
+
 .site-header {
     overflow: auto;
     background-color: #fff;
@@ -102,4 +108,8 @@ ul.subcategories li {
 
 ul.subcategories li + li::before {
     content: '| ';
+}
+
+table.category-products {
+    width: 100%;
 }

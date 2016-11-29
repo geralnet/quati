@@ -8,7 +8,6 @@
     <script src="{{ URL::asset('@res/jquery-3.1.1.min.js')}}"></script>
     <script src="{{ URL::asset('@res/bootstrap-3.3.7-dist/js/bootstrap.min.js')}}"></script>
     <link href="{{ URL::asset('@res/bootstrap-3.3.7-dist/css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{ URL::asset('@res/quati-bootstrap.css')}}" rel="stylesheet">
     <link href="{{ URL::asset('@res/quati.css')}}" rel="stylesheet">
 </head>
 

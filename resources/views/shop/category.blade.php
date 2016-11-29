@@ -35,7 +35,7 @@
             <form action="/@@cart" method="post">
                 <input type="hidden" name="_method" value="PUT" />
                 {{ csrf_field() }}
-                <table class="category-products">
+                <table class="table table-hover table-condensed category-products">
                     <thead>
                     <tr>
                         <th>Product</th>
@@ -45,16 +45,7 @@
                     </thead>
 
                     <tbody>
-                    @foreach($category->products as $product)
-                        <tr>
-                            <td><a href="{{ $product->getKeywordPath() }}">{{ $product->name }}</a></td>
-                            <td>$ {{ $product->price }}</td>
-                            <td>
-                                <input name="quantities[{{$product->id}}]" type="number" step="1"
-                                       title="{{ $product->name }}" />
-                            </td>
-                        </tr>
-                    @endforeach
+                    @each('shop.category-product', $category->products, 'product')
                     </tbody>
                 </table>
 
