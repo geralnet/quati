@@ -54,6 +54,11 @@ return [
             'visibility' => 'public',
         ],
 
+        'uploads' => [
+            'driver' => 'local',
+            'root'   => storage_path(env('UPLOADS_FILESYSTEM', 'app/uploads')),
+        ],
+
         's3' => [
             'driver' => 's3',
             'key'    => 'your-key',
