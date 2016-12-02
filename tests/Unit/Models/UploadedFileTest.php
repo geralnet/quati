@@ -11,8 +11,7 @@ class UploadedFileTest extends TestCase {
     public function it_can_save_an_external_file() {
         $source = tempnam(sys_get_temp_dir(), 'UploadFileSystemTest_');
         file_put_contents($source, 'This is a file!');
-        $fs = new UploadedFile();
-        $fs->createFromExternalFile('/afile.txt', $source);
+        UploadedFile::createFromExternalFile('/afile.txt', $source);
 
         $sha1 = sha1('This is a file!');
         $path = UploadedFile::create_sha1_path($sha1);

@@ -1,4 +1,8 @@
 <tr>
+    <td>
+        <img src="{{ $product->getImageURL(1, $product->keyword) }}"
+             width="100" height="75" />
+    </td>
     <td><a href="{{ $product->getKeywordPath() }}">{{ $product->name }}</a></td>
     <td>$ {{ $product->price }}</td>
     <td>

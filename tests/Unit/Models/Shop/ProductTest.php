@@ -2,6 +2,8 @@
 
 use App\Models\Shop\Category;
 use App\Models\Shop\Product;
+use App\Models\Shop\ProductImage;
+use App\UploadedFile;
 use Illuminate\Database\QueryException;
 use Tests\TestCase;
 
@@ -26,6 +28,22 @@ class ProductTest extends TestCase {
     /** @test */
     public function it_can_be_created() {
         self::assertNotNull(new Product());
+    }
+
+    /** @test */
+    public function it_can_have_a_picture_attached() {
+        $category = Category::createInRoot(['name' => 'Category']);
+        $product = Product::createInCategory($category, ['name' => 'Product', 'price' => 1]);
+        $file = UploadedFile::createFromExternalFile('/images/product.png', __DIR__.'/../../Fixtures/image.png');
+
+        $image = new ProductImage();
+        $image->product()->associate($product);
+        $image->file()->associate($file);
+        $image->save();
+
+        $images = $product->images[0];
+        $file = $images->file;
+        self::assertSame('/images/product.png', $file->logical_path);
     }
 
     /** @test */
@@ -69,11 +87,39 @@ class ProductTest extends TestCase {
     }
 
     /** @test */
+    public function it_has_images() {
+        $category = Category::createInRoot(['name' => 'The Category']);
+        $product = Product::createInCategory($category, ['name' => 'The Product', 'price' => 1]);
+        $file = UploadedFile::createFromExternalFile('/images/product.png', __DIR__.'/../../Fixtures/image.png');
+
+        $image = new ProductImage();
+        $image->product()->associate($product);
+        $image->file()->associate($file);
+        $image->save();
+
+        self::assertSame($product->images[0]->id, $image->id);
+    }
+
+    /** @test */
     public function it_must_belong_to_a_category() {
         $product = new Product(['name' => 'Product without Category']);
 
         self::expectException(QueryException::class);
         $product->save();
+    }
+
+    /** @test */
+    public function it_provides_a_image_url() {
+        $category = Category::createInRoot(['name' => 'Category']);
+        $product = Product::createInCategory($category, ['name' => 'Product', 'price' => 1]);
+        $file = UploadedFile::createFromExternalFile('/images/product.png', __DIR__.'/../../Fixtures/image.png');
+
+        $image = new ProductImage();
+        $image->product()->associate($product);
+        $image->file()->associate($file);
+        $image->save();
+
+        self::assertSame('/@images/product.png', $product->getImageURL(1));
     }
 
     /** @test */

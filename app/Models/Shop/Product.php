@@ -5,6 +5,7 @@ namespace App\Models\Shop;
 use App\Models\EntityRelationshipModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Product
@@ -41,6 +42,20 @@ class Product extends EntityRelationshipModel {
         return $this->belongsTo(Category::class);
     }
 
+    public function getImageURL($number) {
+        $number--; // Image index starts from 0.
+        $count = $this->images()->count();
+        if ($number >= $count) {
+            return '#';
+        }
+
+        $image = $this->images[$number];
+        $file = $image->file;
+        $path = $file->logical_path;
+        $url = preg_replace('#^/images/#', '/@images/', $path);
+        return $url;
+    }
+
     /**
      * @return string
      */
@@ -49,6 +64,13 @@ class Product extends EntityRelationshipModel {
             $this->keywordPath = $this->category->getKeywordPath().'/'.$this->keyword;
         }
         return $this->keywordPath;
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function images() {
+        return $this->hasMany(ProductImage::class);
     }
 
     /**

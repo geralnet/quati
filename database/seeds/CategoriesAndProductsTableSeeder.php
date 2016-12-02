@@ -2,6 +2,8 @@
 
 use App\Models\Shop\Category;
 use App\Models\Shop\Product;
+use App\Models\Shop\ProductImage;
+use App\UploadedFile;
 use Illuminate\Database\Seeder;
 
 class CategoriesAndProductsTableSeeder extends Seeder {
@@ -11,6 +13,11 @@ class CategoriesAndProductsTableSeeder extends Seeder {
      * @return void
      */
     public function run() {
+        $this->createProductsAndCategories();
+        $this->importProductImages();
+    }
+
+    private function createProductsAndCategories() {
         $root = Category::getRoot();
         $root->name = 'Quati Example Store';
         $root->description = 'This is an example of how a store in Quati platform looks like.';
@@ -145,5 +152,21 @@ class CategoriesAndProductsTableSeeder extends Seeder {
         Category::createSubcategory($tools, ['name' => 'Power']);
 
         Category::createInRoot(['name' => 'Devices']);
+    }
+
+    private function importProductImages() {
+        foreach (Product::all() as $product) {
+            if ($product->keyword == 'V-wing') {
+                continue; // No image for V-wing.
+            }
+
+            $file = __DIR__.'/images/products/'.$product->keyword.'.jpg';
+            $file = UploadedFile::createFromExternalFile('/images/product/'.$product->keyword.'.jpg', $file);
+
+            $image = new ProductImage();
+            $image->product()->associate($product);
+            $image->file()->associate($file);
+            $image->save();
+        }
     }
 }
