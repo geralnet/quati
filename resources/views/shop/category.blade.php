@@ -21,7 +21,7 @@
             <h3 class="site-block-header">Subcategories</h3>
             <div>
                 <ul class="subcategories">
-                    @foreach($category->subcategories() as $subcategory)
+                    @foreach($category->subcategories as $subcategory)
                         <li><a href="{{ $subcategory->getKeywordPath() }}">{{ $subcategory->name }}</a></li>
                     @endforeach
                 </ul>

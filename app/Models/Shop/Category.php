@@ -12,18 +12,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * Class Category
  *
  * @mixin Builder
- * @property int                  id
- * @property int                  parent_id
- * @property string               name
- * @property string               keyword
- * @property string               description
- * @property Category             parent
- * @property Collection|Product[] products
+ * @property int                   id
+ * @property int                   parent_id
+ * @property string                name
+ * @property string                keyword
+ * @property string                description
+ * @property Category              parent
+ * @property Collection|Product[]  products
+ * @property Collection|Category[] subcategories
  */
 class Category extends EntityRelationshipModel {
-    /** @var Category Caches the root category. */
-    private static $rootCategory = null;
-
     public static function createInRoot(array $attributes) {
         return self::createSubcategory(self::getRoot(), $attributes);
     }
@@ -37,10 +35,7 @@ class Category extends EntityRelationshipModel {
     }
 
     public static function getRoot() : Category {
-        if (is_null(self::$rootCategory)) {
-            self::$rootCategory = static::where('parent_id', null)->firstOrFail();
-        }
-        return self::$rootCategory;
+        return static::where('parent_id', null)->firstOrFail();
     }
 
     /** @var array */
@@ -117,7 +112,6 @@ class Category extends EntityRelationshipModel {
      * @return Collection
      */
     public function subcategories() {
-        /** @noinspection PhpUndefinedMethodInspection */
-        return $this->hasMany(Category::class, 'parent_id')->get();
+        return $this->hasMany(Category::class, 'parent_id');
     }
 }

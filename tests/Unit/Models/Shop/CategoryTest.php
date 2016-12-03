@@ -46,7 +46,7 @@ class CategoryTest extends TestCase {
         Category::createSubcategory($parent, ['name' => 'Category AA']);
         Category::createSubcategory($parent, ['name' => 'Category AB']);
 
-        self::assertCount(2, $parent->subcategories());
+        self::assertCount(2, $parent->subcategories);
     }
 
     /** @test */
