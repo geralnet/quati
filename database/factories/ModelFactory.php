@@ -1,8 +1,11 @@
 <?php
+declare(strict_types = 1);
 
 use App\Models\Shop\Category;
 use App\User;
 use Faker\Generator;
+
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 $factory->define(User::class, function(Generator $faker) {
     static $password;

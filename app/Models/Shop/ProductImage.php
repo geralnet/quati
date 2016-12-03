@@ -1,16 +1,18 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Models\Shop;
 
 use App\Models\EntityRelationshipModel;
 use App\UploadedFile;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class ProductImage
  *
  * @mixin Builder
- * @property belongsTo product
+ * @property BelongsTo product
  */
 class ProductImage extends EntityRelationshipModel {
     public static function createForProduct($product, $string) {
