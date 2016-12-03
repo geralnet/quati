@@ -1,7 +1,11 @@
 <?php
+declare(strict_types = 1);
+
+namespace Tests\Unit\Controllers;
 
 use App\UploadedFile;
-use Tests\TestCase;
+use Illuminate\Http\Response;
+use Tests\Unit\TestCase;
 
 class FileControllerTest extends TestCase {
     /** @test */
@@ -11,7 +15,6 @@ class FileControllerTest extends TestCase {
 
         /** @var Response $response */
         $response = $this->visit('/@images/image.png')->response;
-        /** @var View $view */
         $data = $response->getContent();
         self::assertSame(file_get_contents($filename), $data);
     }

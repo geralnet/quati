@@ -1,11 +1,14 @@
 <?php
+declare(strict_types = 1);
+
+namespace Tests\Unit\Controllers;
 
 use App\Http\Controllers\ShopController;
 use App\Models\Shop\Category;
 use App\Models\Shop\Product;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
-use Tests\TestCase;
+use Tests\Unit\TestCase;
 
 class ShopControllerTest extends TestCase {
     /** @var Category[] */

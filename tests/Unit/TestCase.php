@@ -1,21 +1,25 @@
 <?php
+declare(strict_types = 1);
 
-namespace Tests;
+namespace Tests\Unit;
 
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\TestCase as IlluminateTestCase;
 use Mockery;
 
 /**
  * Class TestCase
  */
-abstract class TestCase extends \Illuminate\Foundation\Testing\TestCase {
+abstract class TestCase extends IlluminateTestCase {
     use DatabaseTransactions;
 
     /**
      * TestCase constructor.
      */
     public function __construct() {
+        parent::__construct();
         $this->baseUrl = env('APP_URL');
     }
 
@@ -34,10 +38,10 @@ abstract class TestCase extends \Illuminate\Foundation\Testing\TestCase {
     /**
      * Creates the application.
      *
-     * @return \Illuminate\Foundation\Application
+     * @return Application
      */
     public function createApplication() {
-        $app = require __DIR__.'/../bootstrap/app.php';
+        $app = require __DIR__.'/../../bootstrap/app.php';
 
         $app->make(Kernel::class)->bootstrap();
 

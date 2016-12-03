@@ -12,11 +12,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * Class Category
  *
  * @mixin Builder
- * @property int      id
- * @property int      parent_id
- * @property string   name
- * @property string   keyword
- * @property Category parent
+ * @property int                  id
+ * @property int                  parent_id
+ * @property string               name
+ * @property string               keyword
+ * @property string               description
+ * @property Category             parent
+ * @property Collection|Product[] products
  */
 class Category extends EntityRelationshipModel {
     /** @var Category Caches the root category. */
@@ -27,6 +29,7 @@ class Category extends EntityRelationshipModel {
     }
 
     public static function createSubcategory(Category $parent, array $attributes) {
+        $attributes['parent'] = $parent;
         $category = new Category($attributes);
         $category->parent()->associate($parent);
         $category->save();

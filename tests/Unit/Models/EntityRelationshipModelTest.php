@@ -1,6 +1,6 @@
 <?php
 use App\Models\EntityRelationshipModel;
-use Tests\TestCase;
+use Tests\Unit\TestCase;
 
 class EntityRelationshipModelTest extends TestCase {
     /** @test */

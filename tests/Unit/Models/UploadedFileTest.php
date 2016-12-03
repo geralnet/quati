@@ -1,7 +1,7 @@
 <?php
 
 use App\UploadedFile;
-use Tests\TestCase;
+use Tests\Unit\TestCase;
 
 /**
  * Class FileTest

@@ -2,7 +2,7 @@
 
 use App\Models\Shop\Category;
 use App\Models\Shop\Product;
-use Tests\TestCase;
+use Tests\Unit\TestCase;
 
 /**
  * Class CategoryTest
@@ -26,7 +26,9 @@ class CategoryTest extends TestCase {
 
     /** @test */
     public function it_can_have_many_products() {
-        $category = Category::createInRoot(['name' => 'Category']);
+        /** @var Category $category */
+        $category = factory(Category::class)->create(['name' => 'Parent']);
+
         $productA = new Product(['name' => 'Product A', 'price' => 10]);
         $productA->category()->associate($category);
         $productA->save();
@@ -35,21 +37,16 @@ class CategoryTest extends TestCase {
         $productB->category()->associate($category);
         $productB->save();
 
-        $id = $category->id;
-        $fetchedCategory = Category::find($id);
-        $products = $fetchedCategory->products;
-        self::assertCount(2, $products);
+        self::assertCount(2, $category->products);
     }
 
     /** @test */
     public function it_can_have_subcategories() {
-        $categoryA = Category::createInRoot(['name' => 'Category A']);
-        Category::createSubcategory($categoryA, ['name' => 'Category AA']);
-        Category::createSubcategory($categoryA, ['name' => 'Category AB']);
+        $parent = Category::createInRoot(['name' => 'Category A']);
+        Category::createSubcategory($parent, ['name' => 'Category AA']);
+        Category::createSubcategory($parent, ['name' => 'Category AB']);
 
-        $fetchedCategory = Category::find($categoryA->id);
-        $subcategories = $fetchedCategory->subcategories();
-        self::assertCount(2, $subcategories);
+        self::assertCount(2, $parent->subcategories());
     }
 
     /** @test */
@@ -60,20 +57,14 @@ class CategoryTest extends TestCase {
 
     /** @test */
     public function it_exists() {
-        self::assertNotNull(new Category());
-    }
-
-    /** @test */
-    public function it_has_a_default_keyword() {
-        $category = new Category([
-            'name' => 'Category A',
-        ]);
-        self::assertNotNull($category->keyword);
+        $category = factory(Category::class)->create();
+        self::assertNotNull($category);
     }
 
     /** @test */
     public function it_has_a_default_keyword_based_on_its_name_with_underscores_instead_of_spaces() {
-        $category = new Category([
+        /** @var Category $category */
+        $category = factory(Category::class)->create([
             'name' => 'Category A',
         ]);
         self::assertSame('Category_A', $category->keyword);
@@ -81,7 +72,8 @@ class CategoryTest extends TestCase {
 
     /** @test */
     public function it_has_a_default_keywork_with_ascii_alphanumeric_underscores_and_dashes_only() {
-        $category = new Category([
+        /** @var Category $category */
+        $category = factory(Category::class)->create([
             'name' => 'Super-Category 123 F#$k',
         ]);
         self::assertSame('Super-Category_123_F--k', $category->keyword);
@@ -89,7 +81,8 @@ class CategoryTest extends TestCase {
 
     /** @test */
     public function it_has_a_default_keywork_without_accents() {
-        $category = new Category([
+        /** @var Category $category */
+        $category = factory(Category::class)->create([
             'name' => 'História da Computação/Régua de Cálculo',
         ]);
         self::assertSame('Historia_da_Computacao-Regua_de_Calculo', $category->keyword);
@@ -97,40 +90,46 @@ class CategoryTest extends TestCase {
 
     /** @test */
     public function it_has_a_description() {
-        $category = Category::createInRoot(['name' => 'Category', 'description' => 'Category description.']);
+        /** @var Category $category */
+        $category = factory(Category::class)->create(['description' => 'Category description.']);
         self::assertSame('Category description.', $category->description);
     }
 
     /** @test */
     public function it_has_a_keyword() {
-        $category = new Category([
-            'name' => 'Category A',
-        ]);
+        /** @var Category $category */
+        $category = factory(Category::class)->create();
         self::assertNotNull($category->keyword);
     }
 
     /** @test */
     public function it_has_a_name() {
-        $category = Category::createInRoot(['name' => 'Test Category']);
+        $category = factory(Category::class)->create(['name' => 'Test Category']);
         self::assertSame('Test Category', $category->name);
     }
 
     /** @test */
     public function it_may_be_a_subcategory() {
-        $parent = new Category(['name' => 'Parent']);
-        $child = new Category(['name' => 'Child']);
-        $child->parent = $parent;
+        /** @var Category $parent */
+        $parent = factory(Category::class)->create(['name' => 'Parent']);
+        /** @var Category $child */
+        $child = factory(Category::class)->make(['name' => 'Child']);
+        $child->parent()->associate($parent);
+        $child->save();
+
         self::assertSame('Parent', $child->parent->name);
     }
 
     /** @test */
     public function it_may_have_a_parent_category() {
-        $parent = Category::createInRoot(['name' => 'Parent Category']);
+        /** @var Category $category */
+        $parent = factory(Category::class)->create(['name' => 'Parent Category']);
 
-        $child = Category::createSubcategory($parent, ['name' => 'Child Category']);
+        /** @var Category $child */
+        $child = factory(Category::class)->make(['name' => 'Child Category']);
+        $child->parent()->associate($parent);
+        $child->save();
 
-        $fetchedChild = Category::with('parent')->find($child->id);
-        self::assertSame($child->id, $fetchedChild->id);
         self::assertSame($parent->id, $child->parent->id);
         self::assertSame('Parent Category', $child->parent->name);
     }
@@ -151,7 +150,8 @@ class CategoryTest extends TestCase {
 
     /** @test */
     public function it_should_not_override_the_keyword_when_setting_a_name() {
-        $category = new Category(['name' => 'Category A', 'keyword' => 'CategoryKey']);
+        /** @var Category $category */
+        $category = factory(Category::class)->create(['name' => 'Category A', 'keyword' => 'CategoryKey']);
         $category->name = 'New Name';
         self::assertSame('CategoryKey', $category->keyword);
     }
@@ -171,7 +171,8 @@ class CategoryTest extends TestCase {
 
     /** @test */
     public function it_should_trim_names() {
-        $category = new Category(['name' => "   ABC   \n"]);
+        /** @var Category $category */
+        $category = factory(Category::class)->create(['name' => "   ABC   \n"]);
         self::assertSame('ABC', $category->name);
     }
 }

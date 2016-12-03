@@ -1,5 +1,5 @@
 <?php
-namespace app\Models\Shop;
+namespace App\Models\Shop;
 
 abstract class KeywordGenerator {
     /**

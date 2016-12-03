@@ -1,7 +1,7 @@
 <?php
 
-use app\Models\Shop\KeywordGenerator;
-use Tests\TestCase;
+use App\Models\Shop\KeywordGenerator;
+use Tests\Unit\TestCase;
 
 /**
  * Class KeywordGeneratorTest
