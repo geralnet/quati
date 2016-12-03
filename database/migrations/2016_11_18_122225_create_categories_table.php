@@ -1,5 +1,4 @@
 <?php
-declare(strict_types = 1);
 
 use App\Models\Shop\Category;
 use Illuminate\Database\Migrations\Migration;
@@ -31,8 +30,7 @@ class CreateCategoriesTable extends Migration {
 
             $table->text('description');
 
-            $table->integer('parent_id')->unsigned()->nullable()
-                  ->index()->foreign('parent_id')->references('id')->on('categories');
+            $table->integer('parent_id')->unsigned()->nullable()->index();
 
             $table->timestamps();
         });

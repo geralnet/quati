@@ -136,6 +136,13 @@ class CategoryTest extends TestCase {
     }
 
     /** @test */
+    public function it_provides_the_root_category_id() {
+        $root = Category::getRoot();
+        $actual = Category::getRootId();
+        self::assertSame($actual, $root->id);
+    }
+
+    /** @test */
     public function it_should_get_the_path_for_a_given_category() {
         $alpha = Category::createInRoot(['name' => 'Alpha']);
         $beta = Category::createSubcategory($alpha, ['name' => 'Beta']);

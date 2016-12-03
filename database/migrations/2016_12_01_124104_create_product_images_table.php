@@ -1,39 +1,34 @@
 <?php
 declare(strict_types = 1);
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateProductImagesTable extends Migration
-{
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::create('shop_productimages', function (Blueprint $table) {
-            $table->increments('id');
-
-            $table->integer('product_id')->unsigned()
-                  ->index()->foreign()->references('id')->on('products');
-
-            $table->integer('file_id')->unsigned()
-                  ->index()->foreign()->references('id')->on('uploaded_files');
-
-            $table->timestamps();
-        });
-    }
-
+class CreateProductImagesTable extends Migration {
     /**
      * Reverse the migrations.
      *
      * @return void
      */
-    public function down()
-    {
+    public function down() {
         Schema::dropIfExists('shop_productimages');
+    }
+
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up() {
+        Schema::create('shop_productimages', function(Blueprint $table) {
+            $table->increments('id');
+
+            $table->integer('product_id')->unsigned()->index();
+
+            $table->integer('file_id')->unsigned()->index();
+
+            $table->timestamps();
+        });
     }
 }

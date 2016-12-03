@@ -32,8 +32,7 @@ class CreateProductsTable extends Migration {
 
             $table->decimal('price');
 
-            $table->integer('category_id')->unsigned()
-                  ->index()->foreign()->references('id')->on('categories');
+            $table->integer('category_id')->unsigned()->index();
 
             $table->timestamps();
         });
