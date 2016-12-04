@@ -7,7 +7,7 @@ use App\Models\Shop\ProductImage;
 use App\UploadedFile;
 use Illuminate\Database\Seeder;
 
-class CategoriesAndProductsTableSeeder extends Seeder {
+class ShopSeeder extends Seeder {
     /**
      * Run the database seeds.
      *

@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 
 use App\Models\Shop\Category;
+use App\Models\Shop\Path;
 use App\Models\Shop\Product;
 use Tests\Unit\TestCase;
 

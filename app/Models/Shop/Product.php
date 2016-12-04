@@ -12,12 +12,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * Class Product
  *
  * @mixin Builder
+ * @property int      id
  * @property string   name
  * @property string   keyword
  * @property int      price
  * @property Category category
  */
-class Product extends EntityRelationshipModel {
+class Product extends EntityRelationshipModel implements Pathable {
     public static function createInCategory(Category $category, array $attributes) {
         $product = new Product($attributes);
         $product->category()->associate($category);
@@ -41,6 +42,10 @@ class Product extends EntityRelationshipModel {
      */
     public function category() {
         return $this->belongsTo(Category::class);
+    }
+
+    function getId() {
+        return $this->id;
     }
 
     public function getImageURL($number) {

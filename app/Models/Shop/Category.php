@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Collection|Product[]  products
  * @property Collection|Category[] subcategories
  */
-class Category extends EntityRelationshipModel {
+class Category extends EntityRelationshipModel implements Pathable {
     /** @var int|null Cached id of root category. */
     private static $cachedRootId = null;
 
@@ -60,6 +60,10 @@ class Category extends EntityRelationshipModel {
 
     /** @var string */
     private $keywordPath = null;
+
+    function getId() {
+        return $this->id;
+    }
 
     public function getKeywordPath() {
         if (is_null($this->keywordPath)) {
