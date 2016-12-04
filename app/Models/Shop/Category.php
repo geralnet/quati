@@ -26,17 +26,6 @@ class Category extends EntityRelationshipModel implements Pathable {
     /** @var int|null Cached id of root category. */
     private static $cachedRootId = null;
 
-    public static function createInRoot(array $attributes) {
-        return self::createSubcategory(self::getRoot(), $attributes);
-    }
-
-    public static function createSubcategory(Category $parent, array $attributes) {
-        $category = new Category($attributes);
-        $category->parent()->associate($parent);
-        $category->save();
-        return $category;
-    }
-
     public static function getRoot() : Category {
         return static::find(self::getRootId())->firstOrFail();
     }

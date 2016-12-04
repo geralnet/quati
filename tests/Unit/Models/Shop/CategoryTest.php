@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 
 use App\Models\Shop\Category;
-use App\Models\Shop\Path;
 use App\Models\Shop\Product;
 use Tests\Unit\TestCase;
 
@@ -10,17 +9,28 @@ use Tests\Unit\TestCase;
  * Class CategoryTest
  */
 class CategoryTest extends TestCase {
+    public static function createInRoot(array $attributes) {
+        return self::createSubcategory(Category::getRoot(), $attributes);
+    }
+
+    public static function createSubcategory(Category $parent, array $attributes) {
+        $category = new Category($attributes);
+        $category->parent()->associate($parent);
+        $category->save();
+        return $category;
+    }
+
     /** @test */
     public function it_can_create_a_category_inside_root() {
-        $category = Category::createInRoot(['name' => 'Category']);
+        $category = self::createInRoot(['name' => 'Category']);
         self::assertSame('Category', $category->name);
         self::assertTrue($category->parent->isRoot());
     }
 
     /** @test */
     public function it_can_create_a_subcategory() {
-        $categoryA = Category::createInRoot(['name' => 'Category A']);
-        $categoryAA = Category::createSubcategory($categoryA, ['name' => 'Category AA']);
+        $categoryA = self::createInRoot(['name' => 'Category A']);
+        $categoryAA = self::createSubcategory($categoryA, ['name' => 'Category AA']);
         self::assertSame('Category AA', $categoryAA->name);
         self::assertSame('Category A', $categoryAA->parent->name);
         self::assertTrue($categoryAA->parent->parent->isRoot());
@@ -44,9 +54,9 @@ class CategoryTest extends TestCase {
 
     /** @test */
     public function it_can_have_subcategories() {
-        $parent = Category::createInRoot(['name' => 'Category A']);
-        Category::createSubcategory($parent, ['name' => 'Category AA']);
-        Category::createSubcategory($parent, ['name' => 'Category AB']);
+        $parent = self::createInRoot(['name' => 'Category A']);
+        self::createSubcategory($parent, ['name' => 'Category AA']);
+        self::createSubcategory($parent, ['name' => 'Category AB']);
 
         self::assertCount(2, $parent->subcategories);
     }
@@ -145,9 +155,9 @@ class CategoryTest extends TestCase {
 
     /** @test */
     public function it_should_get_the_path_for_a_given_category() {
-        $alpha = Category::createInRoot(['name' => 'Alpha']);
-        $beta = Category::createSubcategory($alpha, ['name' => 'Beta']);
-        $charlie = Category::createSubcategory($beta, ['name' => 'Charlie']);
+        $alpha = self::createInRoot(['name' => 'Alpha']);
+        $beta = self::createSubcategory($alpha, ['name' => 'Beta']);
+        $charlie = self::createSubcategory($beta, ['name' => 'Charlie']);
         self::assertSame('/Alpha/Beta/Charlie', $charlie->getKeywordPath());
     }
 
@@ -167,14 +177,14 @@ class CategoryTest extends TestCase {
 
     /** @test */
     public function it_should_return_false_if_it_has_no_subcategories() {
-        $categoryA = Category::createInRoot(['name' => 'Category A']);
+        $categoryA = self::createInRoot(['name' => 'Category A']);
         self::assertFalse($categoryA->hasSubcategories());
     }
 
     /** @test */
     public function it_should_return_true_if_it_has_subcategories() {
-        $categoryA = Category::createInRoot(['name' => 'Category A']);
-        Category::createSubcategory($categoryA, ['name' => 'Category b']);
+        $categoryA = self::createInRoot(['name' => 'Category A']);
+        self::createSubcategory($categoryA, ['name' => 'Category b']);
         self::assertTrue($categoryA->hasSubcategories());
     }
 

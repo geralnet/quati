@@ -14,7 +14,7 @@ use Tests\Unit\TestCase;
 class ProductTest extends TestCase {
     /** @test */
     public function it_belongs_to_a_category() {
-        $category = Category::createInRoot(['name' => 'Category']);
+        $category = CategoryTest::createInRoot(['name' => 'Category']);
 
         $product = new Product(['name' => 'Product', 'price' => 10]);
         $product->category()->associate($category);
@@ -33,7 +33,7 @@ class ProductTest extends TestCase {
 
     /** @test */
     public function it_can_have_a_picture_attached() {
-        $category = Category::createInRoot(['name' => 'Category']);
+        $category = CategoryTest::createInRoot(['name' => 'Category']);
         $product = Product::createInCategory($category, ['name' => 'Product', 'price' => 1]);
         $file = UploadedFile::createFromExternalFile('/images/product.png', __DIR__.'/../../Fixtures/image.png');
 
@@ -64,7 +64,7 @@ class ProductTest extends TestCase {
 
     /** @test */
     public function it_has_a_keyword() {
-        $category = Category::createInRoot(['name' => 'Category']);
+        $category = CategoryTest::createInRoot(['name' => 'Category']);
         $product = Product::createInCategory($category, [
             'name'    => 'Product A',
             'keyword' => 'Keyword',
@@ -75,21 +75,21 @@ class ProductTest extends TestCase {
 
     /** @test */
     public function it_has_a_name() {
-        $category = Category::createInRoot(['name' => 'Category']);
+        $category = CategoryTest::createInRoot(['name' => 'Category']);
         $product = Product::createInCategory($category, ['name' => 'Test Product', 'price' => 10]);
         self::assertSame('Test Product', $product->name);
     }
 
     /** @test */
     public function it_has_a_price() {
-        $category = Category::createInRoot(['name' => 'Category']);
+        $category = CategoryTest::createInRoot(['name' => 'Category']);
         $product = Product::createInCategory($category, ['name' => 'A Product', 'price' => 1234]);
         self::assertEquals(1234, $product->price);
     }
 
     /** @test */
     public function it_has_images() {
-        $category = Category::createInRoot(['name' => 'The Category']);
+        $category = CategoryTest::createInRoot(['name' => 'The Category']);
         $product = Product::createInCategory($category, ['name' => 'The Product', 'price' => 1]);
         $file = UploadedFile::createFromExternalFile('/images/product.png', __DIR__.'/../../Fixtures/image.png');
 
@@ -111,7 +111,7 @@ class ProductTest extends TestCase {
 
     /** @test */
     public function it_provides_a_image_url() {
-        $category = Category::createInRoot(['name' => 'Category']);
+        $category = CategoryTest::createInRoot(['name' => 'Category']);
         $product = Product::createInCategory($category, ['name' => 'Product', 'price' => 1]);
         $file = UploadedFile::createFromExternalFile('/images/product.png', __DIR__.'/../../Fixtures/image.png');
 
@@ -125,9 +125,9 @@ class ProductTest extends TestCase {
 
     /** @test */
     public function it_should_get_the_path_for_a_given_product() {
-        $alpha = Category::createInRoot(['name' => 'Alpha']);
-        $beta = Category::createSubcategory($alpha, ['name' => 'Beta']);
-        $charlie = Category::createSubcategory($beta, ['name' => 'Charlie']);
+        $alpha = CategoryTest::createInRoot(['name' => 'Alpha']);
+        $beta = CategoryTest::createSubcategory($alpha, ['name' => 'Beta']);
+        $charlie = CategoryTest::createSubcategory($beta, ['name' => 'Charlie']);
         $product = Product::createInCategory($charlie, ['name' => 'The Product', 'price' => 10]);
         self::assertSame('/Alpha/Beta/Charlie/The_Product', $product->getKeywordPath());
     }
@@ -147,13 +147,13 @@ class ProductTest extends TestCase {
 
     /** @test */
     public function it_should_return_false_if_it_has_no_products() {
-        $category = Category::createInRoot(['name' => 'Category']);
+        $category = CategoryTest::createInRoot(['name' => 'Category']);
         self::assertFalse($category->hasProducts());
     }
 
     /** @test */
     public function it_should_return_true_if_it_has_products() {
-        $category = Category::createInRoot(['name' => 'Category']);
+        $category = CategoryTest::createInRoot(['name' => 'Category']);
         Product::createInCategory($category, [
             'name'  => 'Product',
             'price' => 1000,

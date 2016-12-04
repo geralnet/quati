@@ -6,6 +6,7 @@ namespace Tests\Unit\Controllers;
 use App\Http\Controllers\ShopController;
 use App\Models\Shop\Category;
 use App\Models\Shop\Product;
+use CategoryTest;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Tests\Unit\TestCase;
@@ -26,8 +27,8 @@ class ShopControllerTest extends TestCase {
 
     /** @test */
     public function it_handles_a_category_view_providing_the_current_category_for_a_longer_path() {
-        $categoryAlpha = Category::createInRoot(['name' => 'Category Alpha', 'keyword' => 'Alpha']);
-        Category::createSubcategory($categoryAlpha, ['name' => 'Category Beta', 'keyword' => 'Beta']);
+        $categoryAlpha = CategoryTest::createInRoot(['name' => 'Category Alpha', 'keyword' => 'Alpha']);
+        CategoryTest::createSubcategory($categoryAlpha, ['name' => 'Category Beta', 'keyword' => 'Beta']);
 
         $response = $this->visit('/Alpha/Beta')->response;
         $viewData = $response->getOriginalContent()->getData();
@@ -93,12 +94,12 @@ class ShopControllerTest extends TestCase {
      * Creates some data used when testing fetched results.
      */
     private function generateData() {
-        $categoryA = Category::createInRoot(['name' => 'Category A']);
-        $categoryAA = Category::createSubcategory($categoryA, ['name' => 'Category AA']);
-        $categoryAB = Category::createSubcategory($categoryA, ['name' => 'Category AB']);
+        $categoryA = CategoryTest::createInRoot(['name' => 'Category A']);
+        $categoryAA = CategoryTest::createSubcategory($categoryA, ['name' => 'Category AA']);
+        $categoryAB = CategoryTest::createSubcategory($categoryA, ['name' => 'Category AB']);
 
-        $categoryB = Category::createInRoot(['name' => 'Category B']);
-        $categoryBA = Category::createSubcategory($categoryB, ['name' => 'Category BA']);
+        $categoryB = CategoryTest::createInRoot(['name' => 'Category B']);
+        $categoryBA = CategoryTest::createSubcategory($categoryB, ['name' => 'Category BA']);
 
         $productA1 = Product::createInCategory($categoryA, ['name' => 'Product A1', 'price' => 10]);
 
