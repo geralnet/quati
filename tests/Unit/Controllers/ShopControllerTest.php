@@ -16,7 +16,7 @@ class ShopControllerTest extends TestCase {
 
     /** @test */
     public function it_handles_a_category_view_providing_the_current_category() {
-        Category::createInRoot(['name' => 'Category Name', 'keyword' => 'TheKeyword']);
+        factory(Category::class)->create(['name' => 'Category Name', 'keyword' => 'TheKeyword']);
 
         $response = $this->visit('/TheKeyword')->response;
         $viewData = $response->getOriginalContent()->getData();
