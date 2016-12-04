@@ -6,6 +6,7 @@ use App\Models\Shop\Product;
 use App\Models\Shop\ProductImage;
 use App\UploadedFile;
 use Illuminate\Database\QueryException;
+use Tests\Unit\Models\Shop\CategoryTest;
 use Tests\Unit\TestCase;
 
 /**

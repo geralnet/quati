@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string                keyword
  * @property string                description
  * @property Category              parent
+ * @property Path                  path
  * @property Collection|Product[]  products
  * @property Collection|Category[] subcategories
  */
@@ -97,6 +98,10 @@ class Category extends EntityRelationshipModel implements Pathable {
      */
     public function parent() {
         return $this->belongsTo(Category::class);
+    }
+
+    public function path() {
+        return $this->morphOne(Path::class, 'component');
     }
 
     /**

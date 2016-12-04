@@ -8,6 +8,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\MinkExtension\Context\MinkContext;
 use Laracasts\Behat\Context\DatabaseTransactions;
+use Tests\Unit\Models\Shop\CategoryTest;
 
 /**
  * Defines application features from the specific context.
@@ -135,7 +136,7 @@ class FeatureContext extends MinkContext {
         foreach ($table->getHash() as $row) {
             $name = $row['Category'];
             $parent = $this->categories[$row['Parent']];
-            $this->categories[$name] = Category::createSubcategory($parent, ['name' => $name]);
+            $this->categories[$name] = CategoryTest::createSubcategory($parent, ['name' => $name]);
         }
     }
 

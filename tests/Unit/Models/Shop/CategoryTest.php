@@ -1,7 +1,10 @@
 <?php
 declare(strict_types = 1);
 
+namespace Tests\Unit\Models\Shop;
+
 use App\Models\Shop\Category;
+use App\Models\Shop\Path;
 use App\Models\Shop\Product;
 use Tests\Unit\TestCase;
 
@@ -9,15 +12,26 @@ use Tests\Unit\TestCase;
  * Class CategoryTest
  */
 class CategoryTest extends TestCase {
-    public static function createInRoot(array $attributes) {
-        return self::createSubcategory(Category::getRoot(), $attributes);
+    /**
+     * Creates a new category inside 'root category' using the model factory.
+     *
+     * @param array $attributes
+     * @return Category
+     */
+    public static function createInRoot(array $attributes = []) : Category {
+        return factory(Category::class)->create($attributes);
     }
 
-    public static function createSubcategory(Category $parent, array $attributes) {
-        $category = new Category($attributes);
-        $category->parent()->associate($parent);
-        $category->save();
-        return $category;
+    /**
+     * Creates a new subcategory inside given category using the model factory.
+     *
+     * @param Category $parent
+     * @param array    $attributes
+     * @return Category
+     */
+    public static function createSubcategory(Category $parent, array $attributes = []) : Category {
+        $attributes['parent_id'] = $parent->id;
+        return factory(Category::class)->create($attributes);
     }
 
     /** @test */
@@ -38,8 +52,7 @@ class CategoryTest extends TestCase {
 
     /** @test */
     public function it_can_have_many_products() {
-        /** @var Category $category */
-        $category = factory(Category::class)->create(['name' => 'Parent']);
+        $category = self::createInRoot(['name' => 'Parent']);
 
         $productA = new Product(['name' => 'Product A', 'price' => 10]);
         $productA->category()->associate($category);
@@ -69,78 +82,65 @@ class CategoryTest extends TestCase {
 
     /** @test */
     public function it_exists() {
-        $category = factory(Category::class)->create();
+        $category = self::createInRoot();
         self::assertNotNull($category);
     }
 
     /** @test */
     public function it_has_a_default_keyword_based_on_its_name_with_underscores_instead_of_spaces() {
-        /** @var Category $category */
-        $category = factory(Category::class)->create([
-            'name' => 'Category A',
-        ]);
+        $category = self::createInRoot(['name' => 'Category A']);
         self::assertSame('Category_A', $category->keyword);
     }
 
     /** @test */
     public function it_has_a_default_keywork_with_ascii_alphanumeric_underscores_and_dashes_only() {
-        /** @var Category $category */
-        $category = factory(Category::class)->create([
-            'name' => 'Super-Category 123 F#$k',
-        ]);
+        $category = self::createInRoot(['name' => 'Super-Category 123 F#$k']);
         self::assertSame('Super-Category_123_F--k', $category->keyword);
     }
 
     /** @test */
     public function it_has_a_default_keywork_without_accents() {
-        /** @var Category $category */
-        $category = factory(Category::class)->create([
-            'name' => 'História da Computação/Régua de Cálculo',
-        ]);
+        $category = self::createInRoot(['name' => 'História da Computação/Régua de Cálculo']);
         self::assertSame('Historia_da_Computacao-Regua_de_Calculo', $category->keyword);
     }
 
     /** @test */
     public function it_has_a_description() {
-        /** @var Category $category */
-        $category = factory(Category::class)->create(['description' => 'Category description.']);
+        $category = self::createInRoot(['description' => 'Category description.']);
         self::assertSame('Category description.', $category->description);
     }
 
     /** @test */
     public function it_has_a_keyword() {
-        /** @var Category $category */
-        $category = factory(Category::class)->create();
+        $category = self::createInRoot();
         self::assertNotNull($category->keyword);
+        self::assertNotSame('', $category->keyword);
     }
 
     /** @test */
     public function it_has_a_name() {
-        $category = factory(Category::class)->create(['name' => 'Test Category']);
+        $category = self::createInRoot(['name' => 'Test Category']);
         self::assertSame('Test Category', $category->name);
     }
 
+    // /** @test */
+    // public function it_has_a_path() {
+    //     $category = self::createInRoot();
+    //     self::assertInstanceOf(Path::class, $category->path);
+    // }
+
     /** @test */
     public function it_may_be_a_subcategory() {
-        /** @var Category $parent */
-        $parent = factory(Category::class)->create(['name' => 'Parent']);
-        /** @var Category $child */
-        $child = factory(Category::class)->make(['name' => 'Child']);
-        $child->parent()->associate($parent);
-        $child->save();
+        $parent = self::createInRoot(['name' => 'Parent']);
+        $child = self::createSubcategory($parent, ['name' => 'Child']);
 
         self::assertSame('Parent', $child->parent->name);
     }
 
     /** @test */
     public function it_may_have_a_parent_category() {
-        /** @var Category $category */
-        $parent = factory(Category::class)->create(['name' => 'Parent Category']);
-
-        /** @var Category $child */
-        $child = factory(Category::class)->make(['name' => 'Child Category']);
-        $child->parent()->associate($parent);
-        $child->save();
+        $parent = self::createInRoot(['name' => 'Parent Category']);
+        $child = self::createSubcategory($parent, ['name' => 'Child Category']);
 
         self::assertSame($parent->id, $child->parent->id);
         self::assertSame('Parent Category', $child->parent->name);
@@ -163,14 +163,13 @@ class CategoryTest extends TestCase {
 
     /** @test */
     public function it_should_map_to_the_correct_database_table() {
-        $category = new Category();
+        $category = self::createInRoot();
         self::assertSame('shop_categories', $category->getTable());
     }
 
     /** @test */
     public function it_should_not_override_the_keyword_when_setting_a_name() {
-        /** @var Category $category */
-        $category = factory(Category::class)->create(['name' => 'Category A', 'keyword' => 'CategoryKey']);
+        $category = self::createInRoot(['name' => 'Category A', 'keyword' => 'CategoryKey']);
         $category->name = 'New Name';
         self::assertSame('CategoryKey', $category->keyword);
     }
@@ -190,8 +189,7 @@ class CategoryTest extends TestCase {
 
     /** @test */
     public function it_should_trim_names() {
-        /** @var Category $category */
-        $category = factory(Category::class)->create(['name' => "   ABC   \n"]);
+        $category = self::createInRoot(['name' => "   ABC   \n"]);
         self::assertSame('ABC', $category->name);
     }
 }

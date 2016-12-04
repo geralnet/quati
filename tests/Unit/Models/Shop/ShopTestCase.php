@@ -11,14 +11,6 @@ use Tests\Unit\TestCase;
  */
 abstract class ShopTestCase extends TestCase {
     /**
-     * @param array $attributes
-     * @return Category
-     */
-    protected function createCategoryInRoot(array $attributes) : Category {
-        return factory(Category::class)->create($attributes);
-    }
-
-    /**
      * @param Category[] $categories
      * @return Category Root category.
      */

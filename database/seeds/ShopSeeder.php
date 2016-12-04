@@ -6,6 +6,9 @@ use App\Models\Shop\Product;
 use App\Models\Shop\ProductImage;
 use App\UploadedFile;
 use Illuminate\Database\Seeder;
+use Tests\Unit\Models\Shop\CategoryTest;
+
+require_once __DIR__.'/../../tests/Unit/Models/Shop/CategoryTest.php';
 
 class ShopSeeder extends Seeder {
     /**
@@ -24,13 +27,13 @@ class ShopSeeder extends Seeder {
         $root->description = 'This is an example of how a store in Quati platform looks like.';
         $root->save();
 
-        $spaceships = Category::createInRoot([
+        $spaceships = CategoryTest::createInRoot([
             'name'        => 'Spaceships',
             'description' => 'We offer a great range of spaceships.<br /><br />
                               Please ensure you have a valid pilot license before purchasing.',
         ]);
 
-        $starfighters = Category::createSubcategory($spaceships, [
+        $starfighters = CategoryTest::createSubcategory($spaceships, [
             'name'        => 'Starfighters',
             'description' => 'We have a great variety of starfighters,
                               choose the one best adapts to your flying skills.',
@@ -54,7 +57,7 @@ class ShopSeeder extends Seeder {
             'price'       => 15000,
         ]);
 
-        $wings = Category::createSubcategory($starfighters, [
+        $wings = CategoryTest::createSubcategory($starfighters, [
             'name'        => 'Wing Series',
             'description' => 'Some of the best starfighters commonly names as a letter-wing are found here.',
         ]);
@@ -124,7 +127,7 @@ class ShopSeeder extends Seeder {
             'price'       => 28000,
         ]);
 
-        $transportation = Category::createSubcategory($spaceships, [
+        $transportation = CategoryTest::createSubcategory($spaceships, [
             'name'        => 'Transportation',
             'description' => 'Spaceships used for transportation.',
         ]);
@@ -148,11 +151,11 @@ class ShopSeeder extends Seeder {
             'price'       => 135000,
         ]);
 
-        $tools = Category::createInRoot(['name' => 'Tools']);
-        Category::createSubcategory($tools, ['name' => 'Manual']);
-        Category::createSubcategory($tools, ['name' => 'Power']);
+        $tools = CategoryTest::createInRoot(['name' => 'Tools']);
+        CategoryTest::createSubcategory($tools, ['name' => 'Manual']);
+        CategoryTest::createSubcategory($tools, ['name' => 'Power']);
 
-        Category::createInRoot(['name' => 'Devices']);
+        CategoryTest::createInRoot(['name' => 'Devices']);
     }
 
     private function importProductImages() {

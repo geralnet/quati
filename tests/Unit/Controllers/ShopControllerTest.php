@@ -6,9 +6,9 @@ namespace Tests\Unit\Controllers;
 use App\Http\Controllers\ShopController;
 use App\Models\Shop\Category;
 use App\Models\Shop\Product;
-use CategoryTest;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
+use Tests\Unit\Models\Shop\CategoryTest;
 use Tests\Unit\TestCase;
 
 class ShopControllerTest extends TestCase {
@@ -17,7 +17,7 @@ class ShopControllerTest extends TestCase {
 
     /** @test */
     public function it_handles_a_category_view_providing_the_current_category() {
-        factory(Category::class)->create(['name' => 'Category Name', 'keyword' => 'TheKeyword']);
+        CategoryTest::createInRoot(['name' => 'Category Name', 'keyword' => 'TheKeyword']);
 
         $response = $this->visit('/TheKeyword')->response;
         $viewData = $response->getOriginalContent()->getData();

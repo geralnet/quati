@@ -1,10 +1,10 @@
 <?php
 declare(strict_types = 1);
 
-use App\Models\Shop\Category;
 use App\Models\Shop\Product;
 use App\Models\Shop\ProductImage;
 use App\UploadedFile;
+use Tests\Unit\Models\Shop\CategoryTest;
 use Tests\Unit\TestCase;
 
 /**

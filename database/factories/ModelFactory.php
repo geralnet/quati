@@ -11,11 +11,14 @@ use Faker\Generator;
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-$factory->define(Category::class, function(Generator $faker) {
+$factory->define(User::class, function(Generator $faker) {
+    static $password;
+
     return [
-        'parent_id'   => Category::getRoot()->id,
-        'name'        => $faker->text,
-        'description' => $faker->paragraph,
+        'name'           => $faker->name,
+        'email'          => $faker->unique()->safeEmail,
+        'password'       => $password ?: $password = bcrypt('secret'),
+        'remember_token' => str_random(10),
     ];
 });
 
@@ -25,14 +28,11 @@ $factory->define(Path::class, function(Generator $faker) {
     ];
 });
 
-$factory->define(User::class, function(Generator $faker) {
-    static $password;
-
+$factory->define(Category::class, function(Generator $faker) {
     return [
-        'name'           => $faker->name,
-        'email'          => $faker->unique()->safeEmail,
-        'password'       => $password ?: $password = bcrypt('secret'),
-        'remember_token' => str_random(10),
+        'parent_id'   => Category::getRoot()->id,
+        'name'        => $faker->text,
+        'description' => $faker->paragraph,
     ];
 });
 
