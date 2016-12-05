@@ -7,5 +7,13 @@ namespace App\Models\Shop;
  * Interface Pathable
  */
 interface Pathable {
-    function getId();
+    /**
+     * @return int
+     */
+    function getId() : int;
+
+    /**
+     * @return string
+     */
+    function getPathname() : string;
 }

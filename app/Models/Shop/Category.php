@@ -51,7 +51,7 @@ class Category extends EntityRelationshipModel implements Pathable {
     /** @var string */
     private $keywordPath = null;
 
-    function getId() {
+    function getId() : int {
         return $this->id;
     }
 
@@ -70,6 +70,10 @@ class Category extends EntityRelationshipModel implements Pathable {
             $this->keywordPath = $path.'/'.$this->keyword;
         }
         return $this->keywordPath;
+    }
+
+    function getPathname() : string {
+        return $this->keyword;
     }
 
     /**

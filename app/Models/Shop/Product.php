@@ -44,7 +44,7 @@ class Product extends EntityRelationshipModel implements Pathable {
         return $this->belongsTo(Category::class);
     }
 
-    function getId() {
+    function getId() : int {
         return $this->id;
     }
 
@@ -70,6 +70,10 @@ class Product extends EntityRelationshipModel implements Pathable {
             $this->keywordPath = $this->category->getKeywordPath().'/'.$this->keyword;
         }
         return $this->keywordPath;
+    }
+
+    function getPathname() : string {
+        return $this->keyword;
     }
 
     /**

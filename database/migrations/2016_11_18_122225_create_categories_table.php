@@ -34,8 +34,5 @@ class CreateCategoriesTable extends Migration {
 
             $table->timestamps();
         });
-
-        // Add root category.
-        Category::create(['name' => '']);
     }
 }

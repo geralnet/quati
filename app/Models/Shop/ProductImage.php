@@ -27,12 +27,16 @@ class ProductImage extends EntityRelationshipModel implements Pathable {
         return $this->belongsTo(UploadedFile::class);
     }
 
-    function getId() {
+    function getId() :int {
         return $this->id;
     }
 
     public function product() {
         return $this->belongsTo(Product::class);
+    }
+
+    function getPathname() : string {
+        return $this->file->logical_path;
     }
 }
 
