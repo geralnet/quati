@@ -31,14 +31,14 @@ $factory->define(Path::class, function(Generator $faker) {
 $factory->define(Category::class, function(Generator $faker) {
     return [
         'parent_id'   => Category::getRoot()->id,
-        'name'        => $faker->text,
+        'name'        => $faker->text(20),
         'description' => $faker->paragraph,
     ];
 });
 
 $factory->define(Product::class, function(Generator $faker) {
     return [
-        'name'        => $faker->text,
+        'name'        => $faker->text(20),
         'price'       => $faker->numberBetween(1, 10000),
         'category_id' => Category::getRootId(),
     ];
