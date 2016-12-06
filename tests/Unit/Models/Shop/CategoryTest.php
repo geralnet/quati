@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace Tests\Unit\Models\Shop;
 
 use App\Models\Shop\Category;
-use App\Models\Shop\Path;
 use App\Models\Shop\Product;
 use Tests\Unit\TestCase;
 
@@ -144,13 +143,6 @@ class CategoryTest extends TestCase {
 
         self::assertSame($parent->id, $child->parent->id);
         self::assertSame('Parent Category', $child->parent->name);
-    }
-
-    /** @test */
-    public function it_provides_the_root_category_id() {
-        $root = Category::getRoot();
-        $actual = Category::getRootId();
-        self::assertSame($actual, $root->id);
     }
 
     /** @test */

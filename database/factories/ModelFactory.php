@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 
 use App\Models\Shop\Category;
-use App\Models\Shop\Path;
 use App\Models\Shop\Product;
 use App\Models\Shop\ProductImage;
 use App\UploadedFile;
@@ -34,7 +33,7 @@ $factory->define(Product::class, function(Generator $faker) {
     return [
         'name'        => $faker->text(20),
         'price'       => $faker->numberBetween(1, 10000),
-        'category_id' => Category::getRootId(),
+        'category_id' => Category::getRoot()->id,
     ];
 });
 

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use RuntimeException;
 
 /**
  * Class Category
@@ -24,20 +25,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Collection|Category[] subcategories
  */
 class Category extends EntityRelationshipModel implements Pathable {
-    /** @var int|null Cached id of root category. */
-    private static $cachedRootId = null;
-
     public static function getRoot() : Category {
-        return static::find(self::getRootId())->firstOrFail();
-    }
-
-    public static function getRootId() {
-        if (is_null(self::$cachedRootId)) {
-            $root = static::select('id')
-                          ->where('parent_id', null)->first();
-            self::$cachedRootId = $root->id;
+        $component = Path::getRoot()->component;
+        if (!($component instanceof Category)) {
+            throw new RuntimeException('Invalid type for root: '.get_class($component));
         }
-        return self::$cachedRootId;
+        return $component;
     }
 
     /** @var array */
