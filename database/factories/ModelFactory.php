@@ -22,12 +22,6 @@ $factory->define(User::class, function(Generator $faker) {
     ];
 });
 
-$factory->define(Path::class, function(Generator $faker) {
-    return [
-        'pathname' => $faker->text(20),
-    ];
-});
-
 $factory->define(Category::class, function(Generator $faker) {
     return [
         'parent_id'   => Category::getRoot()->id,

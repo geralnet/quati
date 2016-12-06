@@ -25,6 +25,8 @@ class CreateShopPathTreeTable extends Migration {
         Schema::create('shop_pathtree', function(Blueprint $table) {
             $table->increments('id');
 
+            $table->string('fullpath')->unique();
+
             $table->string('pathname', 20);
 
             $table->integer('parent_id')->unsigned()->nullable()->index();

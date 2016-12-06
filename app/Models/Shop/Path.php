@@ -4,31 +4,75 @@ namespace App\Models\Shop;
 
 use App\Models\EntityRelationshipModel;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
  * Class Path
  *
  * @mixin Builder
+ * @property int      id
+ * @property string   fullpath
  * @property string   pathname
+ * @property Path     parent
  * @property Pathable component
  */
 class Path extends EntityRelationshipModel {
-    public static function createForComponent(Pathable $component) {
+    public static function boot() {
+        parent::boot();
+        Path::saving(function(Path $path) {
+            return $path->updateFullpath();
+        });
+    }
+
+    public static function createForComponent(Pathable $component, Path $parent = null) : Path {
+        $parent = $parent ?: self::getRoot();
         $attributes['pathname'] = $component->getPathname();
         $attributes['component_id'] = $component->getId();
         $attributes['component_type'] = get_class($component);
+        $attributes['parent_id'] = $parent->id;
         return self::forceCreate($attributes);
     }
 
     public static function getRoot() : Path {
-        return Path::where('parent_id', null)->firstOrFail();
+        return Path::query()
+                   ->where('parent_id', null)
+                   ->where('fullpath', '')
+                   ->firstOrFail();
     }
 
     protected $fillable = ['pathname'];
 
     protected $table = 'shop_pathtree';
 
-    public function component() {
+    public function component() : MorphTo {
         return $this->morphTo();
+    }
+
+    public function parent() : BelongsTo {
+        return $this->belongsTo(Path::class);
+    }
+
+    public function subpaths() : HasMany {
+        return $this->hasMany(Path::class, 'parent_id');
+    }
+
+    protected function updateFullpath() : bool {
+        $before = $this->fullpath;
+        if (is_null($this->parent)) {
+            $this->fullpath = '';
+        }
+        else {
+            $fp = $this->fullpath = $this->parent->fullpath.'/'.$this->pathname;
+        }
+        if ($before !== $this->fullpath) {
+            foreach ($this->subpaths()->get() as $subpath) {
+                if (!$subpath->updateFullpath()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
