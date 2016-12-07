@@ -3,17 +3,19 @@ declare(strict_types = 1);
 
 namespace App\Models\Shop;
 
+use App\Models\EntityRelationshipModel;
+
 /**
  * Interface Pathable
  */
-interface Pathable {
+abstract class Pathable extends EntityRelationshipModel {
     /**
      * @return int
      */
-    function getId() : int;
+    public abstract function getId() : int;
 
     /**
      * @return string
      */
-    function getPathname() : string;
+    public abstract function getPathname() : string;
 }

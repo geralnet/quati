@@ -24,7 +24,7 @@ use RuntimeException;
  * @property Collection|Product[]  products
  * @property Collection|Category[] subcategories
  */
-class Category extends EntityRelationshipModel implements Pathable {
+class Category extends Pathable {
     public static function getRoot() : Category {
         $component = Path::getRoot()->component;
         if (!($component instanceof Category)) {

@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Models\Shop;
 
-use App\Models\EntityRelationshipModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int      price
  * @property Category category
  */
-class Product extends EntityRelationshipModel implements Pathable {
+class Product extends Pathable {
     public static function createInCategory(Category $category, array $attributes) {
         $product = new Product($attributes);
         $product->category()->associate($category);

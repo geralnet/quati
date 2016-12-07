@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Models\Shop;
 
-use App\Models\EntityRelationshipModel;
 use App\UploadedFile;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int       id
  * @property BelongsTo product
  */
-class ProductImage extends EntityRelationshipModel implements Pathable {
+class ProductImage extends Pathable {
     public static function createForProduct($product, $string) {
         $image = new ProductImage();
         $image->product()->associate($product);
@@ -27,16 +26,16 @@ class ProductImage extends EntityRelationshipModel implements Pathable {
         return $this->belongsTo(UploadedFile::class);
     }
 
-    function getId() :int {
+    function getId() : int {
         return $this->id;
-    }
-
-    public function product() {
-        return $this->belongsTo(Product::class);
     }
 
     function getPathname() : string {
         return $this->file->logical_path;
+    }
+
+    public function product() {
+        return $this->belongsTo(Product::class);
     }
 }
 
