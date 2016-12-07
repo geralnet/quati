@@ -33,7 +33,6 @@ class PathTest extends TestCase {
         $child1 = Path::createForComponent(factory(Category::class)->create(), $parent);
         $child2 = Path::createForComponent(factory(Category::class)->create(), $parent);
 
-        $subpaths =
         self::assertSame($child1->id, $parent->subpaths[0]->id);
         self::assertSame($child2->id, $parent->subpaths[1]->id);
     }
