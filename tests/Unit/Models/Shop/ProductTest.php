@@ -1,18 +1,36 @@
 <?php
 declare(strict_types = 1);
 
+namespace Tests\Unit\Models\Shop;
+
 use App\Models\Shop\Category;
 use App\Models\Shop\Product;
 use App\Models\Shop\ProductImage;
 use App\UploadedFile;
 use Illuminate\Database\QueryException;
-use Tests\Unit\Models\Shop\CategoryTest;
 use Tests\Unit\TestCase;
 
 /**
  * Class ProductTest
  */
 class ProductTest extends TestCase {
+    /**
+     * Creates a new product using the model factory.
+     *
+     * @param array $attributes
+     * @return Product
+     */
+    public static function createInRoot(array $attributes = []) : Product {
+        return factory(Product::class)->create($attributes);
+        // TODO delme ?
+    }
+
+    public static function createInCategory(Category $parent, array $attributes = []) : Product {
+        $attributes['category_id'] = $parent->id;
+        return factory(Product::class)->create($attributes);
+        // TODO fixme ?
+    }
+
     /** @test */
     public function it_belongs_to_a_category() {
         $category = CategoryTest::createInRoot(['name' => 'Category']);
@@ -122,15 +140,6 @@ class ProductTest extends TestCase {
         $image->save();
 
         self::assertSame('/@images/product.png', $product->getImageURL(1));
-    }
-
-    /** @test */
-    public function it_should_get_the_path_for_a_given_product() {
-        $alpha = CategoryTest::createInRoot(['name' => 'Alpha']);
-        $beta = CategoryTest::createSubcategory($alpha, ['name' => 'Beta']);
-        $charlie = CategoryTest::createSubcategory($beta, ['name' => 'Charlie']);
-        $product = Product::createInCategory($charlie, ['name' => 'The Product', 'price' => 10]);
-        self::assertSame('/Alpha/Beta/Charlie/The_Product', $product->getKeywordPath());
     }
 
     /** @test */

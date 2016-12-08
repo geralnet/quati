@@ -3,12 +3,14 @@ declare(strict_types = 1);
 
 use App\Models\Shop\Category;
 use app\Models\Shop\KeywordGenerator;
+use App\Models\Shop\Path;
 use App\Models\Shop\Product;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\MinkExtension\Context\MinkContext;
 use Laracasts\Behat\Context\DatabaseTransactions;
 use Tests\Unit\Models\Shop\CategoryTest;
+use Tests\Unit\Models\Shop\ProductTest;
 
 /**
  * Defines application features from the specific context.
@@ -27,7 +29,7 @@ class FeatureContext extends MinkContext {
      */
     public function iAmOnCategoryPage($category) {
         if (array_key_exists($category, $this->categories)) {
-            $url = $this->categories[$category]->getKeywordPath();
+            $url = $this->categories[$category]->getUrl();
         }
         else {
             $url = '/'.KeywordGenerator::fromName($category);
@@ -39,7 +41,7 @@ class FeatureContext extends MinkContext {
      * @Given /^I am on "([^"]*)" product page$/
      */
     public function iAmOnProductPage($product) {
-        $this->visit($this->products[$product]->getKeywordPath());
+        $this->visit($this->products[$product]->getUrl());
     }
 
     /**
@@ -137,6 +139,7 @@ class FeatureContext extends MinkContext {
             $name = $row['Category'];
             $parent = $this->categories[$row['Parent']];
             $this->categories[$name] = CategoryTest::createSubcategory($parent, ['name' => $name]);
+            Path::createForComponent($this->categories[$name], $parent->path);
         }
     }
 
@@ -147,10 +150,16 @@ class FeatureContext extends MinkContext {
         foreach ($table->getHash() as $row) {
             $name = $row['Product'];
             $category = $this->categories[$row['Category']];
-            $this->products[$name] = Product::createInCategory($category, [
+            $this->products[$name] = ProductTest::createInCategory($category, [
                 'name'  => $name,
                 'price' => $row['Price'],
             ]);
+            $c = $this->products[$name];
+            $path = Path::createForComponent($this->products[$name], $category->path);
+            $component = $path->component;
+
+            $p1 = $c->path;
+            $p2 = $component->path;
         }
     }
 
@@ -159,5 +168,6 @@ class FeatureContext extends MinkContext {
      */
     public function thereIsACategory($name) {
         $this->categories[$name] = Category::createInRoot(['name' => $name]);
+        Path::createForComponent($this->categories[$name]);
     }
 }

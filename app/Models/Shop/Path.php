@@ -28,18 +28,20 @@ class Path extends EntityRelationshipModel {
 
     public static function createForComponent(Pathable $component, Path $parent = null) : Path {
         $parent = $parent ?: self::getRoot();
-        $attributes['pathname'] = $component->getPathname();
-        $attributes['component_id'] = $component->getId();
-        $attributes['component_type'] = get_class($component);
-        $attributes['parent_id'] = $parent->id;
+        $attributes = [
+            'pathname'       => $component->getPathname(),
+            'component_id'   => $component->getId(),
+            'component_type' => get_class($component),
+            'parent_id'      => $parent->id,
+        ];
         return self::forceCreate($attributes);
     }
 
     public static function getRoot() : Path {
         return Path::query()
                    ->where('parent_id', null)
-                   ->where('fullpath', '')
-                   ->firstOrFail();
+                   ->where('fullpath', '/')
+                   ->firstOrFail(); // TODO add ->get();
     }
 
     protected $fillable = ['pathname'];
@@ -61,10 +63,11 @@ class Path extends EntityRelationshipModel {
     protected function updateFullpath() : bool {
         $before = $this->fullpath;
         if (is_null($this->parent)) {
-            $this->fullpath = '';
+            $this->fullpath = '/';
         }
         else {
-            $fp = $this->fullpath = $this->parent->fullpath.'/'.$this->pathname;
+            $fullpath = $this->parent->fullpath;
+            $this->fullpath = $fullpath.($fullpath == '/' ? '' : '/').$this->pathname;
         }
         if ($before !== $this->fullpath) {
             foreach ($this->subpaths()->get() as $subpath) {

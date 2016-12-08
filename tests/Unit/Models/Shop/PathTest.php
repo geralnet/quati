@@ -1,19 +1,31 @@
 <?php
 declare(strict_types = 1);
 
+namespace Tests\Unit\Models\Shop;
+
 use App\Models\Shop\Category;
 use App\Models\Shop\Path;
 use App\Models\Shop\Pathable;
 use App\Models\Shop\Product;
 use App\Models\Shop\ProductImage;
-use Tests\Unit\Models\Shop\CategoryTest;
 use Tests\Unit\TestCase;
 
 /**
  * Class PathTest
  */
 class PathTest extends TestCase {
+    public static function createForCategory(array $attributes = [], Path $parent = null) {
+        $category = CategoryTest::createInRoot($attributes);
+        return Path::createForComponent($category, $parent);
+    }
+
+    public static function createForProduct(array $attributes = [], Path $parent = null) {
+        $product = ProductTest::createInRoot($attributes);
+        return Path::createForComponent($product, $parent);
+    }
+
     /**
+     * @deprecated
      * @param string[] $attributes
      * @param Pathable $component
      * @return Path
@@ -64,7 +76,7 @@ class PathTest extends TestCase {
 
     /** @test */
     public function it_has_a_pathname() {
-        $component = self::createPath(factory(Category::class)->create(['name'=>'NewPath']));
+        $component = self::createPath(factory(Category::class)->create(['name' => 'NewPath']));
         self::assertSame('NewPath', $component->pathname);
     }
 

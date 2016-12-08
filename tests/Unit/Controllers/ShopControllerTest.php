@@ -3,21 +3,18 @@ declare(strict_types = 1);
 
 namespace Tests\Unit\Controllers;
 
-use App\Http\Controllers\ShopController;
-use App\Models\Shop\Category;
-use App\Models\Shop\Product;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
-use Tests\Unit\Models\Shop\CategoryTest;
+use Tests\Unit\Models\Shop\PathTest;
 use Tests\Unit\TestCase;
 
 class ShopControllerTest extends TestCase {
-    /** @var Category[] */
-    private $generatedCategories = null;
+    /** @var Path[] */
+    private $generatedPaths = null;
 
     /** @test */
     public function it_handles_a_category_view_providing_the_current_category() {
-        CategoryTest::createInRoot(['name' => 'Category Name', 'keyword' => 'TheKeyword']);
+        PathTest::createForCategory(['name' => 'Category Name', 'keyword' => 'TheKeyword']);
 
         $response = $this->visit('/TheKeyword')->response;
         $viewData = $response->getOriginalContent()->getData();
@@ -27,8 +24,8 @@ class ShopControllerTest extends TestCase {
 
     /** @test */
     public function it_handles_a_category_view_providing_the_current_category_for_a_longer_path() {
-        $categoryAlpha = CategoryTest::createInRoot(['name' => 'Category Alpha', 'keyword' => 'Alpha']);
-        CategoryTest::createSubcategory($categoryAlpha, ['name' => 'Category Beta', 'keyword' => 'Beta']);
+        $alpha = PathTest::createForCategory(['name' => 'Category Alpha', 'keyword' => 'Alpha']);
+        PathTest::createForCategory(['name' => 'Category Beta', 'keyword' => 'Beta'], $alpha);
 
         $response = $this->visit('/Alpha/Beta')->response;
         $viewData = $response->getOriginalContent()->getData();
@@ -66,45 +63,21 @@ class ShopControllerTest extends TestCase {
         $this->visit('/')->assertResponseOk();
     }
 
-    /** @test */
-    public function it_should_provide_the_category_given_a_parent_and_a_keyword() {
-        $this->generateData();
-
-        $actual = ShopController::getShopItemForKeyword($this->generatedCategories['categoryA'], 'Category_AA');
-        self::assertSame('Category AA', $actual->name);
-    }
-
-    /** @test */
-    public function it_should_provide_the_category_given_root_and_a_keyword() {
-        $this->generateData();
-
-        $actual = ShopController::getShopItemForKeyword(Category::getRoot(), 'Category_A');
-        self::assertSame('Category A', $actual->name);
-    }
-
-    /** @test */
-    public function it_should_provide_the_product_given_a_category_and_a_keyword() {
-        $this->generateData();
-
-        $actual = ShopController::getShopItemForKeyword($this->generatedCategories['categoryA'], 'Product_A1');
-        self::assertSame('Product A1', $actual->name);
-    }
-
     /**
      * Creates some data used when testing fetched results.
      */
     private function generateData() {
-        $categoryA = CategoryTest::createInRoot(['name' => 'Category A']);
-        $categoryAA = CategoryTest::createSubcategory($categoryA, ['name' => 'Category AA']);
-        $categoryAB = CategoryTest::createSubcategory($categoryA, ['name' => 'Category AB']);
+        $pathA = PathTest::createForCategory(['name' => 'Category A']);
+        $pathAA = PathTest::createForCategory(['name' => 'Category AA'], $pathA);
+        $pathAB = PathTest::createForCategory(['name' => 'Category AB'], $pathA);
 
-        $categoryB = CategoryTest::createInRoot(['name' => 'Category B']);
-        $categoryBA = CategoryTest::createSubcategory($categoryB, ['name' => 'Category BA']);
+        $pathB = PathTest::createForCategory(['name' => 'Category B']);
+        $pathBA = PathTest::createForCategory(['name' => 'Category BA'], $pathB);
 
-        $productA1 = Product::createInCategory($categoryA, ['name' => 'Product A1', 'price' => 10]);
+        $pathA1 = PathTest::createForProduct(['name' => 'Product A1', 'price' => 10], $pathA);
 
-        $this->generatedCategories = compact(
-            'categoryA', 'categoryAA', 'categoryAB', 'categoryB', 'categoryBA', 'productA1'
+        $this->generatedPaths = compact(
+            'pathA', 'pathAA', 'pathAB', 'pathB', 'pathBA', 'pathA1'
         );
     }
 }

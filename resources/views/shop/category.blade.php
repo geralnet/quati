@@ -22,7 +22,7 @@
             <div>
                 <ul class="subcategories">
                     @foreach($category->subcategories as $subcategory)
-                        <li><a href="{{ $subcategory->getKeywordPath() }}">{{ $subcategory->name }}</a></li>
+                        <li><a href="{{ $subcategory->getUrl() }}">{{ $subcategory->name }}</a></li>
                     @endforeach
                 </ul>
             </div>

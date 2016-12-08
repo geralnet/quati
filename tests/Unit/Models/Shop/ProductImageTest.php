@@ -1,6 +1,8 @@
 <?php
 declare(strict_types = 1);
 
+namespace Tests\Unit\Models\Shop;
+
 use App\Models\Shop\Product;
 use App\Models\Shop\ProductImage;
 use App\UploadedFile;

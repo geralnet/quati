@@ -48,7 +48,7 @@ class Category extends Pathable {
         return $this->id;
     }
 
-    public function getKeywordPath() {
+    public function getKeywordPath_() {
         if (is_null($this->keywordPath)) {
             if ($this->isRoot()) {
                 return '/';

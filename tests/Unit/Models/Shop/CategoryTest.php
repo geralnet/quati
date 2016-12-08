@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Tests\Unit\Models\Shop;
 
 use App\Models\Shop\Category;
+use App\Models\Shop\Path;
 use App\Models\Shop\Product;
 use Tests\Unit\TestCase;
 
@@ -12,7 +13,7 @@ use Tests\Unit\TestCase;
  */
 class CategoryTest extends TestCase {
     /**
-     * Creates a new category inside 'root category' using the model factory.
+     * Creates a new category using the model factory.
      *
      * @param array $attributes
      * @return Category
@@ -143,14 +144,6 @@ class CategoryTest extends TestCase {
 
         self::assertSame($parent->id, $child->parent->id);
         self::assertSame('Parent Category', $child->parent->name);
-    }
-
-    /** @test */
-    public function it_should_get_the_path_for_a_given_category() {
-        $alpha = self::createInRoot(['name' => 'Alpha']);
-        $beta = self::createSubcategory($alpha, ['name' => 'Beta']);
-        $charlie = self::createSubcategory($beta, ['name' => 'Charlie']);
-        self::assertSame('/Alpha/Beta/Charlie', $charlie->getKeywordPath());
     }
 
     /** @test */

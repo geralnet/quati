@@ -64,7 +64,7 @@ class Product extends Pathable {
     /**
      * @return string
      */
-    public function getKeywordPath() {
+    public function getKeywordPath_() {
         if (is_null($this->keywordPath)) {
             $this->keywordPath = $this->category->getKeywordPath().'/'.$this->keyword;
         }
@@ -80,6 +80,11 @@ class Product extends Pathable {
      */
     public function images() {
         return $this->hasMany(ProductImage::class);
+    }
+
+    public function path() {
+        // TODO try to mix into pathable
+        return $this->morphOne(Path::class, 'component');
     }
 
     /**

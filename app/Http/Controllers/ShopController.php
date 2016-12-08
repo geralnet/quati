@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Shop\Category;
+use App\Models\Shop\Path;
 use App\Models\Shop\Product;
 use Illuminate\View\View;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 class ShopController extends Controller {
+    /** @deprecated */
     public static function getShopItemForKeyword(Category $category, string $keyword) {
         if (!is_null($product = Product::where('category_id', $category->id)->where('keyword', $keyword)->first())) {
             return $product;
@@ -22,47 +24,34 @@ class ShopController extends Controller {
     }
 
     /**
-     * @param $path
+     * @param string $url
      * @return View
      * @throws ServiceUnavailableHttpException
      */
-    public function getShop($path) {
-        $item = $this->getShopItemForPath($path);
+    public function getShop($url) {
+        $fullpath = '/'.trim($url, '/');
+        $path = Path::where('fullpath', $fullpath)->first();
 
-        if (is_null($item)) {
+        if (is_null($path)) {
             throw new NotFoundHttpException();
         }
 
-        if ($item instanceof Product) {
-            return $this->getShopProduct($item);
+        $component = $path->component;
+
+        if ($component instanceof Product) {
+            return $this->getShopProduct($component);
         }
 
-        if ($item instanceof Category) {
-            return $this->getShopCategory($item);
+        if ($component instanceof Category) {
+            return $this->getShopCategory($component);
         }
 
         throw new ServiceUnavailableHttpException();
     }
 
     private function getShopCategory(Category $category) {
+        $cats = $category->subcategories;
         return view('shop.category', ['category' => $category]);
-    }
-
-    private function getShopItemForPath(string $path) {
-        $path = trim($path, '/');
-        $current = Category::getRoot();
-        if ($path == '') {
-            return $current;
-        }
-
-        $keywords = explode('/', $path);
-        while (!is_null($keyword = array_shift($keywords))) {
-            $current = self::getShopItemForKeyword($current, $keyword);
-            if (is_null($current)) {
-                return null;
-            }
-        }
-        return $current;
     }
 
     private function getShopProduct(Product $product) {
