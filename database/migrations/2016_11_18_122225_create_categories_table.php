@@ -26,8 +26,6 @@ class CreateCategoriesTable extends Migration {
 
             $table->string('name')->index();
 
-            $table->string('keyword')->index();
-
             $table->text('description');
 
             $table->integer('parent_id')->unsigned()->nullable()->index();

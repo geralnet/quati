@@ -167,13 +167,14 @@ class ShopSeeder extends Seeder {
                 continue; // No image for V-wing.
             }
 
-            $file = __DIR__.'/images/products/'.$product->keyword.'.jpg';
-            $file = UploadedFile::createFromExternalFile('/images/product/'.$product->keyword.'.jpg', $file);
-
-            $image = new ProductImage();
-            $image->product()->associate($product);
-            $image->file()->associate($file);
-            $image->save();
+            $file = __DIR__.'/images/products/'.$product->path->pathname.'.jpg';
+            if (file_exists($file)) {
+                $file = UploadedFile::createFromExternalFile('/images/product/'.$product->path->pathname.'.jpg', $file);
+                $image = new ProductImage();
+                $image->product()->associate($product);
+                $image->file()->associate($file);
+                $image->save();
+            }
         }
     }
 }

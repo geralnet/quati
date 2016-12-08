@@ -14,9 +14,9 @@ class ShopControllerTest extends TestCase {
 
     /** @test */
     public function it_handles_a_category_view_providing_the_current_category() {
-        PathTest::createForCategory(['name' => 'Category Name', 'keyword' => 'TheKeyword']);
+        PathTest::createForCategory(['name' => 'Category Name']);
 
-        $response = $this->visit('/TheKeyword')->response;
+        $response = $this->visit('/Category_Name')->response;
         $viewData = $response->getOriginalContent()->getData();
 
         self::assertSame('Category Name', $viewData['category']->name);
@@ -24,13 +24,13 @@ class ShopControllerTest extends TestCase {
 
     /** @test */
     public function it_handles_a_category_view_providing_the_current_category_for_a_longer_path() {
-        $alpha = PathTest::createForCategory(['name' => 'Category Alpha', 'keyword' => 'Alpha']);
-        PathTest::createForCategory(['name' => 'Category Beta', 'keyword' => 'Beta'], $alpha);
+        $alpha = PathTest::createForCategory(['name' => 'Alpha']);
+        PathTest::createForCategory(['name' => 'Beta'], $alpha);
 
         $response = $this->visit('/Alpha/Beta')->response;
         $viewData = $response->getOriginalContent()->getData();
 
-        self::assertSame('Category Beta', $viewData['category']->name);
+        self::assertSame('Beta', $viewData['category']->name);
     }
 
     /** @test */

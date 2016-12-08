@@ -31,10 +31,7 @@ class Product extends Pathable {
     ];
 
     /** @var string[] */
-    protected $fillable = ['name', 'keyword', 'description', 'price'];
-
-    /** @var string */
-    private $keywordPath = null;
+    protected $fillable = ['name', 'description', 'price'];
 
     /**
      * @return BelongsTo
@@ -61,18 +58,8 @@ class Product extends Pathable {
         return $url;
     }
 
-    /**
-     * @return string
-     */
-    public function getKeywordPath_() {
-        if (is_null($this->keywordPath)) {
-            $this->keywordPath = $this->category->getKeywordPath().'/'.$this->keyword;
-        }
-        return $this->keywordPath;
-    }
-
     function getPathname() : string {
-        return $this->keyword;
+        return Pathable::makePathname($this->name);
     }
 
     /**
@@ -80,23 +67,5 @@ class Product extends Pathable {
      */
     public function images() {
         return $this->hasMany(ProductImage::class);
-    }
-
-    public function path() {
-        // TODO try to mix into pathable
-        return $this->morphOne(Path::class, 'component');
-    }
-
-    /**
-     * @param $name
-     */
-    public function setNameAttribute($name) {
-        $name = trim($name);
-        $this->attributes['name'] = $name;
-
-        if (!isset($this->attributes['keyword'])) {
-            $keyword = KeywordGenerator::fromName($name);
-            $this->attributes['keyword'] = $keyword;
-        }
     }
 }

@@ -41,7 +41,7 @@ class Path extends EntityRelationshipModel {
         return Path::query()
                    ->where('parent_id', null)
                    ->where('fullpath', '/')
-                   ->firstOrFail(); // TODO add ->get();
+                   ->firstOrFail();
     }
 
     protected $fillable = ['pathname'];

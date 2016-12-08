@@ -10,19 +10,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 class ShopController extends Controller {
-    /** @deprecated */
-    public static function getShopItemForKeyword(Category $category, string $keyword) {
-        if (!is_null($product = Product::where('category_id', $category->id)->where('keyword', $keyword)->first())) {
-            return $product;
-        }
-
-        if (!is_null($subcategory = Category::where('parent_id', $category->id)->where('keyword', $keyword)->first())) {
-            return $subcategory;
-        }
-
-        return null;
-    }
-
     /**
      * @param string $url
      * @return View
@@ -50,7 +37,6 @@ class ShopController extends Controller {
     }
 
     private function getShopCategory(Category $category) {
-        $cats = $category->subcategories;
         return view('shop.category', ['category' => $category]);
     }
 

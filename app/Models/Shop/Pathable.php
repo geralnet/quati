@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace App\Models\Shop;
 
 use App\Models\EntityRelationshipModel;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Psy\Exception\RuntimeException;
 
 /**
@@ -13,6 +15,17 @@ use Psy\Exception\RuntimeException;
  */
 abstract class Pathable extends EntityRelationshipModel {
     /**
+     * @param $name
+     * @return string
+     */
+    public static function makePathname($name) : string {
+        $pathname = str_replace(' ', '_', $name);
+        $pathname = iconv('UTF-8', 'ASCII//TRANSLIT', $pathname);
+        $pathname = preg_replace('/[^A-Za-z0-9_]/u', '-', $pathname);
+        return $pathname;
+    }
+
+    /**
      * @return int
      */
     public abstract function getId() : int;
@@ -21,6 +34,13 @@ abstract class Pathable extends EntityRelationshipModel {
      * @return string
      */
     public abstract function getPathname() : string;
+
+    /**
+     * @return MorphOne
+     */
+    public function path() : MorphOne {
+        return $this->morphOne(Path::class, 'component');
+    }
 
     /**
      * @return string

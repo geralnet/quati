@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Models\Shop;
 
-use App\Models\EntityRelationshipModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -41,32 +40,12 @@ class Category extends Pathable {
     /** @var string[] */
     protected $fillable = ['name', 'keyword', 'description'];
 
-    /** @var string */
-    private $keywordPath = null;
-
     function getId() : int {
         return $this->id;
     }
 
-    public function getKeywordPath_() {
-        if (is_null($this->keywordPath)) {
-            if ($this->isRoot()) {
-                return '/';
-            }
-
-            $path = $this->parent()->getResults()->getKeywordPath();
-
-            if ($path == '/') {
-                $path = '';
-            }
-
-            $this->keywordPath = $path.'/'.$this->keyword;
-        }
-        return $this->keywordPath;
-    }
-
     function getPathname() : string {
-        return $this->keyword;
+        return Pathable::makePathname($this->name);
     }
 
     /**
@@ -97,28 +76,11 @@ class Category extends Pathable {
         return $this->belongsTo(Category::class);
     }
 
-    public function path() {
-        return $this->morphOne(Path::class, 'component');
-    }
-
     /**
      * @return HasMany
      */
-    public function products() {
+    public function products() : HasMany {
         return $this->hasMany(Product::class);
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setNameAttribute(string $name) {
-        $name = trim($name);
-        $this->attributes['name'] = $name;
-
-        if (!isset($this->attributes['keyword'])) {
-            $keyword = KeywordGenerator::fromName($name);
-            $this->attributes['keyword'] = $keyword;
-        }
     }
 
     /**

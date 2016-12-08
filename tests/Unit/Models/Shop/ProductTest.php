@@ -82,17 +82,6 @@ class ProductTest extends TestCase {
     }
 
     /** @test */
-    public function it_has_a_keyword() {
-        $category = CategoryTest::createInRoot(['name' => 'Category']);
-        $product = Product::createInCategory($category, [
-            'name'    => 'Product A',
-            'keyword' => 'Keyword',
-            'price'   => 10,
-        ]);
-        self::assertSame('Keyword', $product->keyword);
-    }
-
-    /** @test */
     public function it_has_a_name() {
         $category = CategoryTest::createInRoot(['name' => 'Category']);
         $product = Product::createInCategory($category, ['name' => 'Test Product', 'price' => 10]);
@@ -146,13 +135,6 @@ class ProductTest extends TestCase {
     public function it_should_map_to_the_correct_database_table() {
         $product = new Product();
         self::assertSame('shop_products', $product->getTable());
-    }
-
-    /** @test */
-    public function it_should_not_override_the_keyword_when_setting_a_name() {
-        $product = new Product(['name' => 'Product A', 'keyword' => 'ProductKey']);
-        $product->name = 'New Name';
-        self::assertSame('ProductKey', $product->keyword);
     }
 
     /** @test */

@@ -87,34 +87,9 @@ class CategoryTest extends TestCase {
     }
 
     /** @test */
-    public function it_has_a_default_keyword_based_on_its_name_with_underscores_instead_of_spaces() {
-        $category = self::createInRoot(['name' => 'Category A']);
-        self::assertSame('Category_A', $category->keyword);
-    }
-
-    /** @test */
-    public function it_has_a_default_keywork_with_ascii_alphanumeric_underscores_and_dashes_only() {
-        $category = self::createInRoot(['name' => 'Super-Category 123 F#$k']);
-        self::assertSame('Super-Category_123_F--k', $category->keyword);
-    }
-
-    /** @test */
-    public function it_has_a_default_keywork_without_accents() {
-        $category = self::createInRoot(['name' => 'História da Computação/Régua de Cálculo']);
-        self::assertSame('Historia_da_Computacao-Regua_de_Calculo', $category->keyword);
-    }
-
-    /** @test */
     public function it_has_a_description() {
         $category = self::createInRoot(['description' => 'Category description.']);
         self::assertSame('Category description.', $category->description);
-    }
-
-    /** @test */
-    public function it_has_a_keyword() {
-        $category = self::createInRoot();
-        self::assertNotNull($category->keyword);
-        self::assertNotSame('', $category->keyword);
     }
 
     /** @test */
@@ -123,11 +98,11 @@ class CategoryTest extends TestCase {
         self::assertSame('Test Category', $category->name);
     }
 
-    // /** @test */
-    // public function it_has_a_path() {
-    //     $category = self::createInRoot();
-    //     self::assertInstanceOf(Path::class, $category->path);
-    // }
+    /** @test */
+    public function it_has_a_path() {
+        Path::createForComponent($category = self::createInRoot());
+        self::assertInstanceOf(Path::class, $category->path);
+    }
 
     /** @test */
     public function it_may_be_a_subcategory() {
@@ -153,13 +128,6 @@ class CategoryTest extends TestCase {
     }
 
     /** @test */
-    public function it_should_not_override_the_keyword_when_setting_a_name() {
-        $category = self::createInRoot(['name' => 'Category A', 'keyword' => 'CategoryKey']);
-        $category->name = 'New Name';
-        self::assertSame('CategoryKey', $category->keyword);
-    }
-
-    /** @test */
     public function it_should_return_false_if_it_has_no_subcategories() {
         $categoryA = self::createInRoot(['name' => 'Category A']);
         self::assertFalse($categoryA->hasSubcategories());
@@ -170,11 +138,5 @@ class CategoryTest extends TestCase {
         $categoryA = self::createInRoot(['name' => 'Category A']);
         self::createSubcategory($categoryA, ['name' => 'Category b']);
         self::assertTrue($categoryA->hasSubcategories());
-    }
-
-    /** @test */
-    public function it_should_trim_names() {
-        $category = self::createInRoot(['name' => "   ABC   \n"]);
-        self::assertSame('ABC', $category->name);
     }
 }

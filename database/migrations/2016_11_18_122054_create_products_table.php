@@ -26,8 +26,6 @@ class CreateProductsTable extends Migration {
 
             $table->string('name')->index();
 
-            $table->string('keyword')->index();
-
             $table->text('description');
 
             $table->decimal('price');
