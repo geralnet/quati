@@ -15,7 +15,7 @@ use Tests\Unit\TestCase;
  */
 class PathTest extends TestCase {
     public static function createForCategory(array $attributes = [], Path $parent = null) {
-        $category = CategoryTest::createInRoot($attributes);
+        $category = CategoryTest::createWithPath($attributes);
         return Path::createForComponent($category, $parent);
     }
 
@@ -32,7 +32,7 @@ class PathTest extends TestCase {
      */
     public static function createPath(Pathable $component = null) : Path {
         if (is_null($component)) {
-            $component = CategoryTest::createInRoot();
+            $component = CategoryTest::createWithPath();
         }
         $attributes['component_id'] = $component->id;
         $attributes['component_type'] = get_class($component);
@@ -95,7 +95,7 @@ class PathTest extends TestCase {
 
     /** @test */
     public function it_may_have_a_category() {
-        $category = CategoryTest::createInRoot();
+        $category = CategoryTest::createWithPath();
         $path = self::createPath($category);
 
         self::assertSame($category->id, $path->component->getId());

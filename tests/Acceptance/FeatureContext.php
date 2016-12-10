@@ -138,7 +138,7 @@ class FeatureContext extends MinkContext {
         foreach ($table->getHash() as $row) {
             $name = $row['Category'];
             $parent = $this->categories[$row['Parent']];
-            $this->categories[$name] = CategoryTest::createSubcategory($parent, ['name' => $name]);
+            $this->categories[$name] = CategoryTest::createWithPath(['name' => $name], $parent);
             Path::createForComponent($this->categories[$name], $parent->path);
         }
     }

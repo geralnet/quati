@@ -30,17 +30,17 @@ class ShopSeeder extends Seeder {
         $root->description = 'This is an example of how a store in Quati platform looks like.';
         $root->save();
 
-        Path::createForComponent($spaceships = CategoryTest::createInRoot([
+        Path::createForComponent($spaceships = CategoryTest::createWithPath([
             'name'        => 'Spaceships',
             'description' => 'We offer a great range of spaceships.<br /><br />
                               Please ensure you have a valid pilot license before purchasing.',
         ]));
 
-        Path::createForComponent($starfighters = CategoryTest::createSubcategory($spaceships, [
+        Path::createForComponent($starfighters = CategoryTest::createWithPath([
             'name'        => 'Starfighters',
             'description' => 'We have a great variety of starfighters,
                               choose the one best adapts to your flying skills.',
-        ]), $spaceships->path);
+        ], $spaceships), $spaceships->path);
         Path::createForComponent(ProductTest::createInCategory($starfighters, [
             'name'        => 'Cylon Raider',
             'description' => 'The new Raiders are cybernetic in nature: the ship is actually a living creature,
@@ -60,10 +60,10 @@ class ShopSeeder extends Seeder {
             'price'       => 15000,
         ]), $starfighters->path);
 
-        Path::createForComponent($wings = CategoryTest::createSubcategory($starfighters, [
+        Path::createForComponent($wings = CategoryTest::createWithPath([
             'name'        => 'Wing Series',
             'description' => 'Some of the best starfighters commonly names as a letter-wing are found here.',
-        ]), $starfighters->path);
+        ], $starfighters), $starfighters->path);
         Path::createForComponent(ProductTest::createInCategory($wings, [
             'name'        => 'A-wing',
             'description' => 'A-wings are fast but fragile Rebel Alliance starfighters conceived for reconnaissance 
@@ -130,10 +130,10 @@ class ShopSeeder extends Seeder {
             'price'       => 28000,
         ]), $wings->path);
 
-        Path::createForComponent($transportation = CategoryTest::createSubcategory($spaceships, [
+        Path::createForComponent($transportation = CategoryTest::createWithPath([
             'name'        => 'Transportation',
             'description' => 'Spaceships used for transportation.',
-        ]), $spaceships->path);
+        ], $spaceships), $spaceships->path);
         Path::createForComponent(ProductTest::createInCategory($transportation, [
             'name'        => 'TARDIS',
             'description' => 'A TARDIS is a product of the advanced technology of the Time Lords, an extraterrestrial
@@ -154,11 +154,11 @@ class ShopSeeder extends Seeder {
             'price'       => 135000,
         ]), $transportation->path);
 
-        Path::createForComponent($tools = CategoryTest::createInRoot(['name' => 'Tools']));
-        Path::createForComponent(CategoryTest::createSubcategory($tools, ['name' => 'Manual']), $tools->path);
-        Path::createForComponent(CategoryTest::createSubcategory($tools, ['name' => 'Power']), $tools->path);
+        Path::createForComponent($tools = CategoryTest::createWithPath(['name' => 'Tools']));
+        Path::createForComponent(CategoryTest::createWithPath(['name' => 'Manual'], $tools), $tools->path);
+        Path::createForComponent(CategoryTest::createWithPath(['name' => 'Power'], $tools), $tools->path);
 
-        Path::createForComponent(CategoryTest::createInRoot(['name' => 'Devices']));
+        Path::createForComponent(CategoryTest::createWithPath(['name' => 'Devices']));
     }
 
     private function importProductImages() {

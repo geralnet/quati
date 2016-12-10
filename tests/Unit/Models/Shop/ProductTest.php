@@ -33,7 +33,7 @@ class ProductTest extends TestCase {
 
     /** @test */
     public function it_belongs_to_a_category() {
-        $category = CategoryTest::createInRoot(['name' => 'Category']);
+        $category = CategoryTest::createWithPath(['name' => 'Category']);
 
         $product = new Product(['name' => 'Product', 'price' => 10]);
         $product->category()->associate($category);
@@ -52,7 +52,7 @@ class ProductTest extends TestCase {
 
     /** @test */
     public function it_can_have_a_picture_attached() {
-        $category = CategoryTest::createInRoot(['name' => 'Category']);
+        $category = CategoryTest::createWithPath(['name' => 'Category']);
         $product = Product::createInCategory($category, ['name' => 'Product', 'price' => 1]);
         $file = UploadedFile::createFromExternalFile('/images/product.png', __DIR__.'/../../Fixtures/image.png');
 
@@ -83,21 +83,21 @@ class ProductTest extends TestCase {
 
     /** @test */
     public function it_has_a_name() {
-        $category = CategoryTest::createInRoot(['name' => 'Category']);
+        $category = CategoryTest::createWithPath(['name' => 'Category']);
         $product = Product::createInCategory($category, ['name' => 'Test Product', 'price' => 10]);
         self::assertSame('Test Product', $product->name);
     }
 
     /** @test */
     public function it_has_a_price() {
-        $category = CategoryTest::createInRoot(['name' => 'Category']);
+        $category = CategoryTest::createWithPath(['name' => 'Category']);
         $product = Product::createInCategory($category, ['name' => 'A Product', 'price' => 1234]);
         self::assertEquals(1234, $product->price);
     }
 
     /** @test */
     public function it_has_images() {
-        $category = CategoryTest::createInRoot(['name' => 'The Category']);
+        $category = CategoryTest::createWithPath(['name' => 'The Category']);
         $product = Product::createInCategory($category, ['name' => 'The Product', 'price' => 1]);
         $file = UploadedFile::createFromExternalFile('/images/product.png', __DIR__.'/../../Fixtures/image.png');
 
@@ -119,7 +119,7 @@ class ProductTest extends TestCase {
 
     /** @test */
     public function it_provides_a_image_url() {
-        $category = CategoryTest::createInRoot(['name' => 'Category']);
+        $category = CategoryTest::createWithPath(['name' => 'Category']);
         $product = Product::createInCategory($category, ['name' => 'Product', 'price' => 1]);
         $file = UploadedFile::createFromExternalFile('/images/product.png', __DIR__.'/../../Fixtures/image.png');
 
@@ -139,13 +139,13 @@ class ProductTest extends TestCase {
 
     /** @test */
     public function it_should_return_false_if_it_has_no_products() {
-        $category = CategoryTest::createInRoot(['name' => 'Category']);
+        $category = CategoryTest::createWithPath(['name' => 'Category']);
         self::assertFalse($category->hasProducts());
     }
 
     /** @test */
     public function it_should_return_true_if_it_has_products() {
-        $category = CategoryTest::createInRoot(['name' => 'Category']);
+        $category = CategoryTest::createWithPath(['name' => 'Category']);
         Product::createInCategory($category, [
             'name'  => 'Product',
             'price' => 1000,

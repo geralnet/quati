@@ -15,7 +15,7 @@ use Tests\Unit\TestCase;
 class ProductImageTest extends TestCase {
     /** @test */
     public function it_has_a_product() {
-        $category = CategoryTest::createInRoot(['name' => 'Category']);
+        $category = CategoryTest::createWithPath(['name' => 'Category']);
         $product = Product::createInCategory($category, ['name' => 'Product', 'price' => 1]);
         $file = UploadedFile::createFromExternalFile('/images/product.png', __DIR__.'/../../Fixtures/image.png');
 
@@ -29,7 +29,7 @@ class ProductImageTest extends TestCase {
 
     /** @test */
     public function it_has_an_uploaded_file() {
-        $category = CategoryTest::createInRoot(['name' => 'Category']);
+        $category = CategoryTest::createWithPath(['name' => 'Category']);
         $product = Product::createInCategory($category, ['name' => 'Product', 'price' => 1]);
         $file = UploadedFile::createFromExternalFile('/images/product.png', __DIR__.'/../../Fixtures/image.png');
 
