@@ -41,14 +41,14 @@ class ShopSeeder extends Seeder {
             'description' => 'We have a great variety of starfighters,
                               choose the one best adapts to your flying skills.',
         ], $spaceships), $spaceships->path);
-        Path::createForComponent(ProductTest::createInCategory($starfighters, [
+        Path::createForComponent(ProductTest::createWithPath([
             'name'        => 'Cylon Raider',
             'description' => 'The new Raiders are cybernetic in nature: the ship is actually a living creature,
                               with a complex system of organs, veins and biological fluids inside the main body
                               You may need special skills in order to interface with this machine.',
             'price'       => 19999,
-        ]), $starfighters->path);
-        Path::createForComponent(ProductTest::createInCategory($starfighters, [
+        ], $starfighters), $starfighters->path);
+        Path::createForComponent(ProductTest::createWithPath([
             'name'        => 'Viper',
             'description' => 'Viper was introduced into Colonial service shortly before the outbreak of
                               the first Cylon War. However, it was the Mark II Viper series, designed specifically for
@@ -58,13 +58,13 @@ class ShopSeeder extends Seeder {
                               remained in service after the end of the war, with William Adama commenting that he last
                               saw one roughly twenty years ago.',
             'price'       => 15000,
-        ]), $starfighters->path);
+        ], $starfighters), $starfighters->path);
 
         Path::createForComponent($wings = CategoryTest::createWithPath([
             'name'        => 'Wing Series',
             'description' => 'Some of the best starfighters commonly names as a letter-wing are found here.',
         ], $starfighters), $starfighters->path);
-        Path::createForComponent(ProductTest::createInCategory($wings, [
+        Path::createForComponent(ProductTest::createWithPath([
             'name'        => 'A-wing',
             'description' => 'A-wings are fast but fragile Rebel Alliance starfighters conceived for reconnaissance 
                               and escort duty. A-wings from Green Squadron participate in the climactic Battle of
@@ -74,8 +74,8 @@ class ShopSeeder extends Seeder {
                               two women recorded A-wing cockpit footage; one of the actors was cut, and the other was
                               dubbed over by a male actor.',
             'price'       => 20000,
-        ]), $wings->path);
-        Path::createForComponent(ProductTest::createInCategory($wings, [
+        ], $wings), $wings->path);
+        Path::createForComponent(ProductTest::createWithPath([
             'name'        => 'B-wing',
             'description' => 'The B-wing is the largest and most powerful fighter designed by the Rebel Alliance, and
                               it is generally viewed as the successor to the older Y-wing fighter/bomber. B-wings have
@@ -84,8 +84,8 @@ class ShopSeeder extends Seeder {
                               B-wings participate at the Battle of Endor in Return of the Jedi and in numerous other
                               engagements throughout the Star Wars Expanded Universe.',
             'price'       => 25000,
-        ]), $wings->path);
-        Path::createForComponent(ProductTest::createInCategory($wings, [
+        ], $wings), $wings->path);
+        Path::createForComponent(ProductTest::createWithPath([
             'name'        => 'E-wing',
             'description' => 'The E-wing escort starfighter was a single-pilot starfighter developed by FreiTek Inc.
                               It was the first fighter designed entirely under the support of the New Republic.
@@ -96,8 +96,8 @@ class ShopSeeder extends Seeder {
                               malfunction issues with the laser cannons and the new R7 astromech units. As a result,
                               many pilots continued to fly upgraded versions of the venerable X-wing.',
             'price'       => 27000,
-        ]), $wings->path);
-        Path::createForComponent(ProductTest::createInCategory($wings, [
+        ], $wings), $wings->path);
+        Path::createForComponent(ProductTest::createWithPath([
             'name'        => 'K-wing',
             'description' => 'A heavily armed bomber that could double as an escort or reconnaissance vessel,
                               the Rebellion’s K-wing was frequently flown on strafing runs against planetary targets
@@ -105,22 +105,22 @@ class ShopSeeder extends Seeder {
                               armor plating, and devastating ordnance make it an outstanding ship for hit-and-run
                               operations.',
             'price'       => 21000,
-        ]), $wings->path);
-        Path::createForComponent(ProductTest::createInCategory($wings, [
+        ], $wings), $wings->path);
+        Path::createForComponent(ProductTest::createWithPath([
             'name'        => 'V-wing',
             'description' => 'The Alpha-3 Nimbus-class V-wing starfighter, often simply known as the V-wing
                               starfighter or Nimbus fighter, was a short-ranged starfighter deployed late in the
                               Clone Wars by the Galactic Republic.',
             'price'       => 22000,
-        ]), $wings->path);
-        Path::createForComponent(ProductTest::createInCategory($wings, [
+        ], $wings), $wings->path);
+        Path::createForComponent(ProductTest::createWithPath([
             'name'        => 'X-wing',
             'description' => 'The X-wing is a versatile Rebel Alliance starfighter that balances speed with firepower.
                               Armed with four laser cannons and two proton torpedo launchers, the X-wing can take on
                               anything the Empire throws at it.',
             'price'       => 30000,
-        ]), $wings->path);
-        Path::createForComponent(ProductTest::createInCategory($wings, [
+        ], $wings), $wings->path);
+        Path::createForComponent(ProductTest::createWithPath([
             'name'        => 'Y-wing',
             'description' => 'The Y-wing is a workhorse starfighter has been in use since the Clone Wars. Used for
                               dogfights and for bombing runs against capital ships and ground targets, Y-wings are
@@ -128,13 +128,13 @@ class ShopSeeder extends Seeder {
                               historical importance is remarkable, and it has reliably served multiple generations of
                               star pilots.',
             'price'       => 28000,
-        ]), $wings->path);
+        ], $wings), $wings->path);
 
         Path::createForComponent($transportation = CategoryTest::createWithPath([
             'name'        => 'Transportation',
             'description' => 'Spaceships used for transportation.',
         ], $spaceships), $spaceships->path);
-        Path::createForComponent(ProductTest::createInCategory($transportation, [
+        Path::createForComponent(ProductTest::createWithPath([
             'name'        => 'TARDIS',
             'description' => 'A TARDIS is a product of the advanced technology of the Time Lords, an extraterrestrial
                               civilisation to which the programme\'s central character, the Doctor, belongs. A
@@ -144,15 +144,15 @@ class ShopSeeder extends Seeder {
                               a degree of sapience and provide their users with additional tools and abilities
                               including a universal translation system based on telepathy.',
             'price'       => 160000,
-        ]), $transportation->path);
-        Path::createForComponent(ProductTest::createInCategory($transportation, [
+        ], $transportation), $transportation->path);
+        Path::createForComponent(ProductTest::createWithPath([
             'name'        => 'Millennium Falcon',
             'description' => 'The Millennium Falcon, originally known as YT-1300 492727ZED, was a Corellian YT-1300f
                               light freighter used by the smugglers Han Solo and Chewbacca during the Galactic Civil
                               War. It was previously owned by Lando Calrissian, who lost it to Solo in a game of
                               sabacc.',
             'price'       => 135000,
-        ]), $transportation->path);
+        ], $transportation), $transportation->path);
 
         Path::createForComponent($tools = CategoryTest::createWithPath(['name' => 'Tools']));
         Path::createForComponent(CategoryTest::createWithPath(['name' => 'Manual'], $tools), $tools->path);

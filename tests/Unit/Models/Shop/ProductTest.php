@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Tests\Unit\Models\Shop;
 
 use App\Models\Shop\Category;
+use App\Models\Shop\Pathable;
 use App\Models\Shop\Product;
 use App\Models\Shop\ProductImage;
 use App\UploadedFile;
@@ -15,20 +16,17 @@ use Tests\Unit\TestCase;
  */
 class ProductTest extends TestCase {
     /**
-     * Creates a new product using the model factory.
+     * Creates a new product with a path.
      *
-     * @param array $attributes
+     * @param array    $attributes
+     * @param Pathable $parent
      * @return Product
      */
-    public static function createInRoot(array $attributes = []) : Product {
+    public static function createWithPath(array $attributes = [], Pathable $parent = null) : Product {
+        if (!is_null($parent)) {
+            $attributes['category_id'] = $parent->getId();
+        }
         return factory(Product::class)->create($attributes);
-        // TODO delme ?
-    }
-
-    public static function createInCategory(Category $parent, array $attributes = []) : Product {
-        $attributes['category_id'] = $parent->id;
-        return factory(Product::class)->create($attributes);
-        // TODO fixme ?
     }
 
     /** @test */

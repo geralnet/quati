@@ -20,7 +20,7 @@ class PathTest extends TestCase {
     }
 
     public static function createForProduct(array $attributes = [], Path $parent = null) {
-        $product = ProductTest::createInRoot($attributes);
+        $product = ProductTest::createWithPath($attributes);
         return Path::createForComponent($product, $parent);
     }
 

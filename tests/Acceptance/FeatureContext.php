@@ -150,10 +150,10 @@ class FeatureContext extends MinkContext {
         foreach ($table->getHash() as $row) {
             $name = $row['Product'];
             $category = $this->categories[$row['Category']];
-            $this->products[$name] = ProductTest::createInCategory($category, [
+            $this->products[$name] = ProductTest::createWithPath([
                 'name'  => $name,
                 'price' => $row['Price'],
-            ]);
+            ], $category);
             $c = $this->products[$name];
             $path = Path::createForComponent($this->products[$name], $category->path);
             $component = $path->component;
