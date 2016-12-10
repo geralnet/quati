@@ -21,7 +21,7 @@
             <h3 class="site-block-header">Subcategories</h3>
             <div>
                 <ul class="subcategories">
-                    @foreach($category->subcategories as $subcategory)
+                    @foreach($category->getSubcategories() as $subcategory)
                         <li><a href="{{ $subcategory->getUrl() }}">{{ $subcategory->name }}</a></li>
                     @endforeach
                 </ul>
@@ -45,7 +45,7 @@
                     </thead>
 
                     <tbody>
-                    @each('shop.category-product', $category->products, 'product')
+                    @each('shop.category-product', $category->getProducts(), 'product')
                     </tbody>
                 </table>
 

@@ -15,13 +15,19 @@ use Tests\Unit\TestCase;
  */
 class PathTest extends TestCase {
     public static function createForCategory(array $attributes = [], Path $parent = null) {
-        $category = CategoryTest::createWithPath($attributes);
-        return Path::createForComponent($category, $parent);
+        $category = CategoryTest::createWithPath(
+            $attributes,
+            is_null($parent) ? null : $parent->component
+        );
+        return $category->path;
     }
 
     public static function createForProduct(array $attributes = [], Path $parent = null) {
-        $product = ProductTest::createWithPath($attributes);
-        return Path::createForComponent($product, $parent);
+        $product = ProductTest::createWithPath(
+            $attributes,
+            is_null($parent) ? null : $parent->component
+        );
+        return $product->path;
     }
 
     /**
@@ -30,13 +36,14 @@ class PathTest extends TestCase {
      * @param Pathable $component
      * @return Path
      */
-    public static function createPath(Pathable $component = null) : Path {
-        if (is_null($component)) {
-            $component = CategoryTest::createWithPath();
-        }
-        $attributes['component_id'] = $component->id;
-        $attributes['component_type'] = get_class($component);
-        return Path::createForComponent($component);
+    public static function createPath() : Path {
+        return CategoryTest::createWithPath()->path;
+    }
+
+    public static function createWithPath(string $pathable, array $attributes = [], Pathable $parent = null) {
+        $pathable = factory($pathable)->create($attributes);
+        $pathable->path = Path::createForComponent($pathable, is_null($parent) ? null : $parent->path);
+        return $pathable;
     }
 
     /** @test */
@@ -76,7 +83,7 @@ class PathTest extends TestCase {
 
     /** @test */
     public function it_has_a_pathname() {
-        $component = self::createPath(factory(Category::class)->create(['name' => 'NewPath']));
+        $component = self::createForCategory(['name' => 'NewPath']);
         self::assertSame('NewPath', $component->pathname);
     }
 
@@ -95,8 +102,8 @@ class PathTest extends TestCase {
 
     /** @test */
     public function it_may_have_a_category() {
-        $category = CategoryTest::createWithPath();
-        $path = self::createPath($category);
+        $category = factory(Category::class)->create();
+        $path = Path::createForComponent($category);
 
         self::assertSame($category->id, $path->component->getId());
     }
@@ -104,7 +111,7 @@ class PathTest extends TestCase {
     /** @test */
     public function it_may_have_a_product() {
         $product = factory(Product::class)->create();
-        $path = self::createPath($product);
+        $path = Path::createForComponent($product);
 
         self::assertSame($product->id, $path->component->getId());
     }
@@ -112,7 +119,7 @@ class PathTest extends TestCase {
     /** @test */
     public function it_may_have_a_product_image() {
         $image = factory(ProductImage::class)->create();
-        $path = self::createPath($image);
+        $path = Path::createForComponent($image);
 
         self::assertSame($image->id, $path->component->getId());
     }

@@ -1,6 +1,6 @@
 <tr>
     <td>
-        <img src="{{ $product->getImageURL(1, $product->keyword) }}"
+        <img src="{{ $product->getImageURL(1) }}"
              width="100" height="75" />
     </td>
     <td><a href="{{ $product->getUrl() }}">{{ $product->name }}</a></td>

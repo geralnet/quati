@@ -30,8 +30,6 @@ class CreateProductsTable extends Migration {
 
             $table->decimal('price');
 
-            $table->integer('category_id')->unsigned()->nullable()->index(); // FIXME remove nullable
-
             $table->timestamps();
         });
     }

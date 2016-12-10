@@ -21,17 +21,14 @@ class CategoryTest extends TestCase {
      * @return Category
      */
     public static function createWithPath(array $attributes = [], Pathable $parent = null) : Category {
-        if (!is_null($parent)) {
-            $attributes['parent_id'] = $parent->getId();
-        }
-        return factory(Category::class)->create($attributes);
+        return PathTest::createWithPath(Category::class, $attributes, $parent);
     }
 
     /** @test */
     public function it_can_create_a_category_inside_root() {
         $category = self::createWithPath(['name' => 'Category']);
         self::assertSame('Category', $category->name);
-        self::assertTrue($category->parent->isRoot());
+        self::assertTrue($category->getParent()->isRoot());
     }
 
     /** @test */
@@ -39,23 +36,27 @@ class CategoryTest extends TestCase {
         $categoryA = self::createWithPath(['name' => 'Category A']);
         $categoryAA = self::createWithPath(['name' => 'Category AA'], $categoryA);
         self::assertSame('Category AA', $categoryAA->name);
-        self::assertSame('Category A', $categoryAA->parent->name);
-        self::assertTrue($categoryAA->parent->parent->isRoot());
+        self::assertSame('Category A', $categoryAA->getParent()->name);
+        self::assertTrue($categoryAA->getParent()->getParent()->isRoot());
     }
 
     /** @test */
     public function it_can_have_many_products() {
         $category = self::createWithPath(['name' => 'Parent']);
 
-        $productA = new Product(['name' => 'Product A', 'price' => 10]);
-        $productA->category()->associate($category);
-        $productA->save();
+        ProductTest::createWithPath(
+            ['name' => 'Product A', 'price' => 10],
+            $category
+        );
+        ProductTest::createWithPath(
+            ['name' => 'Product B', 'price' => 20],
+            $category
+        );
 
-        $productB = new Product(['name' => 'Product B', 'price' => 10]);
-        $productB->category()->associate($category);
-        $productB->save();
-
-        self::assertCount(2, $category->products);
+        self::assertCount(2, $category->getProducts());
+        foreach ($category->getProducts() as $product) {
+            self::assertInstanceOf(Product::class, $product);
+        }
     }
 
     /** @test */
@@ -64,7 +65,10 @@ class CategoryTest extends TestCase {
         self::createWithPath(['name' => 'Category AA'], $parent);
         self::createWithPath(['name' => 'Category AB'], $parent);
 
-        self::assertCount(2, $parent->subcategories);
+        self::assertCount(2, $parent->getSubcategories());
+        foreach ($parent->getSubcategories() as $subcategory) {
+            self::assertInstanceOf(Category::class, $subcategory);
+        }
     }
 
     /** @test */
@@ -93,7 +97,7 @@ class CategoryTest extends TestCase {
 
     /** @test */
     public function it_has_a_path() {
-        Path::createForComponent($category = self::createWithPath());
+        $category = self::createWithPath();
         self::assertInstanceOf(Path::class, $category->path);
     }
 
@@ -102,7 +106,7 @@ class CategoryTest extends TestCase {
         $parent = self::createWithPath(['name' => 'Parent']);
         $child = self::createWithPath(['name' => 'Child'], $parent);
 
-        self::assertSame('Parent', $child->parent->name);
+        self::assertSame('Parent', $child->getParent()->name);
     }
 
     /** @test */
@@ -110,8 +114,9 @@ class CategoryTest extends TestCase {
         $parent = self::createWithPath(['name' => 'Parent Category']);
         $child = self::createWithPath(['name' => 'Child Category'], $parent);
 
-        self::assertSame($parent->id, $child->parent->id);
-        self::assertSame('Parent Category', $child->parent->name);
+        self::assertInstanceOf(Category::class, $child->getParent());
+        self::assertSame($parent->id, $child->getParent()->id);
+        self::assertSame('Parent Category', $child->getParent()->name);
     }
 
     /** @test */

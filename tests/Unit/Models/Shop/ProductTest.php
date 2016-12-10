@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace Tests\Unit\Models\Shop;
 
-use App\Models\Shop\Category;
 use App\Models\Shop\Pathable;
 use App\Models\Shop\Product;
 use App\Models\Shop\ProductImage;
@@ -23,24 +22,18 @@ class ProductTest extends TestCase {
      * @return Product
      */
     public static function createWithPath(array $attributes = [], Pathable $parent = null) : Product {
-        if (!is_null($parent)) {
-            $attributes['category_id'] = $parent->getId();
-        }
-        return factory(Product::class)->create($attributes);
+        return PathTest::createWithPath(Product::class, $attributes, $parent);
     }
 
     /** @test */
     public function it_belongs_to_a_category() {
         $category = CategoryTest::createWithPath(['name' => 'Category']);
+        $product = self::createWithPath(['name' => 'Product', 'price' => 10], $category);
+        $fetchedProduct = Product::find($product->id);
 
-        $product = new Product(['name' => 'Product', 'price' => 10]);
-        $product->category()->associate($category);
-        $product->save();
-
-        $fetchedProduct = Product::with('category')->find($product->id);
         self::assertSame($product->id, $fetchedProduct->id);
-        self::assertSame($category->id, $fetchedProduct->category->id);
-        self::assertSame('Category', $fetchedProduct->category->name);
+        self::assertSame($category->id, $fetchedProduct->getCategory()->id);
+        self::assertSame('Category', $fetchedProduct->getCategory()->name);
     }
 
     /** @test */
@@ -51,17 +44,12 @@ class ProductTest extends TestCase {
     /** @test */
     public function it_can_have_a_picture_attached() {
         $category = CategoryTest::createWithPath(['name' => 'Category']);
-        $product = Product::createInCategory($category, ['name' => 'Product', 'price' => 1]);
-        $file = UploadedFile::createFromExternalFile('/images/product.png', __DIR__.'/../../Fixtures/image.png');
+        $product = ProductTest::createWithPath(['name' => 'Product', 'price' => 1], $category);
+        ProductImageTest::createWithPath(__DIR__.'/../../Fixtures/image.png', 'Product.png', $product);
 
-        $image = new ProductImage();
-        $image->product()->associate($product);
-        $image->file()->associate($file);
-        $image->save();
-
-        $images = $product->images[0];
-        $file = $images->file;
-        self::assertSame('/images/product.png', $file->logical_path);
+        $images = $product->getImages();
+        $file = $images[0]->file;
+        self::assertSame('Product.png', $file->logical_path);
     }
 
     /** @test */
@@ -71,7 +59,7 @@ class ProductTest extends TestCase {
 
     /** @test */
     public function it_has_a_description() {
-        $product = Product::createInCategory(Category::getRoot(), [
+        $product = ProductTest::createWithPath([
             'name'        => 'Product',
             'price'       => 100,
             'description' => 'The description.',
@@ -82,29 +70,24 @@ class ProductTest extends TestCase {
     /** @test */
     public function it_has_a_name() {
         $category = CategoryTest::createWithPath(['name' => 'Category']);
-        $product = Product::createInCategory($category, ['name' => 'Test Product', 'price' => 10]);
+        $product = ProductTest::createWithPath(['name' => 'Test Product', 'price' => 10], $category);
         self::assertSame('Test Product', $product->name);
     }
 
     /** @test */
     public function it_has_a_price() {
         $category = CategoryTest::createWithPath(['name' => 'Category']);
-        $product = Product::createInCategory($category, ['name' => 'A Product', 'price' => 1234]);
+        $product = ProductTest::createWithPath(['name' => 'A Product', 'price' => 1234], $category);
         self::assertEquals(1234, $product->price);
     }
 
     /** @test */
     public function it_has_images() {
-        $category = CategoryTest::createWithPath(['name' => 'The Category']);
-        $product = Product::createInCategory($category, ['name' => 'The Product', 'price' => 1]);
-        $file = UploadedFile::createFromExternalFile('/images/product.png', __DIR__.'/../../Fixtures/image.png');
+        $category = CategoryTest::createWithPath(['name' => 'Category']);
+        $product = ProductTest::createWithPath(['name' => 'Product', 'price' => 1], $category);
+        $image = ProductImageTest::createWithPath(__DIR__.'/../../Fixtures/image.png', 'Product.png', $product);
 
-        $image = new ProductImage();
-        $image->product()->associate($product);
-        $image->file()->associate($file);
-        $image->save();
-
-        self::assertSame($product->images[0]->id, $image->id);
+        self::assertSame($product->getImages()[0]->id, $image->id);
     }
 
     /** @test */
@@ -118,15 +101,10 @@ class ProductTest extends TestCase {
     /** @test */
     public function it_provides_a_image_url() {
         $category = CategoryTest::createWithPath(['name' => 'Category']);
-        $product = Product::createInCategory($category, ['name' => 'Product', 'price' => 1]);
-        $file = UploadedFile::createFromExternalFile('/images/product.png', __DIR__.'/../../Fixtures/image.png');
+        $product = ProductTest::createWithPath(['name' => 'Product', 'price' => 1], $category);
+        ProductImageTest::createWithPath(__DIR__.'/../../Fixtures/image.png', 'Product.png', $product);
 
-        $image = new ProductImage();
-        $image->product()->associate($product);
-        $image->file()->associate($file);
-        $image->save();
-
-        self::assertSame('/@images/product.png', $product->getImageURL(1));
+        self::assertSame('/Category/Product/Product.png', $product->getImageURL(1));
     }
 
     /** @test */
@@ -144,10 +122,10 @@ class ProductTest extends TestCase {
     /** @test */
     public function it_should_return_true_if_it_has_products() {
         $category = CategoryTest::createWithPath(['name' => 'Category']);
-        Product::createInCategory($category, [
+        ProductTest::createWithPath([
             'name'  => 'Product',
             'price' => 1000,
-        ]);
+        ], $category);
         self::assertTrue($category->hasProducts());
     }
 }

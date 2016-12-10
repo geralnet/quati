@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use InvalidArgumentException;
 
 /**
  * Class Path
@@ -27,6 +29,10 @@ class Path extends EntityRelationshipModel {
     }
 
     public static function createForComponent(Pathable $component, Path $parent = null) : Path {
+        if (!is_null($component->path)) {
+            throw new InvalidArgumentException('$component ['.$component->getId().'] already has a path.');
+        }
+
         $parent = $parent ?: self::getRoot();
         $attributes = [
             'pathname'       => $component->getPathname(),

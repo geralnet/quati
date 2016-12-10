@@ -4,8 +4,7 @@ declare(strict_types = 1);
 namespace App\Models\Shop;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class Product
@@ -18,13 +17,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Category category
  */
 class Product extends Pathable {
-    public static function createInCategory(Category $category, array $attributes) {
-        $product = new Product($attributes);
-        $product->category()->associate($category);
-        $product->save();
-        return $product;
-    }
-
     /** @var array */
     protected $attributes = [
         'description' => '',
@@ -33,39 +25,54 @@ class Product extends Pathable {
     /** @var string[] */
     protected $fillable = ['name', 'description', 'price'];
 
-    /**
-     * @return BelongsTo
-     */
-    public function category() {
-        return $this->belongsTo(Category::class);
+    public function getCategory() {
+        return $this->path->parent->component;
     }
 
-    function getId() : int {
+    public function getId() : int {
         return $this->id;
     }
 
-    public function getImageURL($number) {
-        $number--; // Image index starts from 0.
-        $count = $this->images()->count();
-        if ($number >= $count) {
-            return '#';
+    /**
+     * @param int $index Image index (first image is 0).
+     * @return Product|null
+     */
+    public function getImage(int $index) {
+        $images = $this->getImages();
+        if ($index >= count($images)) {
+            return null;
         }
 
-        $image = $this->images[$number];
-        $file = $image->file;
-        $path = $file->logical_path;
-        $url = preg_replace('#^/images/#', '/@images/', $path);
-        return $url;
+        return $images[$index];
+    }
+
+    /**
+     * @param int $number Image number (first image is 1).
+     * @return string
+     */
+    public function getImageUrl(int $number) : string {
+        $image = $this->getImage($number - 1);
+        if (is_null($image)) {
+            return '#';
+        }
+        return $image->getUrl();
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getImages() : Collection {
+        $ids = [];
+        $subpaths = $this->path->subpaths()
+                               ->where('component_type', ProductImage::class)
+                               ->get(['component_id']);
+        foreach ($subpaths as $subpath) {
+            $ids[] = $subpath['component_id'];
+        }
+        return ProductImage::findMany($ids);
     }
 
     function getPathname() : string {
         return Pathable::makePathname($this->name);
-    }
-
-    /**
-     * @return HasMany
-     */
-    public function images() {
-        return $this->hasMany(ProductImage::class);
     }
 }

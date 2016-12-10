@@ -139,7 +139,6 @@ class FeatureContext extends MinkContext {
             $name = $row['Category'];
             $parent = $this->categories[$row['Parent']];
             $this->categories[$name] = CategoryTest::createWithPath(['name' => $name], $parent);
-            Path::createForComponent($this->categories[$name], $parent->path);
         }
     }
 
@@ -154,12 +153,6 @@ class FeatureContext extends MinkContext {
                 'name'  => $name,
                 'price' => $row['Price'],
             ], $category);
-            $c = $this->products[$name];
-            $path = Path::createForComponent($this->products[$name], $category->path);
-            $component = $path->component;
-
-            $p1 = $c->path;
-            $p2 = $component->path;
         }
     }
 

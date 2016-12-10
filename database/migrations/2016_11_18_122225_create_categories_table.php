@@ -28,8 +28,6 @@ class CreateCategoriesTable extends Migration {
 
             $table->text('description');
 
-            $table->integer('parent_id')->unsigned()->nullable()->index();
-
             $table->timestamps();
         });
     }

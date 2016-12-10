@@ -23,7 +23,6 @@ $factory->define(User::class, function(Generator $faker) {
 
 $factory->define(Category::class, function(Generator $faker) {
     return [
-        'parent_id'   => Category::getRoot()->id,
         'name'        => $faker->text(20),
         'description' => $faker->paragraph,
     ];
@@ -33,16 +32,13 @@ $factory->define(Product::class, function(Generator $faker) {
     return [
         'name'        => $faker->text(20),
         'price'       => $faker->numberBetween(1, 10000),
-        'category_id' => Category::getRoot()->id,
     ];
 });
 
 $factory->define(ProductImage::class, function(Generator $faker) {
-    $product = factory(Product::class)->create();
     $file = factory(UploadedFile::class)->create();
 
     return [
-        'product_id' => $product->id,
         'file_id'    => $file->id,
     ];
 });

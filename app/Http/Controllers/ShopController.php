@@ -41,7 +41,7 @@ class ShopController extends Controller {
     }
 
     private function getShopProduct(Product $product) {
-        $root_categories = Category::getRoot()->subcategories();
+        $root_categories = Category::getRoot()->getSubcategories();
         return view('shop.product', compact('root_categories', 'product'));
     }
 }

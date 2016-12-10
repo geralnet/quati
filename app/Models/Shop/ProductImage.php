@@ -34,8 +34,9 @@ class ProductImage extends Pathable {
         return $this->file->logical_path;
     }
 
-    public function product() {
-        return $this->belongsTo(Product::class);
+    public function getProduct() {
+        $path = $this->path;
+        return $this->path->parent->component;
     }
 }
 
