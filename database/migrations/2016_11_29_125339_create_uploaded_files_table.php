@@ -28,6 +28,12 @@ class CreateUploadedFilesTable extends Migration {
 
             $table->string('logical_path');
 
+            $table->integer('owner_id')->unsigned()->nullable();
+
+            $table->string('owner_type')->nullable();
+
+            $table->unique(['owner_id', 'owner_type']);
+
             $table->timestamps();
         });
     }

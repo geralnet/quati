@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 
 use App\Models\Shop\Category;
+use App\Models\Shop\Image;
 use App\Models\Shop\Product;
 use App\Models\Shop\ProductImage;
 use App\UploadedFile;
@@ -30,8 +31,8 @@ $factory->define(Category::class, function(Generator $faker) {
 
 $factory->define(Product::class, function(Generator $faker) {
     return [
-        'name'        => $faker->text(20),
-        'price'       => $faker->numberBetween(1, 10000),
+        'name'  => $faker->text(20),
+        'price' => $faker->numberBetween(1, 10000),
     ];
 });
 
@@ -39,7 +40,13 @@ $factory->define(ProductImage::class, function(Generator $faker) {
     $file = factory(UploadedFile::class)->create();
 
     return [
-        'file_id'    => $file->id,
+        'file_id' => $file->id,
+    ];
+});
+
+$factory->define(Image::class, function(Generator $faker) {
+    return [
+        'filename' => $faker->word.'.jpg',
     ];
 });
 

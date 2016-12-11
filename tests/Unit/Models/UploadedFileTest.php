@@ -1,13 +1,23 @@
 <?php
 declare(strict_types = 1);
 
+use App\Models\Shop\Image;
 use App\UploadedFile;
+use Tests\Unit\Models\Shop\ImageTest;
 use Tests\Unit\TestCase;
 
 /**
  * Class FileTest
  */
 class UploadedFileTest extends TestCase {
+    /** @test */
+    public function it_can_generate_a_filepath_based_on_a_sha1_hash() {
+        $sha1 = 'da39a3ee5e6b4b0d3255bfef95601890afd80709';
+        $expected = 'da/39a3/ee5e6b4b0d3255bfef95601890afd80709';
+        $actual = UploadedFile::create_sha1_path($sha1);
+        self::assertSame($expected, $actual);
+    }
+
     /** @test */
     public function it_can_save_an_external_file() {
         $source = tempnam(sys_get_temp_dir(), 'UploadFileSystemTest_');
@@ -52,10 +62,17 @@ class UploadedFileTest extends TestCase {
     }
 
     /** @test */
-    public function it_can_generate_a_filepath_based_on_a_sha1_hash() {
-        $sha1 = 'da39a3ee5e6b4b0d3255bfef95601890afd80709';
-        $expected = 'da/39a3/ee5e6b4b0d3255bfef95601890afd80709';
-        $actual = UploadedFile::create_sha1_path($sha1);
-        self::assertSame($expected, $actual);
+    public function it_has_an_owner() {
+        $image = ImageTest::createWithPath();
+        $file = UploadedFile::forceCreate([
+            'real_path'    => 'something.png',
+            'logical_path' => '',
+            'owner_type'   => Image::class,
+            'owner_id'     => $image->id,
+        ]);
+        $file = UploadedFile::find($file->id);
+        $owner = $file->owner;
+        self::assertInstanceOf(Image::class, $owner);
+        self::assertSame($image->id, $owner->id);
     }
 }

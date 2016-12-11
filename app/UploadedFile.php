@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
@@ -48,4 +49,8 @@ class UploadedFile extends Model {
     }
 
     protected $fillable = ['real_path', 'logical_path'];
+
+    public function owner() : Relation {
+        return $this->morphTo();
+    }
 }

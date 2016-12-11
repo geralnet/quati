@@ -35,7 +35,7 @@ class CreateShopPathTreeTable extends Migration {
 
             $table->string('component_type');
 
-            $table->index(['component_id', 'component_type']);
+            $table->unique(['component_id', 'component_type']);
 
             $table->timestamps();
         });
