@@ -5,7 +5,10 @@ namespace Tests\Unit\Controllers;
 
 use Illuminate\Http\Response;
 use Illuminate\View\View;
+use Tests\Unit\Models\Shop\CategoryTest;
 use Tests\Unit\Models\Shop\PathTest;
+use Tests\Unit\Models\Shop\ProductImageTest;
+use Tests\Unit\Models\Shop\ProductTest;
 use Tests\Unit\TestCase;
 
 class ShopControllerTest extends TestCase {
@@ -80,4 +83,16 @@ class ShopControllerTest extends TestCase {
             'pathA', 'pathAA', 'pathAB', 'pathB', 'pathBA', 'pathA1'
         );
     }
-}
+
+    /** @test */
+    public function it_should_return_the_requested_product_image_file() {
+        $category = CategoryTest::createWithPath(['name' => 'Category']);
+        $product = ProductTest::createWithPath(['name' => 'Product', 'price' => 1], $category);
+        $sourcefile = __DIR__.'/../Fixtures/image.png';
+        ProductImageTest::createWithPath($sourcefile, 'Product.png', $product);
+
+        /** @var Response $response */
+        $response = $this->visit('/Category/Product/Product.png')->response;
+        $data = $response->getContent();
+        self::assertSame(file_get_contents($sourcefile), $data);
+    }}

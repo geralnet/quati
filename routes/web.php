@@ -15,14 +15,12 @@ declare(strict_types = 1);
 use App\Models\Shop\Product;
 
 Route::get('/{shop_path?}', 'ShopController@getShop')
-     ->where('shop_path', '[A-Za-z0-9_\\-/]*');
-
-Route::get('/@images/{path?}', 'FileController@getImage')
-     ->where('path', '.*');
+     ->where('shop_path', '(?!@).*'); // Matches anything that does not start with '@'.
 
 Route::get('@cart', function() {
     return 'Shopping Cart';
 });
+
 Route::put('@cart', function(\Illuminate\Http\Request $request) {
     $quantities = $request->input('quantities');
 

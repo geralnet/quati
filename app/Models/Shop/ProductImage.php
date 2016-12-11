@@ -15,13 +15,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property BelongsTo product
  */
 class ProductImage extends Pathable {
-    public static function createForProduct($product, $string) {
-        $image = new ProductImage();
-        $image->product()->associate($product);
-        $image->save();
-        return $image;
-    }
-
     public function file() {
         return $this->belongsTo(UploadedFile::class);
     }
@@ -35,7 +28,6 @@ class ProductImage extends Pathable {
     }
 
     public function getProduct() {
-        $path = $this->path;
         return $this->path->parent->component;
     }
 }
