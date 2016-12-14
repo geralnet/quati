@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Shop\Category;
+use App\Models\Shop\Image;
 use App\Models\Shop\Path;
 use App\Models\Shop\Product;
 use App\Models\Shop\ProductImage;
@@ -35,6 +36,10 @@ class ShopController extends Controller {
             return $this->getShopCategory($component);
         }
 
+        if ($component instanceof Image) {
+            return $this->getShopImage($component);
+        }
+
         if ($component instanceof ProductImage) {
             return $this->getShopProductImage($component);
         }
@@ -44,6 +49,12 @@ class ShopController extends Controller {
 
     private function getShopCategory(Category $category) {
         return view('shop.category', ['category' => $category]);
+    }
+
+    private function getShopImage(Image $image) {
+        $path = $image->file->real_path;
+        $data = Storage::drive('uploads')->get($path);
+        return $data;
     }
 
     private function getShopProduct(Product $product) {

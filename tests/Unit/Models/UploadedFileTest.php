@@ -64,13 +64,7 @@ class UploadedFileTest extends TestCase {
     /** @test */
     public function it_has_an_owner() {
         $image = ImageTest::createWithPath();
-        $file = UploadedFile::forceCreate([
-            'real_path'    => 'something.png',
-            'logical_path' => '',
-            'owner_type'   => Image::class,
-            'owner_id'     => $image->id,
-        ]);
-        $file = UploadedFile::find($file->id);
+        $file = UploadedFile::find($image->file->id);
         $owner = $file->owner;
         self::assertInstanceOf(Image::class, $owner);
         self::assertSame($image->id, $owner->id);

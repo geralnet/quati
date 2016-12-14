@@ -4,9 +4,9 @@ declare(strict_types = 1);
 use App\Models\Shop\Category;
 use App\Models\Shop\Product;
 use App\Models\Shop\ProductImage;
-use App\UploadedFile;
 use Illuminate\Database\Seeder;
 use Tests\Unit\Models\Shop\CategoryTest;
+use Tests\Unit\Models\Shop\ImageTest;
 use Tests\Unit\Models\Shop\ProductImageTest;
 use Tests\Unit\Models\Shop\ProductTest;
 
@@ -169,7 +169,7 @@ class ShopSeeder extends Seeder {
 
             $file = __DIR__.'/images/products/'.$product->path->pathname.'.jpg';
             if (file_exists($file)) {
-                ProductImageTest::createWithPath($file, 'Product.jpg', $product);
+                ImageTest::createWithPath(['filename' => 'Product.jpg'], $product, $file);
             }
         }
     }

@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Tests\Unit\Models\Shop;
 
 use App\Models\Shop\Category;
+use App\Models\Shop\Image;
 use App\Models\Shop\Path;
 use App\Models\Shop\Pathable;
 use App\Models\Shop\Product;
@@ -118,7 +119,7 @@ class PathTest extends TestCase {
 
     /** @test */
     public function it_may_have_a_product_image() {
-        $image = factory(ProductImage::class)->create();
+        $image = factory(Image::class)->create();
         $path = Path::createForComponent($image);
 
         self::assertSame($image->id, $path->component->getId());

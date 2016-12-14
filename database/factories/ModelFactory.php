@@ -36,14 +36,6 @@ $factory->define(Product::class, function(Generator $faker) {
     ];
 });
 
-$factory->define(ProductImage::class, function(Generator $faker) {
-    $file = factory(UploadedFile::class)->create();
-
-    return [
-        'file_id' => $file->id,
-    ];
-});
-
 $factory->define(Image::class, function(Generator $faker) {
     return [
         'filename' => $faker->word.'.jpg',

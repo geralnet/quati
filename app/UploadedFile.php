@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 class UploadedFile extends Model {
     const DRIVE_NAME = 'uploads';
 
-    public static function createFromExternalFile($logicalPath, $file) {
+    public static function createFromExternalFile($attributes, $file) {
         if (!file_exists($file)) {
             throw new FileNotFoundException($file);
         }
@@ -26,11 +26,13 @@ class UploadedFile extends Model {
         $shaPath = self::create_sha1_path($sha1);
 
         return DB::transaction(
-            function() use ($file, $logicalPath, $shaPath) {
-                $uploadedFile = UploadedFile::create([
-                    'real_path'    => $shaPath,
-                    'logical_path' => $logicalPath,
-                ]);
+            function() use ($file, $attributes, $shaPath) {
+                if (is_string($attributes)) {
+                    $attributes = ['logical_path' => $attributes];
+                }
+                $attributes['real_path'] = $shaPath;
+                $attributes['logical_path'] = '';
+                $uploadedFile = UploadedFile::forceCreate($attributes);
                 if (!Storage::drive(self::DRIVE_NAME)->has($shaPath)) {
                     $resource = fopen($file, 'r');
                     Storage::drive(self::DRIVE_NAME)

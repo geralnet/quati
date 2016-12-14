@@ -3,9 +3,9 @@ declare(strict_types = 1);
 
 namespace Tests\Unit\Models\Shop;
 
+use App\Models\Shop\Image;
 use App\Models\Shop\Pathable;
 use App\Models\Shop\Product;
-use App\Models\Shop\ProductImage;
 use App\UploadedFile;
 use Illuminate\Database\QueryException;
 use Tests\Unit\TestCase;
@@ -45,11 +45,13 @@ class ProductTest extends TestCase {
     public function it_can_have_a_picture_attached() {
         $category = CategoryTest::createWithPath(['name' => 'Category']);
         $product = ProductTest::createWithPath(['name' => 'Product', 'price' => 1], $category);
-        ProductImageTest::createWithPath(__DIR__.'/../../Fixtures/image.png', 'Product.png', $product);
+        ImageTest::createWithPath(['filename' => 'Product.png'], $product, __DIR__.'/../../Fixtures/image.png');
 
-        $images = $product->getImages();
-        $file = $images[0]->file;
-        self::assertSame('Product.png', $file->logical_path);
+        $image = $product->getImages()[0];
+        $file = $image->file;
+        self::assertInstanceOf(Image::class, $image);
+        self::assertSame($image->filename, 'Product.png');
+        self::assertInstanceOf(UploadedFile::class, $file);
     }
 
     /** @test */
@@ -85,7 +87,7 @@ class ProductTest extends TestCase {
     public function it_has_images() {
         $category = CategoryTest::createWithPath(['name' => 'Category']);
         $product = ProductTest::createWithPath(['name' => 'Product', 'price' => 1], $category);
-        $image = ProductImageTest::createWithPath(__DIR__.'/../../Fixtures/image.png', 'Product.png', $product);
+        $image = ImageTest::createWithPath(['filename' => 'Product.png'], $product, __DIR__.'/../../Fixtures/image.png');
 
         self::assertSame($product->getImages()[0]->id, $image->id);
     }
@@ -102,7 +104,7 @@ class ProductTest extends TestCase {
     public function it_provides_a_image_url() {
         $category = CategoryTest::createWithPath(['name' => 'Category']);
         $product = ProductTest::createWithPath(['name' => 'Product', 'price' => 1], $category);
-        ProductImageTest::createWithPath(__DIR__.'/../../Fixtures/image.png', 'Product.png', $product);
+        ImageTest::createWithPath(['filename' => 'Product.png'], $product, __DIR__.'/../../Fixtures/image.png');
 
         self::assertSame('/Category/Product/Product.png', $product->getImageURL(1));
     }

@@ -64,12 +64,12 @@ class Product extends Pathable {
     public function getImages() : Collection {
         $ids = [];
         $subpaths = $this->path->subpaths()
-                               ->where('component_type', ProductImage::class)
+                               ->where('component_type', Image::class)
                                ->get(['component_id']);
         foreach ($subpaths as $subpath) {
             $ids[] = $subpath['component_id'];
         }
-        return ProductImage::findMany($ids);
+        return Image::findMany($ids);
     }
 
     function getPathname() : string {

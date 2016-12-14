@@ -6,7 +6,6 @@ namespace Tests\Unit\Models\Shop;
 use App\Models\Shop\Image;
 use App\Models\Shop\Path;
 use App\Models\Shop\Pathable;
-use App\Models\Shop\Product;
 use App\UploadedFile;
 use Tests\Unit\TestCase;
 
@@ -14,8 +13,24 @@ use Tests\Unit\TestCase;
  * @property string filename
  */
 class ImageTest extends TestCase {
-    public static function createWithPath(array $attributes = [], Pathable $parent = null) {
-        return PathTest::createWithPath(Image::class, $attributes, $parent);
+    public static function createWithPath(array $attributes = [], Pathable $parent = null, $sourceFile = null) {
+        $image = PathTest::createWithPath(Image::class, $attributes, $parent);
+        $fileAttributes = [
+            'logical_path' => '',
+            'owner_type'   => Image::class,
+            'owner_id'     => $image->id,
+        ];
+        if (is_null($sourceFile)) {
+            $fileAttributes['real_path'] = 'something.png';
+            UploadedFile::forceCreate($fileAttributes);
+        }
+        else {
+            UploadedFile::createFromExternalFile($fileAttributes, $sourceFile);
+        }
+        $ups = UploadedFile::all()->toArray();
+        $img = Image::all()->toArray();
+
+        return $image;
     }
 
     /** @test */
@@ -39,12 +54,7 @@ class ImageTest extends TestCase {
     /** @test */
     public function it_has_an_uploaded_file() {
         $image = self::createWithPath();
-        $file = UploadedFile::forceCreate([
-            'real_path'    => 'something.png',
-            'logical_path' => '',
-            'owner_type'   => Image::class,
-            'owner_id'     => $image->id,
-        ]);
+        $file = $image->file;
 
         self::assertInstanceOf(UploadedFile::class, $image->file);
         self::assertSame($file->id, $image->file->id);
