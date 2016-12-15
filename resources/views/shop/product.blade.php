@@ -14,5 +14,10 @@
                 <b>Price: </b> <i>$ {{ $product->price }}</i>
             </p>
         </div>
+        {{ Form::open(['url'=>'/@cart', 'method'=>'put']) }}
+        {{ Form::token() }}
+        {{ Form::number('quantities['.$product->id.']', '', ['min'=>0]) }}
+        {{ Form::submit('Add to Order') }}
+        {{ Form::close() }}
     </section>
 @endsection

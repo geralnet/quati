@@ -43,13 +43,14 @@ Feature: Shopping Cart
     And I should see "Product A2"
     And I should see "Total: $ 1100.00"
 
-#  Scenario: Add a product from the product page
-#    Given I am on the "Product A2" product page
-#    When I change the quantity to "4"
-#    Then I should see "Shopping Cart"
-#    And I should see "Product A1"
-#    And I should see "Total $ 400.00"
-#
+  Scenario: Add a product from the product page
+    Given I am on "Product A2" product page
+    And I change the quantity of "Product A2" to "2"
+    And I press "Add to Order"
+    Then I should see "Shopping Cart"
+    And I should see "Product A2"
+    And I should see "Total: $ 1000.00"
+
 #  Scenario: I can remove items from the shopping cart
 #    Given I have "2" "Product A1" in my shopping cart
 #    And I have "1" "Product A2" in my shopping cart
