@@ -3,11 +3,9 @@ declare(strict_types = 1);
 
 use App\Models\Shop\Category;
 use App\Models\Shop\Product;
-use App\Models\Shop\ProductImage;
 use Illuminate\Database\Seeder;
 use Tests\Unit\Models\Shop\CategoryTest;
 use Tests\Unit\Models\Shop\ImageTest;
-use Tests\Unit\Models\Shop\ProductImageTest;
 use Tests\Unit\Models\Shop\ProductTest;
 
 require_once __DIR__.'/../../tests/Unit/Models/Shop/CategoryTest.php';

@@ -6,7 +6,6 @@ use App\Models\Shop\Category;
 use App\Models\Shop\Image;
 use App\Models\Shop\Path;
 use App\Models\Shop\Product;
-use App\Models\Shop\ProductImage;
 use Illuminate\View\View;
 use Storage;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -40,10 +39,6 @@ class ShopController extends Controller {
             return $this->getShopImage($component);
         }
 
-        if ($component instanceof ProductImage) {
-            return $this->getShopProductImage($component);
-        }
-
         throw new ServiceUnavailableHttpException(get_class($component));
     }
 
@@ -60,11 +55,5 @@ class ShopController extends Controller {
     private function getShopProduct(Product $product) {
         $root_categories = Category::getRoot()->getSubcategories();
         return view('shop.product', compact('root_categories', 'product'));
-    }
-
-    private function getShopProductImage(ProductImage $image) {
-        $path = $image->file->real_path;
-        $data = Storage::drive('uploads')->get($path);
-        return $data;
     }
 }
