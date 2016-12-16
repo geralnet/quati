@@ -8,7 +8,6 @@ use Illuminate\View\View;
 use Tests\Unit\Models\Shop\CategoryTest;
 use Tests\Unit\Models\Shop\ImageTest;
 use Tests\Unit\Models\Shop\PathTest;
-use Tests\Unit\Models\Shop\ProductImageTest;
 use Tests\Unit\Models\Shop\ProductTest;
 use Tests\Unit\TestCase;
 
@@ -65,6 +64,18 @@ class ShopControllerTest extends TestCase {
     /** @test */
     public function it_should_not_have_an_error_for_homepage() {
         $this->visit('/')->assertResponseOk();
+    }
+
+    /** @test */
+    public function it_should_handle_a_cart_get_request() {
+        $this->get('/@cart')->assertResponseOk();
+    }
+
+    /** @test */
+    public function it_should_handle_a_cart_put_request() {
+        $product = ProductTest::createWithPath();
+        $put = $this->put('/@cart', ['quantities' => [$product->id => 2]]);
+        $put->assertRedirectedTo('/@cart');
     }
 
     /**

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Shop\Cart;
 use App\Models\Shop\Category;
 use App\Models\Shop\Image;
 use App\Models\Shop\Path;
 use App\Models\Shop\Product;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Storage;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -22,7 +24,7 @@ class ShopController extends Controller {
         $path = Path::where('fullpath', $fullpath)->first();
 
         if (is_null($path)) {
-            throw new NotFoundHttpException();
+            throw new NotFoundHttpException('Path not found: '.$path);
         }
 
         $component = $path->component;
@@ -40,6 +42,59 @@ class ShopController extends Controller {
         }
 
         throw new ServiceUnavailableHttpException(get_class($component));
+    }
+
+    public function putCart(Request $request) {
+        $cart = Cart::get();
+        foreach ($request->quantities as $id => $quantity) {
+            $id = (int)$id;
+            if (!Product::find($id)->exists()) {
+                abort(400, 'Invalid product id.');
+            }
+
+            $quantity = (int)$quantity;
+            if ($quantity < 0) {
+                abort(400, 'Invalid product quantity.');
+            }
+            if ($quantity == 0) {
+                continue;
+            }
+
+            $cart->addProduct($id, $quantity);
+        }
+
+        return redirect('/@cart');
+    }
+
+    public function getCart() {
+        $quantities = Cart::get()->getProductsQuantities();
+
+        $html = '<p>Shopping Cart</p>';
+        $total = 0;
+        foreach ($quantities as $id => $quantity) {
+            $quantity = (int)$quantity;
+            if ($quantity < 0) {
+                abort(400, 'Invalid product quantity.');
+            }
+            if ($quantity == 0) {
+                continue;
+            }
+            $product = Product::find($id);
+            $subtotal = $quantity * $product->price;
+            $total += $subtotal;
+
+            $html .= <<<HTML
+<b>Product: </b> {$product->name}<br />
+<b>Price: </b> {$product->price}<br />
+<b>Quantity: </b> {$quantity}<br />
+<b>Subtotal: </b>$ {$subtotal}<br />
+<br />
+HTML;
+        }
+
+        $html .= sprintf('<br /><b>Total: </b> $ %0.2f', $total);
+
+        return $html;
     }
 
     private function getShopCategory(Category $category) {

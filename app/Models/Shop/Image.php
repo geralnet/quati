@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 /**
  * Class Image
  *
- * @property int    id
- * @property string filename
+ * @property int          id
+ * @property string       filename
+ * @property UploadedFile file
  */
 class Image extends Pathable {
     protected $fillable = ['filename'];
