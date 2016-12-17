@@ -38,6 +38,10 @@ class Cart {
         return $this->products;
     }
 
+    public function removeAll() {
+        $this->products = [];
+    }
+
     public function removeProduct($productId) {
         if (array_key_exists($productId, $this->products)) {
             unset($this->products[$productId]);

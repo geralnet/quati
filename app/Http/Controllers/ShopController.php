@@ -63,18 +63,24 @@ class ShopController extends Controller {
 
     public function putCart(Request $request) {
         $cart = Cart::get();
-        foreach ($request->quantities as $id => $quantity) {
-            $id = (int)$id;
-            if (!Product::find($id)->exists()) {
-                abort(400, 'Invalid product id.');
-            }
+        if ($request->has('empty')) {
+            $cart->removeAll();
+        }
+        else {
+            $quantities = $request->input('quantities', []);
+            foreach ($quantities as $id => $quantity) {
+                $id = (int)$id;
+                if (!Product::find($id)->exists()) {
+                    abort(400, 'Invalid product id.');
+                }
 
-            $quantity = (int)$quantity;
-            if ($quantity < 0) {
-                abort(400, 'Invalid product quantity.');
-            }
+                $quantity = (int)$quantity;
+                if ($quantity < 0) {
+                    abort(400, 'Invalid product quantity.');
+                }
 
-            $cart->setProduct($id, $quantity);
+                $cart->setProduct($id, $quantity);
+            }
         }
 
         return redirect('/@cart');

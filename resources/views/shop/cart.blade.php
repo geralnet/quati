@@ -22,7 +22,7 @@
             </thead>
 
             <tbody>
-            @foreach($items as $item)
+            @forelse ($items as $item)
                 <tr>
                     <td>
                         <input name="quantities[{{ $item['product']->id }}]" type="number" step="1"
@@ -32,7 +32,13 @@
                     <td>{{ sprintf('%0.2f', $item['product']->price) }}</td>
                     <td>{{ sprintf('%0.2f', $item['subtotal']) }}</td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <th colspan="4">
+                        Your shopping cart is empty.
+                    </th>
+                </tr>
+            @endforelse
             </tbody>
 
             <tfoot>
@@ -49,6 +55,7 @@
         </table>
 
         {{ Form::submit('Update Cart') }}
+        {{ Form::submit('Remove All', ['name' => 'empty']) }}
         {{ Form::close() }}
     </section>
 @endsection

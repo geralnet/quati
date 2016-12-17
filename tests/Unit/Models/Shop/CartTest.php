@@ -45,6 +45,18 @@ class CartTest extends TestCase {
     }
 
     /** @test */
+    public function it_can_remove_all_products() {
+        $product = factory(Product::class)->make(['id' => 1]);
+
+        $cart = Cart::get();
+        $cart->addProduct($product->id, 10);
+
+        $cart->removeAll();
+
+        self::assertEmpty($cart->getProductsQuantities());
+    }
+
+    /** @test */
     public function it_can_set_the_quantity_of_a_product() {
         $product = factory(Product::class)->make(['id' => 1]);
 

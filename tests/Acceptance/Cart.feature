@@ -65,9 +65,9 @@ Feature: Shopping Cart
     And I should see "Product A2"
     But I should not see "Product A1"
 
-#  Scenario: I can empty the shopping cart
-#    Given I have "2" "Product A1" in my shopping cart
-#    And I have "1" "Product A2" in my shopping cart
-#    And I am on the shopping cart page
-#    When I press "Remove all products"
-#    Then I should see "Your shopping cart is empty"
+  Scenario: I can empty the shopping cart
+    Given I have "2" "Product A1" in my shopping cart
+    And I have "1" "Product A2" in my shopping cart
+    And I am on the shopping cart page
+    When I press "Remove All"
+    Then I should see "Your shopping cart is empty."
