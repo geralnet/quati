@@ -37,4 +37,23 @@ class Cart {
     public function getProductsQuantities() {
         return $this->products;
     }
+
+    public function removeProduct($productId) {
+        if (array_key_exists($productId, $this->products)) {
+            unset($this->products[$productId]);
+        }
+    }
+
+    public function setProduct($productId, $quantity) {
+        if (!is_int($quantity) || ($quantity < 0)) {
+            throw new \InvalidArgumentException('Invalid quantity.');
+        }
+
+        if ($quantity == 0) {
+            $this->removeProduct($productId);
+        }
+        else {
+            $this->products[$productId] = $quantity;
+        }
+    }
 }

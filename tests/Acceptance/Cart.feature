@@ -31,7 +31,8 @@ Feature: Shopping Cart
     And I press "Add to Order"
     Then I should see "Shopping Cart"
     And I should see "Product A1"
-    And I should see "Total: $ 200.00"
+    And I should see "Total"
+    And I should see "200.00"
 
   Scenario: Add two products to the card at once from the category page
     Given I am on "Category A" category page
@@ -41,7 +42,8 @@ Feature: Shopping Cart
     Then I should see "Shopping Cart"
     And I should see "Product A1"
     And I should see "Product A2"
-    And I should see "Total: $ 1100.00"
+    And I should see "Total"
+    And I should see "1100.00"
 
   Scenario: Add a product from the product page
     Given I am on "Product A2" product page
@@ -49,18 +51,20 @@ Feature: Shopping Cart
     And I press "Add to Order"
     Then I should see "Shopping Cart"
     And I should see "Product A2"
-    And I should see "Total: $ 1000.00"
+    And I should see "Total"
+    And I should see "1000.00"
 
-#  Scenario: I can remove items from the shopping cart
-#    Given I have "2" "Product A1" in my shopping cart
-#    And I have "1" "Product A2" in my shopping cart
-#    And I am on the shopping cart page
-#    When I set the quantity of "Product A1" to "0"
-#    And I press "Update Cart"
-#    Then I should see "Total $ 500.00"
-#    And I should see "Product A2"
-#    But I should not see "Product A1"
-#
+  Scenario: I can remove items from the shopping cart
+    Given I have "2" "Product A1" in my shopping cart
+    And I have "1" "Product A2" in my shopping cart
+    And I am on the shopping cart page
+    When I change the quantity of "Product A1" to "0"
+    And I press "Update Cart"
+    And I should see "Total"
+    And I should see "500.00"
+    And I should see "Product A2"
+    But I should not see "Product A1"
+
 #  Scenario: I can empty the shopping cart
 #    Given I have "2" "Product A1" in my shopping cart
 #    And I have "1" "Product A2" in my shopping cart

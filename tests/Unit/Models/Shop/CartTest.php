@@ -22,6 +22,40 @@ class CartTest extends TestCase {
     }
 
     /** @test */
+    public function it_can_provide_all_products() {
+        $product1 = factory(Product::class)->make(['id' => 1]);
+        $product2 = factory(Product::class)->make(['id' => 2]);
+
+        $cart = Cart::get();
+        $cart->addProduct($product1->id, 10);
+        $cart->addProduct($product2->id, 20);
+
+        self::assertSame([1 => 10, 2 => 20], $cart->getProductsQuantities());
+    }
+
+    /** @test */
+    public function it_can_remove_products() {
+        $product = factory(Product::class)->make(['id' => 1]);
+
+        $cart = Cart::get();
+        $cart->addProduct($product->id, 10);
+        $cart->removeProduct($product->id);
+
+        self::assertEmpty($cart->getProductsQuantities());
+    }
+
+    /** @test */
+    public function it_can_set_the_quantity_of_a_product() {
+        $product = factory(Product::class)->make(['id' => 1]);
+
+        $cart = Cart::get();
+        $cart->addProduct($product->id, 10);
+        $cart->setProduct($product->id, 2);
+
+        self::assertSame([1 => 2], $cart->getProductsQuantities());
+    }
+
+    /** @test */
     public function it_exists() {
         self::assertNotNull(Cart::get());
     }
@@ -37,17 +71,5 @@ class CartTest extends TestCase {
         $cart = session('cart');
         self::assertNotNull($cart);
         self::assertSame(2, $cart->getProductQuantity(1));
-    }
-
-    /** @test */
-    public function it_can_provide_all_products() {
-        $product1 = factory(Product::class)->make(['id' => 1]);
-        $product2 = factory(Product::class)->make(['id' => 2]);
-
-        $cart = Cart::get();
-        $cart->addProduct($product1->id, 10);
-        $cart->addProduct($product2->id, 20);
-
-        self::assertSame([1=>10, 2=>20], $cart->getProductsQuantities());
     }
 }

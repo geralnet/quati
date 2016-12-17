@@ -1,6 +1,7 @@
 <?php
 declare(strict_types = 1);
 
+use App\Models\Shop\Cart;
 use App\Models\Shop\Category;
 use app\Models\Shop\KeywordGenerator;
 use App\Models\Shop\Path;
@@ -28,12 +29,7 @@ class FeatureContext extends MinkContext {
      * @Given /^I am on "([^"]*)" category page$/
      */
     public function iAmOnCategoryPage($category) {
-        if (array_key_exists($category, $this->categories)) {
-            $url = $this->categories[$category]->getUrl();
-        }
-        else {
-            $url = '/'.KeywordGenerator::fromName($category);
-        }
+        $url = $this->categories[$category]->getUrl();
         $this->visit($url);
     }
 
@@ -42,6 +38,14 @@ class FeatureContext extends MinkContext {
      */
     public function iAmOnProductPage($product) {
         $this->visit($this->products[$product]->getUrl());
+    }
+
+    /**
+     * @Given /^I am on the shopping cart page$/
+     */
+    public function iAmOnTheShoppingCartPage() {
+        $this->visit('/@cart');
+        $this->assertResponseStatus(200);
     }
 
     /**
@@ -87,6 +91,15 @@ class FeatureContext extends MinkContext {
         }
 
         $found->click();
+    }
+
+    /**
+     * @Given /^I have "([^"]*)" "([^"]*)" in my shopping cart$/
+     */
+    public function iHaveInMyShoppingCart($quantity, $product) {
+        $product = $this->products[$product];
+        $quantity = (int)$quantity;
+        Cart::get()->addProduct($product->id, $quantity);
     }
 
     /**
