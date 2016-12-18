@@ -8,7 +8,7 @@
     <section class="site-block">
         <h1 class="site-block-header">Sign in</h1>
         <div class="panel-body">
-            <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
+            <form class="form-horizontal" role="form" method="POST" action="{{ url('/@auth/signin') }}">
                 {{ csrf_field() }}
 
                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
@@ -52,9 +52,7 @@
 
                 <div class="form-group">
                     <div class="col-md-8 col-md-offset-4">
-                        <button type="submit" class="btn btn-primary">
-                            Login
-                        </button>
+                        <button type="submit" class="btn btn-primary">Sign In</button>
 
                         <a class="btn btn-link" href="{{ url('/password/reset') }}">
                             Forgot Your Password?

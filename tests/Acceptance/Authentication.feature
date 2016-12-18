@@ -2,26 +2,26 @@ Feature: User Authentication
   In order to view my settings
   As a user
   I should be to authenticate
-#
-#  Background: Consider we always have a test user.
-#    Given the following users exist:
-#      | name      | username | e-mail          | password |
-#      | Test User | testuser | user@quati.test | testpw   |
-#
+
+  Background: Consider we always have a test user.
+    Given the following users exist:
+      | name      | email           | password |
+      | Test User | user@quati.test | testpw   |
+
   Scenario: I can go to the sign in page
     Given I am on the homepage
     When I follow "sign in" in the site header
     Then I should see "E-Mail"
     And I should see "Password"
 
-#  Scenario: I can sign in
-#    Given I am on the "sign-in" page
-#    When I fill in "email" with "user@quati.test"
-#    And I fill in "password" with "testpw"
-#    And I press "Sign In"
-#    Then I should see "Test User"
-#    And I should see "sign-out"
-#
+  Scenario: I can sign in
+    Given I am on the "sign in" page
+    When I fill in "email" with "user@quati.test"
+    And I fill in "password" with "testpw"
+    And I press "Sign In"
+    Then I should see "Test User" in the site header
+    And I should see "sign out" in the site header
+
 #  Scenario: I can sign out
 #    Given I am signed in as "testuser"
 #    When I follow "Sign Out"

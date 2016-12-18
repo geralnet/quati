@@ -6,6 +6,8 @@ use App\Models\Shop\Category;
 use app\Models\Shop\KeywordGenerator;
 use App\Models\Shop\Path;
 use App\Models\Shop\Product;
+use App\User;
+use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\MinkExtension\Context\MinkContext;
@@ -38,6 +40,20 @@ class FeatureContext extends MinkContext {
      */
     public function iAmOnProductPage($product) {
         $this->visit($this->products[$product]->getUrl());
+    }
+
+    /**
+     * @Given /^I am on the "([^"]*)" page$/
+     */
+    public function iAmOnThePage($page) {
+        switch ($page) {
+            case 'sign in':
+                $this->visit('/@auth/signin');
+                break;
+            default:
+                throw new PendingException('Invalid page: '.$page);
+        }
+        $this->assertResponseStatus(200);
     }
 
     /**
@@ -140,6 +156,23 @@ class FeatureContext extends MinkContext {
      */
     public function iShouldSeeInTheMainView($text) {
         $this->assertElementContainsText('.site-main', $text);
+    }
+
+    /**
+     * @Then /^I should see "([^"]*)" in the site header$/
+     */
+    public function iShouldSeeInTheSiteHeader($text) {
+        $this->assertElementContainsText('.site-header', $text);
+    }
+
+    /**
+     * @Given /^the following users exist:$/
+     */
+    public function theFollowingUsersExist(TableNode $users) {
+        foreach ($users->getIterator() as $user) {
+            $user['password'] = bcrypt($user['password']);
+            User::create($user);
+        }
     }
 
     /**

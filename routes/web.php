@@ -21,3 +21,4 @@ Route::put('@cart', 'ShopController@putCart');
 
 // Authentication Routes...
 $this->get('@auth/signin', 'Auth\LoginController@showLoginForm');
+$this->post('@auth/signin', 'Auth\LoginController@login');
