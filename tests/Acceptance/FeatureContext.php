@@ -67,15 +67,7 @@ class FeatureContext extends MinkContext {
      * @When /^I follow "([^"]*)" in the category tree$/
      */
     public function iFollowInTheCategoryTree($link) {
-        $link = $this->fixStepArgument($link);
-        $found = $this->getSession()->getPage()->find('css', '.category-tree')
-                      ->findLink($link);
-
-        if (is_null($found)) {
-            throw new ElementNotFoundException($this->getSession(), 'link', 'id|title|alt|text', $link);
-        }
-
-        $found->click();
+        $this->followLinkInCSS($link, '.category-tree');
     }
 
     /**
@@ -91,6 +83,13 @@ class FeatureContext extends MinkContext {
         }
 
         $found->click();
+    }
+
+    /**
+     * @When /^I follow "([^"]*)" in the site header$/
+     */
+    public function iFollowInTheSiteHeader($link) {
+        $this->followLinkInCSS($link, '.site-header');
     }
 
     /**
@@ -175,5 +174,17 @@ class FeatureContext extends MinkContext {
     public function thereIsACategory($name) {
         $this->categories[$name] = Category::createInRoot(['name' => $name]);
         Path::createForComponent($this->categories[$name]);
+    }
+
+    private function followLinkInCSS($link, $css) {
+        $link = $this->fixStepArgument($link);
+        $found = $this->getSession()->getPage()->find('css', $css)
+                      ->findLink($link);
+
+        if (is_null($found)) {
+            throw new ElementNotFoundException($this->getSession(), 'link', 'id|title|alt|text', $link);
+        }
+
+        $found->click();
     }
 }

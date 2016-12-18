@@ -18,3 +18,6 @@ Route::get('{shop_path?}', 'ShopController@getShop')
 Route::get('@cart', 'ShopController@getCart');
 
 Route::put('@cart', 'ShopController@putCart');
+
+// Authentication Routes...
+$this->get('@auth/signin', 'Auth\LoginController@showLoginForm');

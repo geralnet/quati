@@ -8,12 +8,12 @@ Feature: User Authentication
 #      | name      | username | e-mail          | password |
 #      | Test User | testuser | user@quati.test | testpw   |
 #
-#  Scenario: I can go to the sign in page
-#    Given I am on the homepage
-#    When I follow "sign-in"
-#    Then I should see "e-mail"
-#    And I should see "password"
-#
+  Scenario: I can go to the sign in page
+    Given I am on the homepage
+    When I follow "sign in" in the site header
+    Then I should see "E-Mail"
+    And I should see "Password"
+
 #  Scenario: I can sign in
 #    Given I am on the "sign-in" page
 #    When I fill in "email" with "user@quati.test"
