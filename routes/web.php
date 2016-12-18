@@ -26,3 +26,4 @@ $this->post('@auth/signout', 'Auth\LoginController@logout');
 
 // Registration Routes...
 $this->get('@auth/signup', 'Auth\RegisterController@showRegistrationForm');
+$this->post('@auth/signup', 'Auth\RegisterController@register');

@@ -53,6 +53,9 @@ class FeatureContext extends MinkContext {
             case 'sign in':
                 $this->visit('/@auth/signin');
                 break;
+            case 'sign up':
+                $this->visit('/@auth/signup');
+                break;
             default:
                 throw new PendingException('Invalid page: '.$page);
         }

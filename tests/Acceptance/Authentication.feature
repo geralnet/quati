@@ -35,10 +35,12 @@ Feature: User Authentication
     And I should see "Password"
     And I should see "Confirm Password"
 
-#  Scenario: I can sign up
-#    Given I am on the "sign-up" page
-#    When I fill in "name" with "John Doe"
-#    And I fill in "email" with "johndoe@quati.test"
-#    And I fill in "password" with "abc123"
-#    And I press "Sign Up"
-#    Then I should see "Welcome John Doe"
+  Scenario: I can sign up
+    Given I am on the "sign up" page
+    When I fill in "name" with "John Doe"
+    And I fill in "email" with "johndoe@quati.test"
+    And I fill in "password" with "abc123"
+    And I fill in "password-confirm" with "abc123"
+    And I press "Sign up"
+    Then I should see "John Doe" in the site header
+    And I should see "sign out" in the site header
