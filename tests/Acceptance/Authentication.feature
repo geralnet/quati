@@ -1,4 +1,4 @@
-Feature: User Registration
+Feature: User Authentication
   In order to view my settings
   As a user
   I should be to authenticate
