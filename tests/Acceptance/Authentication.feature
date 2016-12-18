@@ -27,13 +27,14 @@ Feature: User Authentication
     When I press "sign out"
     Then I should see "You are not signed in." in the site header
 
-#  Scenario: I can go to the sign up page
-#    Given I am on the homepage
-#    When I follow "sign-up"
-#    Then I should see "name"
-#    And I should see "e-mail"
-#    And I should see "password"
-#
+  Scenario: I can go to the sign up page
+    Given I am on the homepage
+    When I follow "sign up"
+    Then I should see "Name"
+    And I should see "E-Mail"
+    And I should see "Password"
+    And I should see "Confirm Password"
+
 #  Scenario: I can sign up
 #    Given I am on the "sign-up" page
 #    When I fill in "name" with "John Doe"

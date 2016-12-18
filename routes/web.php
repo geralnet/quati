@@ -23,3 +23,6 @@ Route::put('@cart', 'ShopController@putCart');
 $this->get('@auth/signin', 'Auth\LoginController@showLoginForm');
 $this->post('@auth/signin', 'Auth\LoginController@login');
 $this->post('@auth/signout', 'Auth\LoginController@logout');
+
+// Registration Routes...
+$this->get('@auth/signup', 'Auth\RegisterController@showRegistrationForm');
