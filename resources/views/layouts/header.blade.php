@@ -14,15 +14,11 @@
         <div class="user-login-message">{{ Auth::user()->name }}</div>
         <ul class="user-login-options">
             <li>
-                <a href="/@auth/signout" onclick="
-                    event.preventDefault();
-                    document.getElementById('signout-form').submit();
-                ">sign out</a>
+                <form id="signout-form" action="{{ url('/@auth/signout') }}" method="POST">
+                    {{ csrf_field() }}
+                    <input type="submit" value="sign out" />
+                </form>
             </li>
         </ul>
-        <form id="signout-form" action="{{ url('/@auth/signout') }}"
-              method="POST" style="display: none;">
-            {{ csrf_field() }}
-        </form>
     @endif
 </div>

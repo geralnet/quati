@@ -22,11 +22,11 @@ Feature: User Authentication
     Then I should see "Test User" in the site header
     And I should see "sign out" in the site header
 
-#  Scenario: I can sign out
-#    Given I am signed in as "testuser"
-#    When I follow "Sign Out"
-#    Then I should see "You are not signed in."
-#
+  Scenario: I can sign out
+    Given I am signed in as "Test User"
+    When I press "sign out"
+    Then I should see "You are not signed in." in the site header
+
 #  Scenario: I can go to the sign up page
 #    Given I am on the homepage
 #    When I follow "sign-up"

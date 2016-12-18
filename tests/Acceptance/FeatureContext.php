@@ -27,6 +27,9 @@ class FeatureContext extends MinkContext {
     /** @var Product[] */
     private $products = [];
 
+    /** @var array */
+    private $users = [];
+
     /**
      * @Given /^I am on "([^"]*)" category page$/
      */
@@ -62,6 +65,18 @@ class FeatureContext extends MinkContext {
     public function iAmOnTheShoppingCartPage() {
         $this->visit('/@cart');
         $this->assertResponseStatus(200);
+    }
+
+    /**
+     * @Given /^I am signed in as "([^"]*)"$/
+     */
+    public function iAmSignedInAs($name) {
+        $user = $this->users[$name];
+
+        $this->iAmOnThePage('sign in');
+        $this->fillField('email', $user['email']);
+        $this->fillField('password', $user['password']);
+        $this->pressButton('Sign In');
     }
 
     /**
@@ -170,6 +185,7 @@ class FeatureContext extends MinkContext {
      */
     public function theFollowingUsersExist(TableNode $users) {
         foreach ($users->getIterator() as $user) {
+            $this->users[$user['name']] = $user;
             $user['password'] = bcrypt($user['password']);
             User::create($user);
         }
