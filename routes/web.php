@@ -12,7 +12,7 @@ declare(strict_types = 1);
 |
 */
 
-Route::get('/{shop_path?}', 'ShopController@getShop')
+Route::get('{shop_path?}', 'ShopController@getShop')
      ->where('shop_path', '(?!@).*'); // Matches anything that does not start with '@'.
 
 Route::get('@cart', 'ShopController@getCart');
