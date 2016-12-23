@@ -82,10 +82,10 @@ Feature: Shopping Cart
     And I should see "Total"
     And I should see "200.00"
 
-#  Scenario: I keep the shopping cart after logging in
-#    Given I have "2" "Product A1" in my shopping cart
-#    And I have "1" "Product A2" in my shopping cart
-#    When I sign up as a user
-#    And I go to the shopping cart page
-#    Then I should see "Product A1"
-#    And I should not see "Product A2"
+  Scenario: I keep the shopping cart after logging in
+    Given I have "2" "Product A1" in my shopping cart
+    And I have "1" "Product A2" in my shopping cart
+    When I sign in as a user
+    And I go to the shopping cart page
+    Then I should see "Product A1"
+    And I should see "Product A2"

@@ -143,6 +143,13 @@ class FeatureContext extends MinkContext {
     }
 
     /**
+     * @Given /^I go to the shopping cart page$/
+     */
+    public function iGoToTheShoppingCartPage() {
+        $this->iAmOnTheShoppingCartPage();
+    }
+
+    /**
      * @Given /^I have "([^"]*)" "([^"]*)" in my shopping cart$/
      */
     public function iHaveInMyShoppingCart($quantity, $product) {
@@ -197,6 +204,13 @@ class FeatureContext extends MinkContext {
      */
     public function iShouldSeeInTheSiteHeader($text) {
         $this->assertElementContainsText('.site-header', $text);
+    }
+
+    /**
+     * @When /^I sign in as a user$/
+     */
+    public function iSignInAsAUser() {
+        $this->iAmSignedInAsAUser();
     }
 
     /**
