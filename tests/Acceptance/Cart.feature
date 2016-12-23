@@ -72,6 +72,16 @@ Feature: Shopping Cart
     When I press "Remove All"
     Then I should see "Your shopping cart is empty."
 
+  Scenario: I can add products to the shopping cart as a logged user
+    Given I am signed in as a user
+    And I am on "Category A" category page
+    When I change the quantity of "Product A1" to "2"
+    And I press "Add to Order"
+    Then I should see "Shopping Cart"
+    And I should see "Product A1"
+    And I should see "Total"
+    And I should see "200.00"
+
 #  Scenario: I keep the shopping cart after logging in
 #    Given I have "2" "Product A1" in my shopping cart
 #    And I have "1" "Product A2" in my shopping cart

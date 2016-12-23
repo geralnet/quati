@@ -83,6 +83,22 @@ class FeatureContext extends MinkContext {
     }
 
     /**
+     * @Given /^I am signed in as a user$/
+     */
+    public function iAmSignedInAsAUser() {
+        User::create([
+            'name'     => 'Test User',
+            'email'    => 'user@quati.test',
+            'password' => bcrypt('password'),
+        ]);
+
+        $this->iAmOnThePage('sign in');
+        $this->fillField('email', 'user@quati.test');
+        $this->fillField('password', 'password');
+        $this->pressButton('Sign In');
+    }
+
+    /**
      * @Then /^I can see "([^"]*)" in the shopping cart block$/
      */
     public function iCanSeeInTheShoppingCartBlock($text) {
