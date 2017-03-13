@@ -89,3 +89,15 @@ Feature: Shopping Cart
     And I go to the shopping cart page
     Then I should see "Product A1"
     And I should see "Product A2"
+
+  Scenario: My shopping cart is saved to my profile
+    Given I have "1" "Product A1" in my shopping cart
+    When I sign in as a user
+    And I go to the shopping cart page
+    Then I should see "Product A1"
+    When I sign out
+    And I go to the shopping cart page
+    Then I should not see "Product A1"
+    When I sign in as the same user again
+    And I go to the shopping cart page
+    Then I should see "Product A1"

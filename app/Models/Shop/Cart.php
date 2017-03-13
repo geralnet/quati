@@ -2,40 +2,52 @@
 
 namespace App\Models\Shop;
 
-/**
- * Class Cart
- */
+use Auth;
+
 class Cart {
     public static function get() : Cart {
-        $cart = session('cart');
-        if (is_null($cart)) {
+        $sessionCart = session('cart');
+        if (Auth::user()) {
             $cart = new Cart();
-            session(['cart' => $cart]);
+            $cart->load();
+            if (!is_null($sessionCart)) {
+                $cart->import($sessionCart);
+                session(['cart' => null]);
+            }
+        }
+        else {
+            if (is_null($sessionCart)) {
+                $cart = new Cart();
+                session(['cart' => $cart]);
+            }
+            else {
+                $cart = $sessionCart;
+            }
         }
         return $cart;
     }
 
-    private function __construct() { }
-
-    /** @var int[] */
+    /** @var CartProduct[] */
     private $products = [];
 
     public function addProduct(int $productId, int $quantity) {
-        if (!array_key_exists($productId, $this->products)) {
-            $this->products[$productId] = 0;
-        }
-        $this->products[$productId] += $quantity;
+        $this->ensureProductExists($productId);
+        $this->products[$productId]->addQuantity($quantity);
     }
 
     public function getProductQuantity($productId) {
         if (!array_key_exists($productId, $this->products)) {
             return 0;
         }
-        return $this->products[$productId];
+        return $this->products[$productId]->quantity;
     }
 
     public function getProductsQuantities() {
-        return $this->products;
+        $quantities = [];
+        foreach ($this->products as $id => $product) {
+            $quantities[$product->product_id] = $product->quantity;
+        }
+        return $quantities;
     }
 
     public function removeAll() {
@@ -43,21 +55,47 @@ class Cart {
     }
 
     public function removeProduct($productId) {
-        if (array_key_exists($productId, $this->products)) {
+        $this->setProduct($productId, 0);
+    }
+
+    public function setProduct($productId, $quantity) {
+        if (($quantity == 0) && !array_key_exists($productId, $this->products)) {
+            return;
+        }
+
+        $this->ensureProductExists($productId);
+        $this->products[$productId]->setQuantity($quantity);
+
+        if ($quantity == 0) {
             unset($this->products[$productId]);
         }
     }
 
-    public function setProduct($productId, $quantity) {
-        if (!is_int($quantity) || ($quantity < 0)) {
-            throw new \InvalidArgumentException('Invalid quantity.');
+    private function ensureProductExists(int $productId) {
+        if (array_key_exists($productId, $this->products)) {
+            return;
         }
 
-        if ($quantity == 0) {
-            $this->removeProduct($productId);
+        $userId = is_null(Auth::user()) ? null : Auth::user()->id;
+        $product = new CartProduct();
+        $product->forceFill([
+            'user_id'    => $userId,
+            'product_id' => $productId,
+            'quantity'   => 0,
+        ]);
+        $this->products[$productId] = $product;
+    }
+
+    private function import(Cart $cart) {
+        foreach ($cart->getProductsQuantities() as $productId => $quantity) {
+            $this->addProduct($productId, $quantity);
         }
-        else {
-            $this->products[$productId] = $quantity;
+    }
+
+    private function load() {
+        $cartProducts = CartProduct::where(['user_id' => Auth::user()->id])->get();
+        foreach ($cartProducts as $product) {
+            $this->products[$product->product_id] = $product;
         }
     }
 }

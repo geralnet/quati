@@ -91,11 +91,7 @@ class FeatureContext extends MinkContext {
             'email'    => 'user@quati.test',
             'password' => bcrypt('password'),
         ]);
-
-        $this->iAmOnThePage('sign in');
-        $this->fillField('email', 'user@quati.test');
-        $this->fillField('password', 'password');
-        $this->pressButton('Sign In');
+        $this->iSignInAsTheSameUserAgain();
     }
 
     /**
@@ -211,6 +207,23 @@ class FeatureContext extends MinkContext {
      */
     public function iSignInAsAUser() {
         $this->iAmSignedInAsAUser();
+    }
+
+    /**
+     * @When /^I sign in as the same user again$/
+     */
+    public function iSignInAsTheSameUserAgain() {
+        $this->iAmOnThePage('sign in');
+        $this->fillField('email', 'user@quati.test');
+        $this->fillField('password', 'password');
+        $this->pressButton('Sign In');
+    }
+
+    /**
+     * @When /^I sign out$/
+     */
+    public function iSignOut() {
+        $this->pressButton('sign out');
     }
 
     /**
