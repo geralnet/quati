@@ -35,13 +35,14 @@ Feature: Purchase checkout
     Then I should see "Your shopping cart is empty."
     And I should not see "Continue"
 
-#  Scenario: I can provide my address in the checkout
-#    Given I have a "Product A" in my cart
-#    And I am on the address checkout page
-#    When I fill my address
-#    And I click "Continue"
-#    Then I should see "Payment"
-#
+  Scenario: I can provide my address in the checkout
+    Given I am signed in as a user
+    And I have "1" "Product XYZ" in my shopping cart
+    And I am on the "checkout" page
+    When I fill in "address" with "20 My Street, Aussieland"
+    And I press "Continue"
+    Then I should see "Payment"
+
 #  Scenario: I can see the bank details
 #    Given I have a "Product A" in my cart
 #    And I am on the checkout payment page

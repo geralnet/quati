@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Shop\Cart;
-use Auth;
 
 class CheckoutController extends Controller {
     public function __construct() {
@@ -11,9 +10,21 @@ class CheckoutController extends Controller {
     }
 
     public function getIndex() {
+        return redirect('/@checkout/address');
+    }
+
+    public function getAddress() {
         $prices = Cart::get()->getCalculatePrices();
         $items = $prices['products'];
         $totalPrice = $prices['total'];
-        return view('checkout.index', compact('totalPrice', 'items'));
+        return view('checkout.address', compact('totalPrice', 'items'));
+    }
+
+    public function postAddress() {
+        return redirect('/@checkout/payment');
+    }
+
+    public function getPayment() {
+        return view('checkout.payment');
     }
 }
