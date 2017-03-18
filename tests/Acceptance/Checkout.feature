@@ -16,17 +16,17 @@ Feature: Purchase checkout
     And I have "1" "Product XYZ" in my shopping cart
     And I am on the shopping cart page
     When I press "Checkout"
-    Then I should be on the sign in page
+    Then I should be on the "sign in" page
 
-#  Scenario: I can proceed to the checkout after signing in
-#    Given I am not signed in
-#    And I have a product in the cart
-#    And I am viewing my cart
-#    When I click on "Checkout"
-#    And I am redirected to the login page
-#    And I login as a user
-#    Then I should be at the Checkout Page
-#
+  Scenario: I can proceed to the checkout after signing in
+    Given I am not signed in
+    And I have "1" "Product XYZ" in my shopping cart
+    And I am on the shopping cart page
+    When I press "Checkout"
+    And I should be on the "sign in" page
+    And I sign in as a user
+    Then I should be on the "checkout" page
+
 #  Scenario: I can proceed to the checkout after signing up
 #    Given I am not signed in
 #    And I have a product in the cart

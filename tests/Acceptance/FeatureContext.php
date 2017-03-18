@@ -193,10 +193,20 @@ class FeatureContext extends MinkContext {
     }
 
     /**
-     * @Then /^I should be on the sign in page$/
+     * @Then /^I should be on the "([^"]*)" page$/
      */
-    public function iShouldBeOnTheSignInPage() {
-        $this->assertPageAddress('/@auth/signin');
+    public function iShouldBeOnThePage($page) {
+        switch ($page) {
+            case 'sign in':
+                $url = '/@auth/signin';
+                break;
+            case 'checkout':
+                $url = '/@checkout';
+                break;
+            default:
+                throw new PendingException('Invalid page: '.$page);
+        }
+        $this->assertPageAddress($url);
     }
 
     /**
