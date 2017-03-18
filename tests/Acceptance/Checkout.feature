@@ -49,11 +49,13 @@ Feature: Purchase checkout
     And I am on the "checkout - address" page
     When I press "Continue"
     Then I should see "Bank Bar of Foo account 12345"
-#
-#  Scenario: I can provide the payment details
-#    Given I have a "Product A" in my cart
-#    And I am on the checkout payment page
-#    When I select "Bank Deposit or Transfer" option
-#    And I fill in the details as "Recipt 123.456"
-#    And I click continue
-#    Then I should see "Your order has been placed!"
+
+  Scenario: I can provide the payment details
+    Given I am signed in as a user
+    And I have "1" "Product XYZ" in my shopping cart
+    And I am on the "checkout - address" page
+    And I press "Continue"
+    And I should be on the "checkout - payment" page
+    When I select "deposit" from "payment_type"
+    And I press "Continue"
+    Then I should see "Your order has been placed!"

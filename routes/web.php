@@ -24,6 +24,8 @@ Route::get('@checkout', 'CheckoutController@getIndex');
 Route::get('@checkout/address', 'CheckoutController@getAddress');
 Route::post('@checkout/address', 'CheckoutController@postAddress');
 Route::get('@checkout/payment', 'CheckoutController@getPayment');
+Route::post('@checkout/payment', 'CheckoutController@postPayment');
+Route::get('@checkout/confirmation', 'CheckoutController@getConfirmation');
 
 // Authentication Routes...
 $this->get('@auth/signin', 'Auth\LoginController@showLoginForm');

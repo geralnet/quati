@@ -27,4 +27,12 @@ class CheckoutController extends Controller {
     public function getPayment() {
         return view('checkout.payment');
     }
+
+    public function postPayment() {
+        return redirect('/@checkout/confirmation');
+    }
+
+    public function getConfirmation() {
+        return view('checkout.confirmation');
+    }
 }
