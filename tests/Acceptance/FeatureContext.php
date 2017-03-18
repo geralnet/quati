@@ -255,6 +255,13 @@ class FeatureContext extends MinkContext {
     }
 
     /**
+     * @Given /^my shopping cart is empty$/
+     */
+    public function myShoppingCartIsEmpty() {
+        Cart::get()->removeAll();
+    }
+
+    /**
      * @Given /^the following users exist:$/
      */
     public function theFollowingUsersExist(TableNode $users) {

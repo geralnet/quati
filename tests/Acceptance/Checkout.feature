@@ -27,14 +27,14 @@ Feature: Purchase checkout
     And I sign in as a user
     Then I should be on the "checkout" page
 
-#  Scenario: I cannot checkout if my shopping cart is empty
-#    Given I am signed in as a user
-#    And my shopping card is empty
-#    And I am viewing my cart
-#    When I click on "Checkout"
-#    Then I should see "Your cart is empty"
-#    And I should not see "Continue"
-#
+  Scenario: I cannot checkout if my shopping cart is empty
+    Given I am signed in as a user
+    And my shopping cart is empty
+    And I am on the shopping cart page
+    When I press "Checkout"
+    Then I should see "Your shopping cart is empty."
+    And I should not see "Continue"
+
 #  Scenario: I can provide my address in the checkout
 #    Given I have a "Product A" in my cart
 #    And I am on the address checkout page
