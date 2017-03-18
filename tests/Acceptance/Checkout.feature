@@ -27,16 +27,6 @@ Feature: Purchase checkout
     And I sign in as a user
     Then I should be on the "checkout" page
 
-#  Scenario: I can proceed to the checkout after signing up
-#    Given I am not signed in
-#    And I have a product in the cart
-#    And I am viewing my cart
-#    When I click on "Checkout"
-#    And I am redirected to the login page
-#    And I am click on "sign up"
-#    And I sign up
-#    Then I should be at the Checkout Page
-#
 #  Scenario: I cannot checkout if my shopping cart is empty
 #    Given I am signed in as a user
 #    And my shopping card is empty
