@@ -15,19 +15,9 @@ use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 class ShopController extends Controller {
     public function getCart() {
-        $cart = Cart::get();
-        $items = [];
-        $totalPrice = 0;
-        foreach ($cart->getProductsQuantities() as $id => $quantity) {
-            $product = Product::find($id);
-            $subtotal = ($quantity * $product->price);
-            $items[] = [
-                'quantity' => $quantity,
-                'product'  => $product,
-                'subtotal' => $subtotal,
-            ];
-            $totalPrice += $subtotal;
-        }
+        $prices = Cart::get()->getCalculatePrices();
+        $items = $prices['products'];
+        $totalPrice = $prices['total'];
         return view('shop.cart', compact('totalPrice', 'items'));
     }
 
@@ -83,7 +73,7 @@ class ShopController extends Controller {
             }
         }
 
-        return redirect('/@cart');
+        return redirect($request->has('checkout') ? '/@checkout' : '/@cart');
     }
 
     private function getShopCategory(Category $category) {

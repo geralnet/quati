@@ -149,6 +149,9 @@ class FeatureContext extends MinkContext {
      * @Given /^I have "([^"]*)" "([^"]*)" in my shopping cart$/
      */
     public function iHaveInMyShoppingCart($quantity, $product) {
+        if (!array_key_exists($product, $this->products)) {
+            $this->createProduct($product, 100, 'Product Category');
+        }
         $product = $this->products[$product];
         $quantity = (int)$quantity;
         Cart::get()->addProduct($product->id, $quantity);
@@ -241,11 +244,8 @@ class FeatureContext extends MinkContext {
      * @Given /^there are the following categories:$/
      */
     public function thereAreTheFollowingCategories(TableNode $table) {
-        $this->categories[''] = Category::getRoot();
         foreach ($table->getHash() as $row) {
-            $name = $row['Category'];
-            $parent = $this->categories[$row['Parent']];
-            $this->categories[$name] = CategoryTest::createWithPath(['name' => $name], $parent);
+            $this->createCategory($row['Category'], $row['Parent']);
         }
     }
 
@@ -254,12 +254,11 @@ class FeatureContext extends MinkContext {
      */
     public function thereAreTheFollowingProducts(TableNode $table) {
         foreach ($table->getHash() as $row) {
-            $name = $row['Product'];
-            $category = $this->categories[$row['Category']];
-            $this->products[$name] = ProductTest::createWithPath([
-                'name'  => $name,
-                'price' => $row['Price'],
-            ], $category);
+            $this->createProduct(
+                $row['Product'],
+                $row['Price'],
+                $row['Category']
+            );
         }
     }
 
@@ -269,6 +268,33 @@ class FeatureContext extends MinkContext {
     public function thereIsACategory($name) {
         $this->categories[$name] = Category::createInRoot(['name' => $name]);
         Path::createForComponent($this->categories[$name]);
+    }
+
+    private function createCategory($name, $parent = '') {
+        if (($name == '') && ($parent == '')) {
+            $this->categories[''] = Category::getRoot();
+            return;
+        }
+
+        if (!array_key_exists($parent, $this->categories)) {
+            $this->createCategory($parent);
+        }
+        $parent = $this->categories[$parent];
+        $this->categories[$name] = CategoryTest::createWithPath(
+            ['name' => $name],
+            $parent
+        );
+    }
+
+    private function createProduct($name, $price, $category) {
+        if (!array_key_exists($category, $this->categories)) {
+            $this->createCategory($category);
+        }
+        $category = $this->categories[$category];
+        $this->products[$name] = ProductTest::createWithPath([
+            'name'  => $name,
+            'price' => $price,
+        ], $category);
     }
 
     private function followLinkInCSS($link, $css) {

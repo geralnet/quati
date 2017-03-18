@@ -15,9 +15,12 @@ declare(strict_types = 1);
 Route::get('{shop_path?}', 'ShopController@getShop')
      ->where('shop_path', '(?!@).*'); // Matches anything that does not start with '@'.
 
+// Cart Routes ...
 Route::get('@cart', 'ShopController@getCart');
-
 Route::put('@cart', 'ShopController@putCart');
+
+// Checkout Routes ...
+Route::get('@checkout', 'CheckoutController@getIndex');
 
 // Authentication Routes...
 $this->get('@auth/signin', 'Auth\LoginController@showLoginForm');

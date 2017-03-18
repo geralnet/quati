@@ -35,6 +35,26 @@ class Cart {
         $this->products[$productId]->addQuantity($quantity);
     }
 
+    public function getCalculatePrices() {
+        $items = [];
+        $totalPrice = 0;
+        foreach ($this->products as $item) {
+            $quantity = $item->quantity;
+            $product = Product::find($item->product_id);
+            $subtotal = ($quantity * $product->price);
+            $items[] = [
+                'quantity' => $quantity,
+                'product'  => $product,
+                'subtotal' => $subtotal,
+            ];
+            $totalPrice += $subtotal;
+        }
+        return [
+            'total'    => $totalPrice,
+            'products' => $items,
+        ];
+    }
+
     public function getProductQuantity($productId) {
         if (!array_key_exists($productId, $this->products)) {
             return 0;

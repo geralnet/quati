@@ -56,6 +56,7 @@
 
         {{ Form::submit('Update Cart') }}
         {{ Form::submit('Remove All', ['name' => 'empty']) }}
+        {{ Form::submit('Checkout', ['name' => 'checkout']) }}
         {{ Form::close() }}
     </section>
 @endsection

@@ -154,4 +154,27 @@ class CartTest extends TestCase {
         self::assertSame($product->id, $cartProduct->product_id);
         self::assertSame(3, $cartProduct->quantity);
     }
+
+    /** @test */
+    public function it_can_calculate_prices() {
+        $product1 = factory(Product::class)->create(['price' => 3]);
+        $product2 = factory(Product::class)->create(['price' => 5]);
+
+        $cart = Cart::get();
+        $cart->addProduct($product1->id, 3);
+        $cart->addProduct($product2->id, 5);
+        $items = $cart->getCalculatePrices();
+
+        self::assertEquals(34, $items['total']);
+        self::assertCount(2, $items['products']);
+
+        self::assertSame(3, $items['products'][0]['quantity']);
+        self::assertSame(5, $items['products'][1]['quantity']);
+
+        self::assertEquals(9, $items['products'][0]['subtotal']);
+        self::assertEquals(25, $items['products'][1]['subtotal']);
+
+        self::assertSame($product1->id, $items['products'][0]['product']->id);
+        self::assertSame($product2->id, $items['products'][1]['product']->id);
+    }
 }

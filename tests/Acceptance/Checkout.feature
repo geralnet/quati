@@ -3,14 +3,14 @@ Feature: Purchase checkout
   As a customer
   I should provide a delivery address, pay and receive a confirmation.
 
-#  Scenario: I can go to the checkout when viewing the shopping cart
-#    Given I am signed in as a user
-#    And I have a product in the cart
-#    And I am viewing my cart
-#    When I click on "Checkout"
-#    Then I should see "Delivery Address"
-#    And I should see "Product A"
-#
+  Scenario: I can go to the checkout when viewing the shopping cart
+    Given I am signed in as a user
+    And I have "1" "Product XYZ" in my shopping cart
+    And I am on the shopping cart page
+    When I press "Checkout"
+    Then I should see "Delivery Address"
+    And I should see "Product XYZ"
+
 #  Scenario: I need to be signed in before checking out
 #    Given I am not signed in
 #    And I have a product in the cart
