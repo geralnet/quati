@@ -25,7 +25,7 @@ Feature: Purchase checkout
     When I press "Checkout"
     And I should be on the "sign in" page
     And I sign in as a user
-    Then I should be on the "checkout" page
+    Then I should be on the "checkout - address" page
 
   Scenario: I cannot checkout if my shopping cart is empty
     Given I am signed in as a user
@@ -38,16 +38,17 @@ Feature: Purchase checkout
   Scenario: I can provide my address in the checkout
     Given I am signed in as a user
     And I have "1" "Product XYZ" in my shopping cart
-    And I am on the "checkout" page
+    And I am on the "checkout - address" page
     When I fill in "address" with "20 My Street, Aussieland"
     And I press "Continue"
     Then I should see "Payment"
 
-#  Scenario: I can see the bank details
-#    Given I have a "Product A" in my cart
-#    And I am on the checkout payment page
-#    When I select "Bank Deposit or Transfer" option
-#    Then I should see "Bank Bar of Foo account 12345"
+  Scenario: I can see the bank details
+    Given I am signed in as a user
+    And I have "1" "Product XYZ" in my shopping cart
+    And I am on the "checkout - address" page
+    When I press "Continue"
+    Then I should see "Bank Bar of Foo account 12345"
 #
 #  Scenario: I can provide the payment details
 #    Given I have a "Product A" in my cart

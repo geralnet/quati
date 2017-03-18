@@ -64,8 +64,11 @@ class FeatureContext extends MinkContext {
             case 'sign up':
                 $this->visit('/@auth/signup');
                 break;
-            case 'checkout':
-                $this->visit('/@checkout');
+            case 'checkout - address':
+                $this->visit('/@checkout/address');
+                break;
+            case 'checkout - payment':
+                $this->visit('/@checkout/payment');
                 break;
             default:
                 throw new PendingException('Invalid page: '.$page);
@@ -203,8 +206,11 @@ class FeatureContext extends MinkContext {
             case 'sign in':
                 $url = '/@auth/signin';
                 break;
-            case 'checkout':
-                $url = '/@checkout';
+            case 'checkout - address':
+                $url = '/@checkout/address';
+                break;
+            case 'checkout - payment':
+                $url = '/@checkout/payment';
                 break;
             default:
                 throw new PendingException('Invalid page: '.$page);
