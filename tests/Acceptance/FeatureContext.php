@@ -31,6 +31,14 @@ class FeatureContext extends MinkContext {
     private $users = [];
 
     /**
+     * @Given /^I am not signed in$/
+     */
+    public function iAmNotSignedIn() {
+        $this->visit('/');
+        $this->assertPageContainsText('You are not signed in.');
+    }
+
+    /**
      * @Given /^I am on "([^"]*)" category page$/
      */
     public function iAmOnCategoryPage($category) {
@@ -182,6 +190,13 @@ class FeatureContext extends MinkContext {
         }
         $this->assertSession()->addressEquals($this->locatePath($url));
         $this->assertSession()->statusCodeEquals(200);
+    }
+
+    /**
+     * @Then /^I should be on the sign in page$/
+     */
+    public function iShouldBeOnTheSignInPage() {
+        $this->assertPageAddress('/@auth/signin');
     }
 
     /**

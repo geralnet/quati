@@ -11,13 +11,13 @@ Feature: Purchase checkout
     Then I should see "Delivery Address"
     And I should see "Product XYZ"
 
-#  Scenario: I need to be signed in before checking out
-#    Given I am not signed in
-#    And I have a product in the cart
-#    And I am viewing my cart
-#    When I click on "Checkout"
-#    Then I should be redirected to the login page
-#
+  Scenario: I need to be signed in before checking out
+    Given I am not signed in
+    And I have "1" "Product XYZ" in my shopping cart
+    And I am on the shopping cart page
+    When I press "Checkout"
+    Then I should be on the sign in page
+
 #  Scenario: I can proceed to the checkout after signing in
 #    Given I am not signed in
 #    And I have a product in the cart
