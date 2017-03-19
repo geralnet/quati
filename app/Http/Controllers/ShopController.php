@@ -18,7 +18,7 @@ class ShopController extends Controller {
         $prices = Cart::get()->getCalculatePrices();
         $items = $prices['products'];
         $totalPrice = $prices['total'];
-        return view('shop.cart', compact('totalPrice', 'items'));
+        return view('cart.cart', compact('totalPrice', 'items'));
     }
 
     /**
