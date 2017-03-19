@@ -4,7 +4,7 @@ namespace App\Models\Shop;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CartProduct extends Model {
+class CartItem extends Model {
     public function addQuantity(int $quantity) {
         if ($quantity < 0) {
             throw new \InvalidArgumentException('Invalid quantity.');

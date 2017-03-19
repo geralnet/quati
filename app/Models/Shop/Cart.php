@@ -27,18 +27,18 @@ class Cart {
         return $cart;
     }
 
-    /** @var CartProduct[] */
-    private $products = [];
+    /** @var CartItem[] */
+    private $items = [];
 
     public function addProduct(int $productId, int $quantity) {
         $this->ensureProductExists($productId);
-        $this->products[$productId]->addQuantity($quantity);
+        $this->items[$productId]->addQuantity($quantity);
     }
 
     public function getCalculatePrices() {
         $items = [];
         $totalPrice = 0;
-        foreach ($this->products as $item) {
+        foreach ($this->items as $item) {
             $quantity = $item->quantity;
             $product = Product::find($item->product_id);
             $subtotal = ($quantity * $product->price);
@@ -56,22 +56,22 @@ class Cart {
     }
 
     public function getProductQuantity($productId) {
-        if (!array_key_exists($productId, $this->products)) {
+        if (!array_key_exists($productId, $this->items)) {
             return 0;
         }
-        return $this->products[$productId]->quantity;
+        return $this->items[$productId]->quantity;
     }
 
     public function getProductsQuantities() {
         $quantities = [];
-        foreach ($this->products as $id => $product) {
+        foreach ($this->items as $id => $product) {
             $quantities[$product->product_id] = $product->quantity;
         }
         return $quantities;
     }
 
     public function removeAll() {
-        $this->products = [];
+        $this->items = [];
     }
 
     public function removeProduct($productId) {
@@ -79,31 +79,31 @@ class Cart {
     }
 
     public function setProduct($productId, $quantity) {
-        if (($quantity == 0) && !array_key_exists($productId, $this->products)) {
+        if (($quantity == 0) && !array_key_exists($productId, $this->items)) {
             return;
         }
 
         $this->ensureProductExists($productId);
-        $this->products[$productId]->setQuantity($quantity);
+        $this->items[$productId]->setQuantity($quantity);
 
         if ($quantity == 0) {
-            unset($this->products[$productId]);
+            unset($this->items[$productId]);
         }
     }
 
     private function ensureProductExists(int $productId) {
-        if (array_key_exists($productId, $this->products)) {
+        if (array_key_exists($productId, $this->items)) {
             return;
         }
 
         $userId = is_null(Auth::user()) ? null : Auth::user()->id;
-        $product = new CartProduct();
-        $product->forceFill([
+        $item = new CartItem();
+        $item->forceFill([
             'user_id'    => $userId,
             'product_id' => $productId,
             'quantity'   => 0,
         ]);
-        $this->products[$productId] = $product;
+        $this->items[$productId] = $item;
     }
 
     private function import(Cart $cart) {
@@ -113,9 +113,9 @@ class Cart {
     }
 
     private function load() {
-        $cartProducts = CartProduct::where(['user_id' => Auth::user()->id])->get();
+        $cartProducts = CartItem::where(['user_id' => Auth::user()->id])->get();
         foreach ($cartProducts as $product) {
-            $this->products[$product->product_id] = $product;
+            $this->items[$product->product_id] = $product;
         }
     }
 }

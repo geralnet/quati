@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace Tests\Unit\Models\Shop;
 
 use App\Models\Shop\Cart;
-use App\Models\Shop\CartProduct;
+use App\Models\Shop\CartItem;
 use App\Models\Shop\Product;
 use App\User;
 use Tests\Unit\TestCase;
@@ -116,7 +116,7 @@ class CartTest extends TestCase {
         $cart = Cart::get();
         $cart->addProduct($product->id, 2);
 
-        $cartProducts = CartProduct::where('user_id', $user->id)->get();
+        $cartProducts = CartItem::where('user_id', $user->id)->get();
         self::assertCount(1, $cartProducts);
 
         $cartProduct = $cartProducts->first();
@@ -147,7 +147,7 @@ class CartTest extends TestCase {
         $this->be($user);
         Cart::get(); // This will import from the session.
 
-        $cartProducts = CartProduct::where('user_id', $user->id)->get();
+        $cartProducts = CartItem::where('user_id', $user->id)->get();
         self::assertCount(1, $cartProducts);
 
         $cartProduct = $cartProducts->first();
