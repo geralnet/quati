@@ -72,6 +72,15 @@ Feature: Shopping Cart
     When I press "Remove All"
     Then I should see "Your shopping cart is empty."
 
+  # Regression test for Issue #16
+  Scenario: I can empty the shopping cart as a logged user
+    Given I am signed in as a user
+    And I have "2" "Product A1" in my shopping cart
+    And I have "1" "Product A2" in my shopping cart
+    And I am on the shopping cart page
+    When I press "Remove All"
+    Then I should see "Your shopping cart is empty."
+
   Scenario: I can add products to the shopping cart as a logged user
     Given I am signed in as a user
     And I am on "Category A" category page

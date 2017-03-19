@@ -47,6 +47,24 @@ class CartTest extends TestCase {
         self::assertEmpty($cart->getProductsQuantities());
     }
 
+    /**
+     * Regression test for Issue #16.
+     *
+     * @test
+     */
+    public function it_can_remove_all_products_when_logged_in() {
+        $this->actingAs(factory(User::class)->create());
+        $product = factory(Product::class)->create(['id' => 1]);
+
+        $cart = Cart::get();
+        $cart->addProduct($product->id, 10);
+        $cart->removeAll();
+
+        $cart = Cart::get();
+
+        self::assertEmpty($cart->getProductsQuantities());
+    }
+
     /** @test */
     public function it_can_remove_products() {
         $product = factory(Product::class)->make(['id' => 1]);

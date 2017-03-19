@@ -72,6 +72,9 @@ class Cart {
 
     public function removeAll() {
         $this->items = [];
+        if (!is_null(Auth::user())) {
+            CartItem::where('user_id', Auth::user()->id)->delete();
+        }
     }
 
     public function removeProduct($productId) {
